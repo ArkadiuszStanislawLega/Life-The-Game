@@ -41,9 +41,10 @@ class MapCell:
         Returns:
             [boolean] -- prawda jeżeli udało się wstawić komórkę życiową.
         """
-        if self.__life_cell is None and isinstance(LifeCell, life_cell):
+        if self.__life_cell is None and isinstance(life_cell, LifeCell):
             self.__life_cell = life_cell
             self.__is_occupied = True
+            life_cell.location = self.__location
             return True
         return False
 
@@ -57,6 +58,6 @@ class MapCell:
 
     def __str__(self):
         if self.__is_occupied:
-            return self.__life_cell
+            return f'{self.__life_cell}'
         else:
             return '_'
