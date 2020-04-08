@@ -10,3 +10,6 @@ class Location:
     @property
     def Y(self):
         return self.__y
+
+    def __str__(self):
+        return f'({self.__x}, {self.__y})'
