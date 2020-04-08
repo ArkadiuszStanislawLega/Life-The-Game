@@ -1,5 +1,7 @@
+from Models.map import Map
+
 def main():
-    pass
+    game = Map()
 
 
 if __name__ == "__main__":
