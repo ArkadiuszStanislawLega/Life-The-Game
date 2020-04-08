@@ -1,5 +1,5 @@
-from location import Location
-from life_cell import LifeCell
+from Models.location import Location
+from Models.life_cell import LifeCell
 
 
 class MapCell:
