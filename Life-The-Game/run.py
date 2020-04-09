@@ -13,27 +13,24 @@ def main():
 
 
 def add_cells(game):
-    lifecell = LifeCell()
     location = Location()
     location.X = 2
     location.Y = 3
-
+    lifecell = LifeCell()
     lifecell.is_alive = True
     lifecell.location = location
 
-    lifecell2 = LifeCell()
     location2 = Location()
     location2.X = 3
     location2.Y = 2
-
+    lifecell2 = LifeCell()
     lifecell2.is_alive = True
     lifecell2.location = location2
 
-    lifecell3 = LifeCell()
     location3 = Location()
     location3.X = 4
     location3.Y = 3
-
+    lifecell3 = LifeCell()
     lifecell3.is_alive = True
     lifecell3.location = location3
 
