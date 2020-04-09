@@ -16,11 +16,11 @@ class LifeCell:
         return self.__location
 
     @property
-    def is_life(self):
+    def is_alive(self):
         return self.__is_alive
 
-    @is_life.setter
-    def is_life(self, value: bool):
+    @is_alive.setter
+    def is_alive(self, value: bool):
         self.__is_alive = value
 
     @location.setter

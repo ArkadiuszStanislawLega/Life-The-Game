@@ -60,4 +60,4 @@ class MapCell:
         if self.__is_occupied:
             return f'{self.__life_cell}'
         else:
-            return '_'
+            return ' '
