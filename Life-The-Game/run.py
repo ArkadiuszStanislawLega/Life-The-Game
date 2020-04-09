@@ -13,6 +13,7 @@ def main():
 
     input("Wciśnij ENTER")
 
+    game.find_empty_cells_to_live()
     game.remove_dead_cells()
     game.game_map.print_map()
 
