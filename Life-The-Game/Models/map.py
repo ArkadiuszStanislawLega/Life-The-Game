@@ -36,4 +36,4 @@ class Map(Logbook):
                 coordinates = f'{location}'
                 print(f'{self.__cell_container[coordinates]} ', end="")
                 if x == self.MAP_WIDTH - 1:
-                    print("\n")
+                    print()

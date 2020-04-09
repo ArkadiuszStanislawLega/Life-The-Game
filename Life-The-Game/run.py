@@ -14,22 +14,22 @@ def main():
 
 def add_cells(game):
     location = Location()
-    location.X = 2
-    location.Y = 3
+    location.X = 1
+    location.Y = 1
     lifecell = LifeCell()
     lifecell.is_alive = True
     lifecell.location = location
 
     location2 = Location()
-    location2.X = 3
-    location2.Y = 2
+    location2.X = 2
+    location2.Y = 0
     lifecell2 = LifeCell()
     lifecell2.is_alive = True
     lifecell2.location = location2
 
     location3 = Location()
-    location3.X = 4
-    location3.Y = 3
+    location3.X = 3
+    location3.Y = 1
     lifecell3 = LifeCell()
     lifecell3.is_alive = True
     lifecell3.location = location3
