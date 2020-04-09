@@ -10,12 +10,19 @@ class Game(Logbook):
         self.__game_map = Map()
         self.__life_cells = {}
 
-        self.__cells_that_survive = []
+        self.__cells_that_survive = {}
         self.__cells_that_will_die = []
 
     @property
     def game_map(self):
         return self.__game_map
+
+    def remove_dead_cells(self):
+        for location in self.__cells_that_will_die:
+            cell = self.__game_map.container.get(f'{location}')
+            cell.clear_cell()
+
+        self.__cells_that_will_die.clear()
 
     def put_life_cell(self, life_cell: LifeCell):
         """
@@ -40,31 +47,38 @@ class Game(Logbook):
         for value in self.__life_cells.values():
             live_cell = self.__game_map.container.get(f'{value.location}')
             current_location = live_cell.location
-            #print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
+            # print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
 
             counter_top = self.check_top(current_location)
-            #print(f'góra - {counter_top}')
+            # print(f'góra - {counter_top}')
 
             counter_mid = self.check_mid(current_location)
-            #print(f'środek - {counter_mid}')
+            # print(f'środek - {counter_mid}')
 
             counter_bot = self.check_bot(current_location)
-            #print(f'dół - {counter_bot}')
+            # print(f'dół - {counter_bot}')
 
             count_life_cells += counter_top + counter_mid + counter_bot
 
             if count_life_cells == 2 or count_life_cells == 3:
-                self.__cells_that_survive.append(current_location)
+                self.__cells_that_survive[current_location] = count_life_cells
             #    value.is_alive = True
             else:
                 self.__cells_that_will_die.append(current_location)
             #    value.is_alive = False
 
+            count_life_cells = 0
+            counter_top = 0
+            counter_mid = 0
+            counter_bot = 0
+
             counter += 1
 
         print("Przeżyją:")
-        for i, item in enumerate(self.__cells_that_survive):
-            print(f'{i+1}. {item}')
+        cnt = 1
+        for item in self.__cells_that_survive:
+            print(f'{cnt}. {item} {self.__cells_that_survive[item]}')
+            cnt += 1
 
         print("Umrą:")
         for i, item in enumerate(self.__cells_that_will_die):
@@ -168,7 +182,7 @@ class Game(Logbook):
             eq = self.check_map_cell(map_cell)
 
             # debug help
-            #print(f'{check_location} - lewo - {eq}')
+            # print(f'{check_location} - lewo - {eq}')
             return eq
 
         return 0
@@ -193,7 +207,7 @@ class Game(Logbook):
             eq = self.check_map_cell(map_cell)
 
             # debug help
-            #print(f'{check_location} - środek - {eq}')
+            # print(f'{check_location} - środek - {eq}')
             return eq
 
         return 0
@@ -219,7 +233,7 @@ class Game(Logbook):
                 eq = self.check_map_cell(map_cell)
 
                 # debug help
-                #print(f'{check_location} - prawo - {eq}')
+                # print(f'{check_location} - prawo - {eq}')
                 return eq
             else:
                 return 0

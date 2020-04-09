@@ -11,12 +11,18 @@ def main():
     game.game_map.print_map()
     game.find_life_cells()
 
+    input("Wciśnij ENTER")
+
+    game.remove_dead_cells()
+    game.game_map.print_map()
+
 
 def add_cells(game):
     location = Location()
     location.X = 1
     location.Y = 0
     lifecell = LifeCell()
+
     lifecell.is_alive = True
     lifecell.location = location
 
