@@ -10,6 +10,9 @@ class Game(Logbook):
         self.__game_map = Map()
         self.__life_cells = {}
 
+        self.__cells_that_survive = []
+        self.__cells_that_will_die = []
+
     @property
     def game_map(self):
         return self.__game_map
@@ -35,28 +38,37 @@ class Game(Logbook):
         counter_bot = 0
         counter = 0
         for value in self.__life_cells.values():
-            current_location = self.__game_map.container.get(
-                f'{value.location}').location
-            print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
+            live_cell = self.__game_map.container.get(f'{value.location}')
+            current_location = live_cell.location
+            #print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
 
             counter_top = self.check_top(current_location)
-            print(f'góra - {counter_top}')
+            #print(f'góra - {counter_top}')
 
             counter_mid = self.check_mid(current_location)
-            print(f'środek - {counter_mid}')
+            #print(f'środek - {counter_mid}')
 
             counter_bot = self.check_bot(current_location)
-            print(f'dół - {counter_bot}')
+            #print(f'dół - {counter_bot}')
 
             count_life_cells += counter_top + counter_mid + counter_bot
 
-            # if count_life_cells == 2 or count_life_cells == 3:
+            if count_life_cells == 2 or count_life_cells == 3:
+                self.__cells_that_survive.append(current_location)
             #    value.is_alive = True
-            # else:
+            else:
+                self.__cells_that_will_die.append(current_location)
             #    value.is_alive = False
 
             counter += 1
-            print()
+
+        print("Przeżyją:")
+        for i, item in enumerate(self.__cells_that_survive):
+            print(f'{i+1}. {item}')
+
+        print("Umrą:")
+        for i, item in enumerate(self.__cells_that_will_die):
+            print(f'{i+1}. {item}')
 
     def check_bot(self, location):
         """
@@ -156,7 +168,7 @@ class Game(Logbook):
             eq = self.check_map_cell(map_cell)
 
             # debug help
-            print(f'{check_location} - lewo - {eq}')
+            #print(f'{check_location} - lewo - {eq}')
             return eq
 
         return 0
@@ -181,7 +193,7 @@ class Game(Logbook):
             eq = self.check_map_cell(map_cell)
 
             # debug help
-            print(f'{check_location} - środek - {eq}')
+            #print(f'{check_location} - środek - {eq}')
             return eq
 
         return 0
@@ -207,7 +219,7 @@ class Game(Logbook):
                 eq = self.check_map_cell(map_cell)
 
                 # debug help
-                print(f'{check_location} - prawo - {eq}')
+                #print(f'{check_location} - prawo - {eq}')
                 return eq
             else:
                 return 0
