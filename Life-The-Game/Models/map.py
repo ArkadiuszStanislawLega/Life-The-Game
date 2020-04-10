@@ -5,7 +5,7 @@ from Models.logbook import Logbook
 
 class Map(Logbook):
     MAP_WIDTH = 20
-    MAP_HEIGHT = 10
+    MAP_HEIGHT = 20
 
     def __init__(self):
         self.__cell_container = {str: MapCell}

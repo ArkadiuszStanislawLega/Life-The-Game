@@ -3,6 +3,7 @@ from Models.life_cell import LifeCell
 from Models.location import Location
 
 import os
+import time
 
 
 def main():
@@ -12,9 +13,7 @@ def main():
     glider(game)
 
     counter = 0
-
     while counter < 19:
-
         os.system('cls')
         print(f'{counter}')
         game.game_map.print_map()
@@ -23,6 +22,7 @@ def main():
         game.find_empty_cells_to_live()
         game.remove_dead_cells()
         counter += 1
+        time.sleep(0.5)
 
 
 def glider(game):
@@ -47,9 +47,25 @@ def glider(game):
     lifecell3.is_alive = True
     lifecell3.location = location3
 
+    location4 = Location()
+    location4.X = 2
+    location4.Y = 2
+    lifecell4 = LifeCell()
+    lifecell4.is_alive = True
+    lifecell4.location = location4
+
+    location5 = Location()
+    location5.X = 3
+    location5.Y = 2
+    lifecell5 = LifeCell()
+    lifecell5.is_alive = True
+    lifecell5.location = location5
+
     game.put_life_cell(lifecell)
     game.put_life_cell(lifecell2)
     game.put_life_cell(lifecell3)
+    game.put_life_cell(lifecell4)
+    game.put_life_cell(lifecell5)
 
 
 def line(game):
