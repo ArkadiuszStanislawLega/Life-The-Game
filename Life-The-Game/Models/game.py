@@ -19,69 +19,59 @@ class Game(Logbook):
     def game_map(self):
         return self.__game_map
 
-    def find_empty_cells_to_live(self):
+    def search_for_potential_places_to_place_new_cells(self):
         """
-        Sprawdza pola które miały 3 żywe komórki w około siebie i wstawia w odpowiednie miejsce nową żywą komórkę
+        Wyszukuje wszystkie puste miejsca w około aktulnie postawionych komórek na mapie.
         """
+        # counter_top = 0
+        # counter_mid = 0
+        # counter_bot = 0
+        # counter = 0
+        #print("Szukam miejsc do wstawienia żywych komórek.")
+        for value in self.__life_cells:
+            live_cell = self.__game_map.container.get(f'{value}')
+            current_location = live_cell.location
+            #print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
+
+            self.check_top(current_location, False)
+            #print(f'góra - {counter_top}')
+
+            self.check_mid(current_location, False)
+            #print(f'środek - {counter_mid}')
+
+            self.check_bot(current_location, False)
+            #print(f'dół - {counter_bot}')
+
+            # counter += 1
+
+        #print("Potencjalne miejsca do obstawienia.")
+        # for item in self.__cells_for_potential_betting:
+        #    print(item)
+
+    def from_potential_cells_check_which_have_three_neighbors(self):
         count_life_cells = 0
         counter_top = 0
         counter_mid = 0
         counter_bot = 0
         counter = 0
-        print("Szukam miejsc do wstawienia żywych komórek.")
-        for value in self.__cells_that_survive:
-            if self.__cells_that_survive[value] == 3:
-                live_cell = self.__game_map.container.get(f'{value}')
-                current_location = live_cell.location
-                print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
-
-                counter_top = self.check_top(current_location, False)
-                print(f'góra - {counter_top}')
-
-                counter_mid = self.check_mid(current_location, False)
-                print(f'środek - {counter_mid}')
-
-                counter_bot = self.check_bot(current_location, False)
-                print(f'dół - {counter_bot}')
-
-                count_life_cells += counter_top + counter_mid + counter_bot
-
-                if count_life_cells == 3:
-                    lifecell = LifeCell()
-                    lifecell.is_alive = True
-                    lifecell.location = current_location
-                    self.put_life_cell(lifecell)
-
-                count_life_cells = 0
-                counter_top = 0
-                counter_mid = 0
-                counter_bot = 0
-
-                counter += 1
-
-        print("Potencjalne miejsca do obstawienia.")
-        for item in self.__cells_for_potential_betting:
-            print(item)
-
-        count_life_cells = 0
-        counter_top = 0
-        counter_mid = 0
-        counter_bot = 0
-        counter = 0
-        for location in self.__cells_for_potential_betting:
+        #print("W pustych miejscach szukam które ma 3 komórki w około")
+        for str_location in self.__cells_for_potential_betting:
+            live_cell = self.__game_map.container.get(str_location)
+            location = live_cell.location
+         #   print(f'Sprawdzam komórkę: {counter+1} - {location}')
             counter_top = self.check_top(location, True)
-            # print(f'góra - {counter_top}')
+          #  print(f'góra - {counter_top}')
 
-            counter_mid = self.check_mid(location, True)
-            # print(f'środek - {counter_mid}')
+            counter_mid += self.check_mid(location, True)
+           # print(f'środek - {counter_mid}')
 
             counter_bot = self.check_bot(location, True)
-            # print(f'dół - {counter_bot}')
+            #print(f'dół - {counter_bot}')
 
             count_life_cells += counter_top + counter_mid + counter_bot
-
+            # print(f'{count_life_cells}')
             if count_life_cells == 3:
-                self.__finded.append(location)
+                self.__finded.append(f'{location}')
                 # lifecell = LifeCell()
                 # lifecell.is_alive = True
                 # lifecell.location = location
@@ -91,16 +81,23 @@ class Game(Logbook):
             counter_top = 0
             counter_mid = 0
             counter_bot = 0
-            counter = 0
-        print("znalezione miejsca")
-        final_count = {}
-        for item in self.__finded:
-            final_count[item] = self.__finded.count(item)
-            print(item)
+            counter += 1
 
-        print("finał finałów")
-        for item in final_count:
-            print(f'{item} {final_count[item]}')
+    def find_empty_cells_to_live(self):
+        """
+        Sprawdza pola które miały 3 żywe komórki w około siebie i wstawia w odpowiednie miejsce nową żywą komórkę
+        """
+        self.search_for_potential_places_to_place_new_cells()
+        self.from_potential_cells_check_which_have_three_neighbors()
+
+        #print("finał finałów")
+        for str_location in self.__finded:
+            location = self.__game_map.container[str_location].location
+        #    print(f'{location}')
+            lifecell = LifeCell()
+            lifecell.is_alive = True
+            lifecell.location = location
+            self.put_life_cell(lifecell)
 
     def remove_dead_cells(self):
         """
@@ -108,9 +105,14 @@ class Game(Logbook):
         """
         for location in self.__cells_that_will_die:
             cell = self.__game_map.container.get(f'{location}')
+            cell.is_alive = False
             cell.clear_cell()
+            del(self.__life_cells[f'{location}'])
 
+        self.__cells_that_survive.clear()
         self.__cells_that_will_die.clear()
+        self.__cells_for_potential_betting.clear()
+        self.__finded.clear()
 
     def put_life_cell(self, life_cell: LifeCell):
         """
@@ -135,25 +137,26 @@ class Game(Logbook):
         for value in self.__life_cells.values():
             live_cell = self.__game_map.container.get(f'{value.location}')
             current_location = live_cell.location
-            # print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
+            #print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
 
             counter_top = self.check_top(current_location, True)
-            # print(f'góra - {counter_top}')
+            #print(f'góra - {counter_top}')
 
-            counter_mid = self.check_mid(current_location, True)
-            # print(f'środek - {counter_mid}')
+            counter_mid += self.check_mid(current_location, True)
+            #print(f'środek - {counter_mid}')
 
             counter_bot = self.check_bot(current_location, True)
-            # print(f'dół - {counter_bot}')
+            #print(f'dół - {counter_bot}')
 
             count_life_cells += counter_top + counter_mid + counter_bot
+            # print(f'{count_life_cells}')
 
             if count_life_cells == 2 or count_life_cells == 3:
                 self.__cells_that_survive[current_location] = count_life_cells
-            #    value.is_alive = True
+                value.is_alive = True
             else:
                 self.__cells_that_will_die.append(current_location)
-            #    value.is_alive = False
+                value.is_alive = False
 
             count_life_cells = 0
             counter_top = 0
@@ -280,7 +283,9 @@ class Game(Logbook):
             else:
                 eq = self.check_is_empty(map_cell)
                 if eq == 1:
-                    self.__cells_for_potential_betting.append(check_location)
+                    if f'{check_location}' not in self.__cells_for_potential_betting:
+                        self.__cells_for_potential_betting.append(
+                            f'{check_location}')
 
             # debug help
             # print(f'{check_location} - lewo - {eq}')
@@ -311,7 +316,9 @@ class Game(Logbook):
             else:
                 eq = self.check_is_empty(map_cell)
                 if eq == 1:
-                    self.__cells_for_potential_betting.append(check_location)
+                    if f'{check_location}' not in self.__cells_for_potential_betting:
+                        self.__cells_for_potential_betting.append(
+                            f'{check_location}')
 
             # debug help
             # print(f'{check_location} - środek - {eq}')
@@ -343,8 +350,9 @@ class Game(Logbook):
                 else:
                     eq = self.check_is_empty(map_cell)
                     if eq == 1:
-                        self.__cells_for_potential_betting.append(
-                            check_location)
+                        if f'{check_location}' not in self.__cells_for_potential_betting:
+                            self.__cells_for_potential_betting.append(
+                                f'{check_location}')
 
                 # debug help
                 # print(f'{check_location} - prawo - {eq}')
@@ -363,11 +371,19 @@ class Game(Logbook):
         Returns:
             [int] -- 1 - jeżeli w polu znajduje się żyjąca komórka życia, 0 - jeżeli pole may nie posiada żyjącej komórki życia.
         """
-        if isinstance(map_cell, MapCell) and map_cell.is_occupied and isinstance(map_cell.life_cell, LifeCell) and map_cell.life_cell.is_alive:
+        if isinstance(map_cell, MapCell) and map_cell.is_occupied and isinstance(map_cell.life_cell, LifeCell) and map_cell.life_cell != None:
             return 1
         return 0
 
     def check_is_empty(self, map_cell: MapCell):
-        if isinstance(map_cell, MapCell) and not map_cell.is_occupied:
+        if isinstance(map_cell, MapCell):
+             # Sprawdza czy miejsce jest puste
+            if map_cell.is_occupied:
+                return 0
+
+            # sprawdza czy miejsce jest zajęte, ale komórka umiera
+            if isinstance(map_cell.life_cell, LifeCell) and map_cell.life_cell != None:
+                return 0
+
             return 1
-        return 0
+        return -1
