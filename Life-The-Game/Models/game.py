@@ -3,6 +3,7 @@ from Models.logbook import Logbook
 from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
+
 import time
 import os
 
@@ -33,9 +34,22 @@ class Game(Logbook):
 
             self.__check_current_cells_to_see_if_they_survive()
             self.__find_empty_cells_to_live_and_put_new_ones()
+            self.__print_survived_cells()
+            self.__print_dead_cells()
             self.__remove_dead_cells()
+            self.__clear_after_round()
+
             counter += 1
             time.sleep(0.5)
+
+    def __clear_after_round(self):
+        """
+        Czyści wszystkie właściowści klasy do stanu początkowego rundy.
+        """
+        self.__cells_that_survive.clear()
+        self.__cells_that_will_die.clear()
+        self.__cells_for_potential_betting.clear()
+        self.__finded.clear()
 
     def __search_for_potential_places_to_place_new_cells(self):
         """
@@ -107,11 +121,6 @@ class Game(Logbook):
             cell.clear_cell()
             del(self.__life_cells[f'{location}'])
 
-        self.__cells_that_survive.clear()
-        self.__cells_that_will_die.clear()
-        self.__cells_for_potential_betting.clear()
-        self.__finded.clear()
-
     def put_life_cell(self, life_cell: LifeCell):
         """
         Wstawia komórkę życia do określonego pola na mapie.
@@ -127,48 +136,51 @@ class Game(Logbook):
         """
         Sprawdza pola wszystkich do okoła komórek aktualnie żywych czy są zdolne do przeżycia.
         """
-        count_life_cells = 0
-        counter_top = 0
-        counter_mid = 0
-        counter_bot = 0
-        counter = 0
-        for value in self.__life_cells.values():
-            live_cell = self.__game_map.container.get(f'{value.location}')
+        count_life_cells_in_neighbors = 0
+        counter_cells_in_neighbor_top = 0
+        counter_cells_in_neighbor_mid = 0
+        counter_cells_in_neighbor_bot = 0
+
+        for cell in self.__life_cells.values():
+            live_cell = self.__game_map.container.get(f'{cell.location}')
             current_location = live_cell.location
-            #print(f'Sprawdzam komórkę: {counter+1} - {current_location}')
 
-            counter_top = self.check_top(current_location, True)
-            #print(f'góra - {counter_top}')
+            counter_cells_in_neighbor_top = self.check_top(
+                current_location, True)
+            counter_cells_in_neighbor_mid = self.check_mid(
+                current_location, True)
+            counter_cells_in_neighbor_bot = self.check_bot(
+                current_location, True)
 
-            counter_mid += self.check_mid(current_location, True)
-            #print(f'środek - {counter_mid}')
+            count_life_cells_in_neighbors += counter_cells_in_neighbor_top + \
+                counter_cells_in_neighbor_mid + counter_cells_in_neighbor_bot
 
-            counter_bot = self.check_bot(current_location, True)
-            #print(f'dół - {counter_bot}')
-
-            count_life_cells += counter_top + counter_mid + counter_bot
-            # print(f'{count_life_cells}')
-
-            if count_life_cells == 2 or count_life_cells == 3:
-                self.__cells_that_survive[current_location] = count_life_cells
-                value.is_alive = True
+            if count_life_cells_in_neighbors == 2 or count_life_cells_in_neighbors == 3:
+                self.__cells_that_survive[current_location] = count_life_cells_in_neighbors
+                cell.is_alive = True
             else:
                 self.__cells_that_will_die.append(current_location)
-                value.is_alive = False
+                cell.is_alive = False
 
-            count_life_cells = 0
-            counter_top = 0
-            counter_mid = 0
-            counter_bot = 0
+            count_life_cells_in_neighbors = 0
+            counter_cells_in_neighbor_top = 0
+            counter_cells_in_neighbor_mid = 0
+            counter_cells_in_neighbor_bot = 0
 
-            counter += 1
-
+    def __print_survived_cells(self):
+        """
+        Drukuje do konsoli wszystkie komórki które przeżyją.
+        """
         print("Przeżyją:")
         cnt = 1
         for item in self.__cells_that_survive:
             print(f'{cnt}. {item} {self.__cells_that_survive[item]}')
             cnt += 1
 
+    def __print_dead_cells(self):
+        """
+        Drukuje do konsoli wszystkie komórki które umrą.
+        """
         print("Umrą:")
         for i, item in enumerate(self.__cells_that_will_die):
             print(f'{i+1}. {item}')
@@ -266,8 +278,7 @@ class Game(Logbook):
             location {Location} -- koordynaty od których ma zostać srawdzone pole na lewo
 
         Returns:
-            [int] -- -1 - jeżeli podany w atrybucie element nie jest instancją klasy Lokacja
-                      0 - jeżeli lokacja wychodzi po za obszar mapy
+            [int] --  0 - jeżeli lokacja wychodzi po za obszar mapy
                       1 - jeżeli po lewej strony od podanej lokacji pole jest zajęte przez żyjącą komórkę życia
         """
         if isinstance(location, Location) and location.X > 0:
@@ -299,8 +310,7 @@ class Game(Logbook):
             location {Location} -- koordynaty od których ma zostać srawdzone pole na środku
 
         Returns:
-            [int] -- -1 - jeżeli podany w atrybucie element nie jest instancją klasy Lokacja
-                      0 - jeżeli lokacja wychodzi po za obszar mapy
+            [int] --  0 - jeżeli lokacja wychodzi po za obszar mapy
                       1 - jeżeli naśrodku (nad lub pod) od podanej lokacji pole jest zajęte przez żyjącą komórkę życia
         """
         if isinstance(location, Location):
