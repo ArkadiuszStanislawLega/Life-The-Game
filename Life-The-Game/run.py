@@ -9,13 +9,12 @@ def main():
     os.system('cls')
     game = Game()
 
-    add_cells(game)
+    glider(game)
 
     counter = 0
 
     while counter < 19:
 
-        input("Wciśnij ENTER")
         os.system('cls')
         print(f'{counter}')
         game.game_map.print_map()
@@ -24,6 +23,60 @@ def main():
         game.find_empty_cells_to_live()
         game.remove_dead_cells()
         counter += 1
+
+
+def glider(game):
+    location = Location()
+    location.X = 2
+    location.Y = 0
+    lifecell = LifeCell()
+    lifecell.is_alive = True
+    lifecell.location = location
+
+    location2 = Location()
+    location2.X = 3
+    location2.Y = 1
+    lifecell2 = LifeCell()
+    lifecell2.is_alive = True
+    lifecell2.location = location2
+
+    location3 = Location()
+    location3.X = 1
+    location3.Y = 2
+    lifecell3 = LifeCell()
+    lifecell3.is_alive = True
+    lifecell3.location = location3
+
+    game.put_life_cell(lifecell)
+    game.put_life_cell(lifecell2)
+    game.put_life_cell(lifecell3)
+
+
+def line(game):
+    location = Location()
+    location.X = 0
+    location.Y = 1
+    lifecell = LifeCell()
+    lifecell.is_alive = True
+    lifecell.location = location
+
+    location2 = Location()
+    location2.X = 1
+    location2.Y = 1
+    lifecell2 = LifeCell()
+    lifecell2.is_alive = True
+    lifecell2.location = location2
+
+    location3 = Location()
+    location3.X = 2
+    location3.Y = 1
+    lifecell3 = LifeCell()
+    lifecell3.is_alive = True
+    lifecell3.location = location3
+
+    game.put_life_cell(lifecell)
+    game.put_life_cell(lifecell2)
+    game.put_life_cell(lifecell3)
 
 
 def add_cells(game):
