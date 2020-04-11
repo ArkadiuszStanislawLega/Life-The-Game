@@ -9,8 +9,13 @@ import os
 
 
 class Game(Logbook):
-    def __init__(self):
-        self.__game_map = Map()
+    # Prędkość odświeżania mapy w sekundach.
+    MAP_REFRESH_RATE = 0.5
+    # Ilość cykli po których ma zakończyć się aplikacja.
+    NUMBER_OF_CYCLES = 19
+
+    def __init__(self, map_width, map_height):
+        self.__game_map = Map(width=map_width, height=map_height)
         self.__life_cells = {}
 
         self.__cells_that_survive = {}
@@ -38,7 +43,7 @@ class Game(Logbook):
         Włącza gre.
         """
         counter = 0
-        while counter < 19:
+        while counter < self.NUMBER_OF_CYCLES:
             os.system('cls')
             print(f'{counter}')
             self.game_map.print_map()
@@ -51,7 +56,7 @@ class Game(Logbook):
             self.__clear_after_round()
 
             counter += 1
-            time.sleep(0.5)
+            time.sleep(self.MAP_REFRESH_RATE)
 
     def __clear_after_round(self):
         """
@@ -197,7 +202,7 @@ class Game(Logbook):
                       >= 0 iczba żyjących komórek życia które są pod podanymi koordynatami
         """
         if isinstance(location, Location):
-            if location.Y < self.__game_map.MAP_WIDTH:
+            if location.Y < self.__game_map.width:
                 count_life_cells = 0
                 check_location = Location()
                 check_location.Y = location.Y+1
@@ -296,8 +301,6 @@ class Game(Logbook):
                         self.__cells_for_potential_betting.append(
                             f'{check_location}')
 
-            # debug help
-            # print(f'{check_location} - lewo - {eq}')
             return eq
 
         return 0
@@ -345,7 +348,7 @@ class Game(Logbook):
                       1 - jeżeli po prawej strony od podanej lokacji pole jest zajęte przez żyjącą komórkę życia
         """
         if isinstance(location, Location):
-            if location.X < self.__game_map.MAP_WIDTH:
+            if location.X < self.__game_map.width:
                 check_location = Location()
                 check_location.Y = location.Y
                 check_location.X = location.X+1

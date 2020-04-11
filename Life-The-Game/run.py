@@ -4,7 +4,7 @@ from Models.location import Location
 
 
 def main():
-    game = Game()
+    game = Game(map_width=5, map_height=5)
     glider(game)
     game.run()
 

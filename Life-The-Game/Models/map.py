@@ -4,14 +4,13 @@ from Models.logbook import Logbook
 
 
 class Map(Logbook):
-    MAP_WIDTH = 20
-    MAP_HEIGHT = 20
-
-    def __init__(self):
+    def __init__(self, width, height):
         self.__cell_container = {str: MapCell}
+        self.__width = width
+        self.__height = height
 
-        for y in range(self.MAP_HEIGHT):
-            for x in range(self.MAP_WIDTH):
+        for y in range(self.__height):
+            for x in range(self.__width):
                 location = Location()
                 location.X = x
                 location.Y = y
@@ -27,13 +26,21 @@ class Map(Logbook):
     def container(self):
         return self.__cell_container
 
+    @property
+    def width(self):
+        return self.__width
+
+    @property
+    def height(self):
+        return self.__height
+
     def print_map(self):
-        for y in range(self.MAP_HEIGHT):
-            for x in range(self.MAP_WIDTH):
+        for y in range(self.__height):
+            for x in range(self.__width):
                 location = Location()
                 location.X = x
                 location.Y = y
                 coordinates = f'{location}'
                 print(f'{self.__cell_container[coordinates]}', end="")
-                if x == self.MAP_WIDTH - 1:
+                if x == self.__width - 1:
                     print()
