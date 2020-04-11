@@ -22,6 +22,17 @@ class Game(Logbook):
     def game_map(self):
         return self.__game_map
 
+    def put_life_cell(self, life_cell: LifeCell):
+        """
+        Wstawia komórkę życia do określonego pola na mapie.
+
+        Arguments:
+            life_cell {LifeCell} -- Komórka życia z ustawionymi koordynatami.
+        """
+        if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
+            if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
+                self.__life_cells[f'{life_cell.location}'] = life_cell
+
     def run(self):
         """
         Włącza gre.
@@ -59,9 +70,9 @@ class Game(Logbook):
             live_cell = self.__game_map.container.get(f'{value}')
             current_location = live_cell.location
 
-            self.check_top(current_location, False)
-            self.check_mid(current_location, False)
-            self.check_bot(current_location, False)
+            self.__check_top(current_location, False)
+            self.__check_mid(current_location, False)
+            self.__check_bot(current_location, False)
 
     def __from_potential_cells_check_which_have_three_neighbors(self):
         """
@@ -77,9 +88,9 @@ class Game(Logbook):
             live_cell = self.__game_map.container.get(str_location)
             location = live_cell.location
 
-            counter_of_empty_cells_top = self.check_top(location, True)
-            counter_of_empty_cells_mid = self.check_mid(location, True)
-            counter_of_empty_cells_bot = self.check_bot(location, True)
+            counter_of_empty_cells_top = self.__check_top(location, True)
+            counter_of_empty_cells_mid = self.__check_mid(location, True)
+            counter_of_empty_cells_bot = self.__check_bot(location, True)
 
             sum_of_neighbors_cells += counter_of_empty_cells_top + \
                 counter_of_empty_cells_mid + counter_of_empty_cells_bot
@@ -121,17 +132,6 @@ class Game(Logbook):
             cell.clear_cell()
             del(self.__life_cells[f'{location}'])
 
-    def put_life_cell(self, life_cell: LifeCell):
-        """
-        Wstawia komórkę życia do określonego pola na mapie.
-
-        Arguments:
-            life_cell {LifeCell} -- Komórka życia z ustawionymi koordynatami.
-        """
-        if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
-            if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
-                self.__life_cells[f'{life_cell.location}'] = life_cell
-
     def __check_current_cells_to_see_if_they_survive(self):
         """
         Sprawdza pola wszystkich do okoła komórek aktualnie żywych czy są zdolne do przeżycia.
@@ -145,11 +145,11 @@ class Game(Logbook):
             live_cell = self.__game_map.container.get(f'{cell.location}')
             current_location = live_cell.location
 
-            counter_cells_in_neighbor_top = self.check_top(
+            counter_cells_in_neighbor_top = self.__check_top(
                 current_location, True)
-            counter_cells_in_neighbor_mid = self.check_mid(
+            counter_cells_in_neighbor_mid = self.__check_mid(
                 current_location, True)
-            counter_cells_in_neighbor_bot = self.check_bot(
+            counter_cells_in_neighbor_bot = self.__check_bot(
                 current_location, True)
 
             count_life_cells_in_neighbors += counter_cells_in_neighbor_top + \
@@ -185,7 +185,7 @@ class Game(Logbook):
         for i, item in enumerate(self.__cells_that_will_die):
             print(f'{i+1}. {item}')
 
-    def check_bot(self, location, occupied: bool):
+    def __check_bot(self, location, occupied: bool):
         """
         Sprawdza czy w pod koordynatami podanymi w argumencie po lewej, środku i po prawo znajdują się jakieś żywe komórki.
 
@@ -217,7 +217,7 @@ class Game(Logbook):
 
         return 0
 
-    def check_mid(self, location, occupied: bool):
+    def __check_mid(self, location, occupied: bool):
         """
         Sprawdza czy na wysokości podanych w argumencie koordynatów po lewej i po prawo znajdują się jakieś żywe komórki.
 
@@ -239,7 +239,7 @@ class Game(Logbook):
 
         return 0
 
-    def check_top(self, location: Location, occupied: bool):
+    def __check_top(self, location: Location, occupied: bool):
         """
         Sprawdza czy w nad koordynatami podanymi w argumencie po lewej, środku i po prawo znajdują się jakieś żywe komórki.
 
@@ -288,9 +288,9 @@ class Game(Logbook):
             map_cell = self.__game_map.container.get(f'{check_location}')
             eq = -2
             if occupied:
-                eq = self.check_map_cell(map_cell)
+                eq = self.__check_map_cell(map_cell)
             else:
-                eq = self.check_is_empty(map_cell)
+                eq = self.__check_is_empty(map_cell)
                 if eq == 1:
                     if f'{check_location}' not in self.__cells_for_potential_betting:
                         self.__cells_for_potential_betting.append(
@@ -320,16 +320,14 @@ class Game(Logbook):
             map_cell = self.__game_map.container.get(f'{check_location}')
             eq = -2
             if occupied:
-                eq = self.check_map_cell(map_cell)
+                eq = self.__check_map_cell(map_cell)
             else:
-                eq = self.check_is_empty(map_cell)
+                eq = self.__check_is_empty(map_cell)
                 if eq == 1:
                     if f'{check_location}' not in self.__cells_for_potential_betting:
                         self.__cells_for_potential_betting.append(
                             f'{check_location}')
 
-            # debug help
-            # print(f'{check_location} - środek - {eq}')
             return eq
 
         return 0
@@ -354,22 +352,20 @@ class Game(Logbook):
                 map_cell = self.__game_map.container.get(f'{check_location}')
                 eq = -2
                 if occupied:
-                    eq = self.check_map_cell(map_cell)
+                    eq = self.__check_map_cell(map_cell)
                 else:
-                    eq = self.check_is_empty(map_cell)
+                    eq = self.__check_is_empty(map_cell)
                     if eq == 1:
                         if f'{check_location}' not in self.__cells_for_potential_betting:
                             self.__cells_for_potential_betting.append(
                                 f'{check_location}')
 
-                # debug help
-                # print(f'{check_location} - prawo - {eq}')
                 return eq
             else:
                 return 0
         return -1
 
-    def check_map_cell(self, map_cell: MapCell):
+    def __check_map_cell(self, map_cell: MapCell):
         """
         Sprawdza czy podane w argumencie pole mapy zawiera w sobie żyjącą komórkę życia.
 
@@ -383,7 +379,7 @@ class Game(Logbook):
             return 1
         return 0
 
-    def check_is_empty(self, map_cell: MapCell):
+    def __check_is_empty(self, map_cell: MapCell):
         if isinstance(map_cell, MapCell):
              # Sprawdza czy miejsce jest puste
             if map_cell.is_occupied:
