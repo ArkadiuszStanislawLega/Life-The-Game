@@ -10,6 +10,8 @@ class MapCell:
         [MapCell] -- Jedno pole mapy.
     """
 
+    CHARACTER_REPRESENTING_AN_EMPTY_MAP_FIELD = ' '
+
     def __init__(self):
         self.__life_cell = None
         self.__is_occupied = False
@@ -60,4 +62,4 @@ class MapCell:
         if self.__is_occupied:
             return f'{self.__life_cell}'
         else:
-            return ' '
+            return self.CHARACTER_REPRESENTING_AN_EMPTY_MAP_FIELD
