@@ -4,7 +4,9 @@ from Models.location import Location
 
 
 def main():
-    game = Game(map_width=5, map_height=5)
+    game = Game(map_width=20, map_height=30)
+    game.map_refresh_rate = 0.09
+    game.number_of_cycles = 40
     glider(game)
     game.run()
 

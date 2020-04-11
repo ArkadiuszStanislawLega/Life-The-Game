@@ -1,9 +1,8 @@
 from Models.location import Location
 from Models.map_cell import MapCell
-from Models.logbook import Logbook
 
 
-class Map(Logbook):
+class Map:
     def __init__(self, width, height):
         self.__cell_container = {str: MapCell}
         self.__width = width
@@ -19,8 +18,6 @@ class Map(Logbook):
                 map_cell.location = location
 
                 self.__cell_container[f'{location}'] = map_cell
-
-        self._add_log("Utworzono mapę.")
 
     @property
     def container(self):

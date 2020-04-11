@@ -1,5 +1,4 @@
 from Models.map import Map
-from Models.logbook import Logbook
 from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
@@ -8,14 +7,11 @@ import time
 import os
 
 
-class Game(Logbook):
-    # Prędkość odświeżania mapy w sekundach.
-    MAP_REFRESH_RATE = 0.5
-    # Ilość cykli po których ma zakończyć się aplikacja.
-    NUMBER_OF_CYCLES = 19
-
+class Game:
     def __init__(self, map_width, map_height):
         self.__game_map = Map(width=map_width, height=map_height)
+        self.__map_refresh_rate = 0.5
+        self.__number_of_cycles = 40
         self.__life_cells = {}
 
         self.__cells_that_survive = {}
@@ -24,8 +20,48 @@ class Game(Logbook):
         self.__finded = []
 
     @property
-    def game_map(self):
-        return self.__game_map
+    def map_refresh_rate(self):
+        """
+        Szybkość odświeżania mapy.
+        Wartość podawana w sekundach.
+        Z taką prędkością wyknuje się jeden cykl na mapie.
+
+        Returns:
+            [float] -- Szybkość w sekundach odświeżania mapy.
+        """
+        return self.__map_refresh_rate
+
+    @map_refresh_rate.setter
+    def map_refresh_rate(self, value: float):
+        """
+        Szybkość odświeżania mapy.
+        Wartość podawana w sekundach.
+        Z taką prędkością wyknuje się jeden cykl na mapie.
+
+        Arguments:
+            value {float} -- Szybkość w sekundach odświeżania mapy.
+        """
+        self.__map_refresh_rate = value
+
+    @property
+    def number_of_cycles(self):
+        """
+        Ilość cykli po których zakończy się aplikacja.
+
+        Returns:
+            [int] -- Liczba cykli po której zakończy się aplikacja.
+        """
+        return self.__number_of_cycles
+
+    @number_of_cycles.setter
+    def number_of_cycles(self, value: int):
+        """
+        Ilość cykli po których zakończy się aplikacja.
+
+        Arguments:
+            value {int} -- Liczba cykli po której zakończy się aplikacja.
+        """
+        self.__number_of_cycles = value
 
     def put_life_cell(self, life_cell: LifeCell):
         """
@@ -43,10 +79,10 @@ class Game(Logbook):
         Włącza gre.
         """
         counter = 0
-        while counter < self.NUMBER_OF_CYCLES:
+        while counter < self.__number_of_cycles:
             os.system('cls')
             print(f'{counter}')
-            self.game_map.print_map()
+            self.__game_map.print_map()
 
             self.__check_current_cells_to_see_if_they_survive()
             self.__find_empty_cells_to_live_and_put_new_ones()
@@ -56,7 +92,7 @@ class Game(Logbook):
             self.__clear_after_round()
 
             counter += 1
-            time.sleep(self.MAP_REFRESH_RATE)
+            time.sleep(self.__map_refresh_rate)
 
     def __clear_after_round(self):
         """
