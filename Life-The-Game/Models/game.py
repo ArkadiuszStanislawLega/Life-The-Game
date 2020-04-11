@@ -76,8 +76,8 @@ class Game:
     def put_coordinates_to_map(self, coordinates, x, y):
         for item in coordinates:
             location = Location()
-            location.X = x + item[1]
-            location.Y = y + item[0]
+            location.X = x + item[0]
+            location.Y = y + item[1]
             lifecell = LifeCell()
             lifecell.is_alive = True
             lifecell.location = location
