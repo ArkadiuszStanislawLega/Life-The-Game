@@ -8,6 +8,42 @@ class Map:
         self.__width = width
         self.__height = height
 
+        self.__create_empty_cells()
+
+    @property
+    def container(self):
+        """
+        Kontener z komórkami mapy.
+
+        Returns:
+            [dictionary{str:MapCell}] -- Słownik z komórkami mapy, kluczami są koordynaty lokacji (x, y)
+        """
+        return self.__cell_container
+
+    @property
+    def width(self):
+        """
+        Szerokość mapy.
+
+        Returns:
+            [int] -- Podana w argumencie szerokość mapy.
+        """
+        return self.__width
+
+    @property
+    def height(self):
+        """
+        Wysokość mapy.
+
+        Returns:
+            [int] -- Podana w argumencie wysokość mapy.
+        """
+        return self.__height
+
+    def __create_empty_cells(self):
+        """
+        Tworzy wszystkie komórki potrzebne do działania gry.
+        """
         for y in range(self.__height):
             for x in range(self.__width):
                 location = Location()
@@ -19,19 +55,10 @@ class Map:
 
                 self.__cell_container[f'{location}'] = map_cell
 
-    @property
-    def container(self):
-        return self.__cell_container
-
-    @property
-    def width(self):
-        return self.__width
-
-    @property
-    def height(self):
-        return self.__height
-
     def print_map(self):
+        """
+        Rysuje mapę w konsoli.
+        """
         for y in range(self.__height):
             for x in range(self.__width):
                 location = Location()
