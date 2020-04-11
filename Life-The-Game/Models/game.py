@@ -232,6 +232,7 @@ class Game:
 
         Arguments:
             location {Location} -- koordynaty pod którymi mają zostać sprawdzone pola
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
 
         Returns:
             [int] -- -1 - jeżeli podana w atrybucie lokacja nie jest instancją klasy Location,
@@ -264,6 +265,7 @@ class Game:
 
         Arguments:
             location {Location} -- koordynaty w około których mają zostać sprawdzone pola
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
 
         Returns:
             [int] -- -1 - jeżeli podana w atrybucie lokacja nie jest instancją klasy Location,
@@ -286,6 +288,7 @@ class Game:
 
         Arguments:
             location {Location} -- koordynaty nad którymi mają zostać sprawdzone pola
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
 
         Returns:
             [int] -- -1 - jeżeli podana w atrybucie lokacja nie jest instancją klasy Location,
@@ -317,6 +320,7 @@ class Game:
 
         Arguments:
             location {Location} -- koordynaty od których ma zostać srawdzone pole na lewo
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
 
         Returns:
             [int] --  0 - jeżeli lokacja wychodzi po za obszar mapy
@@ -347,6 +351,7 @@ class Game:
 
         Arguments:
             location {Location} -- koordynaty od których ma zostać srawdzone pole na środku
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
 
         Returns:
             [int] --  0 - jeżeli lokacja wychodzi po za obszar mapy
@@ -377,6 +382,7 @@ class Game:
 
         Arguments:
             location {Location} -- koordynaty od których ma zostać srawdzone pole na prawo
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
 
         Returns:
             [int] -- -1 - jeżeli podany w atrybucie element nie jest instancją klasy Lokacja
