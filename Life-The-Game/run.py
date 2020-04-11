@@ -1,13 +1,16 @@
 from Models.game import Game
 from Models.life_cell import LifeCell
 from Models.location import Location
+from Library.demonid import demonid
 
 
 def main():
-    game = Game(map_width=20, map_height=30)
+    game = Game(map_width=60, map_height=35)
     game.map_refresh_rate = 0.09
-    game.number_of_cycles = 40
-    glider(game)
+    game.number_of_cycles = 120
+    game.is_stats_are_visibile = False
+    demonid(game, 17, 0)
+    demonid(game, 0, 0)
     game.run()
 
 

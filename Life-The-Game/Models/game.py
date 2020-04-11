@@ -14,10 +14,20 @@ class Game:
         self.__number_of_cycles = 40
         self.__life_cells = {}
 
+        self.__is_stats_are_visible = True
+
         self.__cells_that_survive = {}
         self.__cells_that_will_die = []
         self.__cells_for_potential_betting = []
         self.__finded = []
+
+    @property
+    def is_stats_are_visibile(self):
+        return self.__is_stats_are_visible
+
+    @is_stats_are_visibile.setter
+    def is_stats_are_visibile(self, value: bool):
+        self.__is_stats_are_visible = value
 
     @property
     def map_refresh_rate(self):
@@ -63,6 +73,16 @@ class Game:
         """
         self.__number_of_cycles = value
 
+    def put_coordinates_to_map(self, coordinates, x, y):
+        for item in coordinates:
+            location = Location()
+            location.X = x + item[1]
+            location.Y = y + item[0]
+            lifecell = LifeCell()
+            lifecell.is_alive = True
+            lifecell.location = location
+            self.put_life_cell(lifecell)
+
     def put_life_cell(self, life_cell: LifeCell):
         """
         Wstawia komórkę życia do określonego pola na mapie.
@@ -86,8 +106,11 @@ class Game:
 
             self.__check_current_cells_to_see_if_they_survive()
             self.__find_empty_cells_to_live_and_put_new_ones()
-            self.__print_survived_cells()
-            self.__print_dead_cells()
+
+            if self.__is_stats_are_visible:
+                self.__print_stats_survived_cells()
+                self.__print_stats_dead_cells()
+
             self.__remove_dead_cells()
             self.__clear_after_round()
 
@@ -208,7 +231,7 @@ class Game:
             counter_cells_in_neighbor_mid = 0
             counter_cells_in_neighbor_bot = 0
 
-    def __print_survived_cells(self):
+    def __print_stats_survived_cells(self):
         """
         Drukuje do konsoli wszystkie komórki które przeżyją.
         """
@@ -218,7 +241,7 @@ class Game:
             print(f'{cnt}. {item} {self.__cells_that_survive[item]}')
             cnt += 1
 
-    def __print_dead_cells(self):
+    def __print_stats_dead_cells(self):
         """
         Drukuje do konsoli wszystkie komórki które umrą.
         """
