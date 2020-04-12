@@ -5,6 +5,7 @@ from Library.demonid import demonid
 from Library.glider import glider
 from Library.horizontal_line import horizontal_line
 from Library.spaceship import spaceship
+from Library.noah_ark import noah_ark
 
 
 def main():
@@ -24,6 +25,7 @@ def main():
     horizontal_line(game, 13, 40)
     horizontal_line(game, 16, 40)
     spaceship(game, 60, 20)
+    noah_ark(game, 30, 15)
     game.run()
 
 
