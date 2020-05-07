@@ -38,6 +38,12 @@ def main():
     clock = pygame.time.Clock()
     counter = 0
 
+    cells = [CellView(screen), CellView(screen), CellView(screen)]
+
+    cells[0].change_coordinates(10, 20)
+    cells[1].change_coordinates(10, 30)
+    cells[2].change_coordinates(10, 40)
+
     cell = CellView(screen)
     while carry_on:
 
@@ -48,30 +54,35 @@ def main():
 
         # --- Game logic should go here
 
-        # --- Drawing code should go here
-        # First, clear the screen to white.
         screen.fill(COLOUR_BACKGROUND)
 
-        new_left_position = cell.distance_from_the_left + 10
-        new_top_position = cell.distance_from_the_top + 10
+        new_left_position = cell.distance_from_the_left + 1
+        new_top_position = cell.distance_from_the_top + 1
 
         font = pygame.font.Font('freesansbold.ttf', 10)
-        text = font.render(f'{new_left_position}', True, GREEN, RED)
+        text = font.render(f'{new_left_position}', True, GREEN, BLACK)
         textRect = text.get_rect()
         textRect.center = (200 // 2, 200 // 2)
 
         screen.blit(text, textRect)
-        screen.blit(screen,
-                    (new_left_position, new_top_position),  cell.body)
 
-        cell.change_location(new_left_position, new_top_position)
+        cell.change_coordinates(new_left_position, new_top_position)
 
-        # --- Go ahead and update the screen with what we've drawn.
-        pygame.display.flip()
+        if counter == 50:
+            cells.remove(cells[2])
+        if counter == 100:
+            cells.remove(cells[1])
+        if counter == 150:
+            cells.remove(cells[0])
 
-        # --- Limit to 60 frames per second
+        for rect in cells:
+            pygame.draw.ellipse(screen, BLACK, rect.body)
+
+        pygame.draw.ellipse(screen, BLACK, cell.body)
+
         counter += 1
         clock.tick(60)
+        pygame.display.flip()
 
     # Once we have exited the main program loop we can stop the game engine:
     pygame.quit()

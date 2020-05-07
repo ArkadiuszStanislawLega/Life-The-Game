@@ -11,11 +11,15 @@ class CellView:
     def __init__(self, screen):
         self.__distance_from_the_top = 10
         self.__distance_from_the_left = 10
+        self.__coordinates = (self.__distance_from_the_left // 2,
+                              self.__distance_from_the_top // 2)
+
         self.__width = self.WIDTH
         self.__height = self.HEIGHT
+        self.__size = (self.__width, self.__height)
         self.__screen = screen
-        self.__position = [self.__distance_from_the_left,
-                           self.__distance_from_the_top, self.__width, self.__height]
+
+        self.__position = (self.__coordinates, self.__size)
 
         self.__body = pygame.draw.ellipse(
             self.__screen, self.LIVE_COLOUR, self.__position, 0)
@@ -29,6 +33,14 @@ class CellView:
         return self.__body
 
     @property
+    def width(self):
+        return self.__width
+
+    @property
+    def height(self):
+        return self.__height
+
+    @property
     def distance_from_the_top(self):
         return self.__distance_from_the_top
 
@@ -36,9 +48,18 @@ class CellView:
     def distance_from_the_left(self):
         return self.__distance_from_the_left
 
-    def change_location(self, top, left):
-        if isinstance(top, int) and isinstance(left, int):
-            if top > 0 and left > 0:
-                if top < self.__bot_border - self.__height and left < self.__right_border - self.__width:
-                    self.__distance_from_the_top = top
-                    self.__distance_from_the_lef = left
+    @property
+    def position(self):
+        return self.__position
+
+    def change_coordinates(self, x, y):
+        if isinstance(y, int) and isinstance(x, int):
+            if y > 0 and x > 0:
+                if y < self.__bot_border - self.__height and x < self.__right_border - self.__width:
+                    self.__distance_from_the_top = y
+                    self.__distance_from_the_left = x
+                    self.__coordinates = (self.__distance_from_the_left // 1,
+                                          self.__distance_from_the_top // 1)
+                    self.__position = (self.__coordinates, self.__size)
+                    self.__body = pygame.draw.ellipse(
+                        self.__screen, self.LIVE_COLOUR, self.__position, 0)
