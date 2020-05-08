@@ -159,12 +159,16 @@ class App():
             f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.', True,  self.COLOUR_TEXT, self.DARKRED)
         information_about_pause_part_2 = font.render(
             f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ', True,  self.COLOUR_TEXT, self.DARKRED)
+        information_about_delay_speed = font.render(
+            f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-', True,  self.COLOUR_TEXT, self.DARKRED)
 
         self.__screen.blit(title_dead_cells, (15, 15))
         self.__screen.blit(title_live_cells, (15, 30))
 
         self.__screen.blit(delay_info, (15, 45))
 
+        self.__screen.blit(information_about_delay_speed,
+                           (15, self.WINDOW_HEIGHT-45))
         self.__screen.blit(information_about_pause_part_1,
                            (15, self.WINDOW_HEIGHT-30))
         self.__screen.blit(information_about_pause_part_2,
@@ -228,8 +232,8 @@ class App():
                 self.__delay_counter = 0
 
             # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
-            self.__print_text()
             self.__print_all_live_cells()
+            self.__print_text()
 
             self.__clock.tick(self.REFRESH_RATE)
             pygame.display.flip()
