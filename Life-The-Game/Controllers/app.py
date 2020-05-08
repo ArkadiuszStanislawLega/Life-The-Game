@@ -17,16 +17,20 @@ class App():
     RED = (255, 0, 0)
     GRAY = (192, 192, 192)
     DARKRED = (139, 0, 0)
+    MATRIX = (52, 195, 5)
 
-    COLOUR_BACKGROUND = GRAY
+    COLOUR_BACKGROUND = BLACK
+    COLOUR_CELLS = MATRIX
+    COLOUR_TEXT = WHITE
+    COLOUT_TEXT_BACKGROUD = COLOUR_BACKGROUND
 
     GAME_WIDTH = 120
-    GAME_HEIGHT = 80
+    GAME_HEIGHT = 60
 
     REFRESH_RATE = 60
 
     WINDOW_WIDTH = 1200
-    WINDOW_HEIGHT = 800
+    WINDOW_HEIGHT = 600
 
     WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
     WINDOW_TITLE = "Life the game"
@@ -49,16 +53,29 @@ class App():
         self.start_game()
 
     def cells_at_the_begginning(self):
-        horizontal_line(self.__game, 10, 10)
-        demonid(self.__game, 40, 20)
-        spaceship(self.__game, 30, 60)
+        # demonid(self.__game, 1, 5)
+        # demonid(self.__game, 23, 5)
+        # demonid(self.__game, 46, 5)
+        # demonid(self.__game, 70, 5)
+
+        # demonid(self.__game, 1, 20)
+        # demonid(self.__game, 23, 20)
+        # demonid(self.__game, 46, 20)
+        # demonid(self.__game, 70, 20)
+
+        # demonid(self.__game, 1, 35)
+        # demonid(self.__game, 23, 35)
+        # demonid(self.__game, 46, 35)
+        # demonid(self.__game, 70, 35)
+
+        spaceship(self.__game, 60, 20)
 
         glider(self.__game, 80, 10)
         glider(self.__game, 90, 10)
         glider(self.__game, 100, 10)
         glider(self.__game, 110, 10)
 
-        noah_ark(self.__game, 80, 20)
+        noah_ark(self.__game, 20, 30)
 
     def add_new_cells(self):
         for key, value in self.__game.life_cells.items():
@@ -87,18 +104,19 @@ class App():
     def print_all_live_cells(self):
         if len(self.__cells):
             for rect in self.__cells.values():
-                pygame.draw.ellipse(self.__screen, self.BLACK, rect.body)
+                pygame.draw.ellipse(
+                    self.__screen, self.COLOUR_CELLS, rect.body)
 
     def print_text(self):
         font = pygame.font.Font('freesansbold.ttf', 12)
 
         text = font.render(
-            f'Umiera: {len(self.__keys_of_dead_cells)} komórek', True, self.DARKRED, self.GRAY)
+            f'Umiera: {len(self.__keys_of_dead_cells)} komórek', True, self.COLOUR_TEXT, self.COLOUT_TEXT_BACKGROUD)
         textRect = text.get_rect()
         textRect.center = (100 // 1, 10 // 1)
 
         text2 = font.render(
-            f'Żywych komórek: {len(self.__cells)}', True,  self.DARKRED, self.GRAY)
+            f'Żywych komórek: {len(self.__cells)}', True,  self.COLOUR_TEXT, self.COLOUT_TEXT_BACKGROUD)
         textRect2 = text2.get_rect()
         textRect2.center = (100 // 1, 25 // 1)
 
