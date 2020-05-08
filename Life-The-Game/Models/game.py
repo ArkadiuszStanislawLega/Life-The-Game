@@ -9,8 +9,6 @@ class Game:
         self.__game_map = Map(width=map_width, height=map_height)
         self.__life_cells = {}
 
-        self.__is_stats_are_visible = True
-
         self.__cells_that_survive = {}
         self.__cells_that_will_die = []
         self.__cells_for_potential_betting = []
@@ -19,14 +17,6 @@ class Game:
     @property
     def life_cells(self):
         return self.__life_cells
-
-    @property
-    def is_stats_are_visibile(self):
-        return self.__is_stats_are_visible
-
-    @is_stats_are_visibile.setter
-    def is_stats_are_visibile(self, value: bool):
-        self.__is_stats_are_visible = value
 
     def put_coordinates_to_map(self, coordinates, x, y):
         for item in coordinates:

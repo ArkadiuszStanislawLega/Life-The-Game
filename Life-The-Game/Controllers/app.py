@@ -19,18 +19,24 @@ class App():
     DARKRED = (139, 0, 0)
     MATRIX = (52, 195, 5)
 
+    REFRESH_RATE = 60
+
     COLOUR_BACKGROUND = BLACK
     COLOUR_CELLS = MATRIX
     COLOUR_TEXT = WHITE
     COLOUT_TEXT_BACKGROUD = COLOUR_BACKGROUND
 
+    FONT_SIZE = 12
+    FONT_NAME = 'freesansbold.ttf'
+
     GAME_WIDTH = 120
     GAME_HEIGHT = 60
 
-    REFRESH_RATE = 60
+    CELLS_WIDTH = 10
+    CELLS_HEIGHT = 10
 
-    WINDOW_WIDTH = 1200
-    WINDOW_HEIGHT = 600
+    WINDOW_WIDTH = GAME_WIDTH*CELLS_WIDTH
+    WINDOW_HEIGHT = GAME_HEIGHT*CELLS_HEIGHT
 
     WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
     WINDOW_TITLE = "Life the game"
@@ -43,16 +49,18 @@ class App():
         self.__game_delay = 1
         self.__delay_counter = 0
         self.__is_working = True
-
+        # Instancja gry - mechanika działania
         self.__game = Game(map_width=self.GAME_WIDTH,
                            map_height=self.GAME_HEIGHT)
-        self.__game.is_stats_are_visibile = False
 
-        self.cells_at_the_begginning()
+        self.__cells_at_the_begginning()
 
         self.start_game()
 
-    def cells_at_the_begginning(self):
+    def __cells_at_the_begginning(self):
+        """
+        Początkowy układ komórek przy uruchomieniu aplikacji.
+        """
         # demonid(self.__game, 1, 5)
         # demonid(self.__game, 23, 5)
         # demonid(self.__game, 46, 5)
@@ -77,18 +85,31 @@ class App():
 
         noah_ark(self.__game, 20, 30)
 
-    def add_new_cells(self):
+    def __add_new_cells(self):
+        """
+        Dodaje wszystkie widoki komórek które są utworzone w instancji gry.
+        """
         for key, value in self.__game.life_cells.items():
             if not self.__cells.get(key):
-                self.__cells.update({key: CellView(self.__screen, value)})
+                new_cell = CellView(self.__screen, value)
+                new_cell.width = self.CELLS_WIDTH
+                new_cell.height = self.CELLS_HEIGHT
+                new_cell.colour = self.COLOUR_CELLS
+                self.__cells.update({key: new_cell})
 
-    def make_list_of_dead_cells(self):
+    def __make_list_of_dead_cells(self):
+        """
+        Tworzy listę kluczy komórek które umrą w rundzie.
+        """
         if len(self.__cells) > 0:
             for key, value in self.__cells.items():
                 if value.model == None or not value.model.is_alive:
                     self.__keys_of_dead_cells.append(key)
 
-    def remove_dead_cells(self):
+    def __remove_dead_cells(self):
+        """
+        Usuwa wszystkie widoki martwych komórek, po kluczach komórek.
+        """
         if len(self.__keys_of_dead_cells) > 0:
             for key in self.__keys_of_dead_cells:
                 if self.__cells.get(key):
@@ -96,45 +117,51 @@ class App():
 
         self.__keys_of_dead_cells.clear()
 
-    def update_live_cells(self):
+    def __update_live_cells(self):
+        """
+        Aktualizuje pozycję widoków komórek.
+        """
         if len(self.__cells):
             for rect in self.__cells.values():
                 rect.update()
 
-    def print_all_live_cells(self):
+    def __print_all_live_cells(self):
+        """
+        Drukuje wszystkie widoki komórek.
+        """
         if len(self.__cells):
             for rect in self.__cells.values():
                 pygame.draw.ellipse(
                     self.__screen, self.COLOUR_CELLS, rect.body)
 
-    def print_text(self):
-        font = pygame.font.Font('freesansbold.ttf', 12)
+    def __print_text(self):
+        """
+        Drukuje wszystkie napisy w oknie.
+        """
+        font = pygame.font.Font(self.FONT_NAME, self.FONT_SIZE)
 
-        text = font.render(
-            f'Umiera: {len(self.__keys_of_dead_cells)} komórek', True, self.COLOUR_TEXT, self.COLOUT_TEXT_BACKGROUD)
-        textRect = text.get_rect()
-        textRect.center = (100 // 1, 10 // 1)
+        title_dead_cells = font.render(
+            f'Umierających komórek: {len(self.__keys_of_dead_cells)}', True, self.COLOUR_TEXT)
 
-        text2 = font.render(
-            f'Żywych komórek: {len(self.__cells)}', True,  self.COLOUR_TEXT, self.COLOUT_TEXT_BACKGROUD)
-        textRect2 = text2.get_rect()
-        textRect2.center = (100 // 1, 25 // 1)
+        title_live_cells = font.render(
+            f'Żywych komórek: {len(self.__cells)}', True,  self.COLOUR_TEXT)
 
-        self.__screen.blit(text, textRect)
-        self.__screen.blit(text2, textRect2)
+        self.__screen.blit(title_dead_cells, (15, 15))
+        self.__screen.blit(title_live_cells, (15, 30))
 
     def start_game(self):
+        """
+        Inicjalizuje grę. 
+        Zawarta tutaj jest główna pętla aplikacji.
+        """
         pygame.init()
         pygame.display.set_caption(self.WINDOW_TITLE)
 
         while self.__is_working:
 
-            # --- Main event loop
-            for event in pygame.event.get():  # User did something
-                if event.type == pygame.QUIT:  # If user clicked close
-                    self.__is_working = False             # Flag that we are done so we exit this loop
-
-            # --- Game logic should go here
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.__is_working = False
 
             self.__screen.fill(self.COLOUR_BACKGROUND)
 
@@ -142,17 +169,17 @@ class App():
 
             if self.__delay_counter == self.__game_delay:
                 self.__game.run()
-                self.make_list_of_dead_cells()
-                self.print_text()
-                self.remove_dead_cells()
-                self.add_new_cells()
-                self.update_live_cells()
+                self.__make_list_of_dead_cells()
+                # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
+                self.__print_text()
+                self.__remove_dead_cells()
+                self.__add_new_cells()
+                self.__update_live_cells()
                 self.__delay_counter = 0
 
-            self.print_all_live_cells()
+            self.__print_all_live_cells()
 
             self.__clock.tick(self.REFRESH_RATE)
             pygame.display.flip()
 
-        # Once we have exited the main program loop we can stop the game engine:
         pygame.quit()
