@@ -77,6 +77,8 @@ class App():
                 if self.__cells.get(key):
                     self.__cells.pop(key)
 
+        self.__keys_of_dead_cells.clear()
+
     def update_live_cells(self):
         if len(self.__cells):
             for rect in self.__cells.values():
@@ -86,6 +88,22 @@ class App():
         if len(self.__cells):
             for rect in self.__cells.values():
                 pygame.draw.ellipse(self.__screen, self.BLACK, rect.body)
+
+    def print_text(self):
+        font = pygame.font.Font('freesansbold.ttf', 12)
+
+        text = font.render(
+            f'Umiera: {len(self.__keys_of_dead_cells)} komórek', True, self.DARKRED, self.GRAY)
+        textRect = text.get_rect()
+        textRect.center = (100 // 1, 10 // 1)
+
+        text2 = font.render(
+            f'Żywych komórek: {len(self.__cells)}', True,  self.DARKRED, self.GRAY)
+        textRect2 = text2.get_rect()
+        textRect2.center = (100 // 1, 25 // 1)
+
+        self.__screen.blit(text, textRect)
+        self.__screen.blit(text2, textRect2)
 
     def start_game(self):
         pygame.init()
@@ -107,6 +125,7 @@ class App():
             if self.__delay_counter == self.__game_delay:
                 self.__game.run()
                 self.make_list_of_dead_cells()
+                self.print_text()
                 self.remove_dead_cells()
                 self.add_new_cells()
                 self.update_live_cells()
