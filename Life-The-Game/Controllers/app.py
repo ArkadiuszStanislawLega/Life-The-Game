@@ -8,6 +8,7 @@ from Library.spaceship import spaceship
 from Library.noah_ark import noah_ark
 from Views.cell_view import CellView
 import pygame
+import sys
 
 
 class App():
@@ -44,14 +45,19 @@ class App():
     def __init__(self):
         self.__cells = {}
         self.__keys_of_dead_cells = []
+        self.__number_of_dead_cells = 0
         self.__screen = pygame.display.set_mode(self.WINDOW_SIZE)
         self.__clock = pygame.time.Clock()
-        self.__game_delay = 1
+        self.__current_game_delay = 1
+        self.__default_game_delay = 1
+        self.__user_game_delay = 1
+        self.__is_user_change_delay = False
         self.__delay_counter = 0
         self.__is_working = True
         # Instancja gry - mechanika działania
         self.__game = Game(map_width=self.GAME_WIDTH,
                            map_height=self.GAME_HEIGHT)
+        self.__is_space_pushed = False
 
         self.__cells_at_the_begginning()
 
@@ -141,13 +147,28 @@ class App():
         font = pygame.font.Font(self.FONT_NAME, self.FONT_SIZE)
 
         title_dead_cells = font.render(
-            f'Umierających komórek: {len(self.__keys_of_dead_cells)}', True, self.COLOUR_TEXT)
+            f'Umierających komórek: {self.__number_of_dead_cells}', True, self.COLOUR_TEXT)
 
         title_live_cells = font.render(
             f'Żywych komórek: {len(self.__cells)}', True,  self.COLOUR_TEXT)
 
+        delay_info = font.render(
+            f'Opóźnienie gry: {self.__current_game_delay}', True,  self.COLOUR_TEXT, self.DARKRED)
+
+        information_about_pause_part_1 = font.render(
+            f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.', True,  self.COLOUR_TEXT, self.DARKRED)
+        information_about_pause_part_2 = font.render(
+            f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ', True,  self.COLOUR_TEXT, self.DARKRED)
+
         self.__screen.blit(title_dead_cells, (15, 15))
         self.__screen.blit(title_live_cells, (15, 30))
+
+        self.__screen.blit(delay_info, (15, 45))
+
+        self.__screen.blit(information_about_pause_part_1,
+                           (15, self.WINDOW_HEIGHT-30))
+        self.__screen.blit(information_about_pause_part_2,
+                           (15, self.WINDOW_HEIGHT-15))
 
     def start_game(self):
         """
@@ -163,20 +184,51 @@ class App():
                 if event.type == pygame.QUIT:
                     self.__is_working = False
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        if self.__is_space_pushed:
+                            if self.__is_user_change_delay:
+                                self.__current_game_delay = self.__user_game_delay
+                            else:
+                                self.__current_game_delay = self.__default_game_delay
+
+                            self.__delay_counter = 0
+                            self.__is_space_pushed = False
+                        else:
+                            self.__current_game_delay = -1
+                            self.__is_space_pushed = True
+                            self.__print_text()
+
+                    if event.key == pygame.K_KP_PLUS or event.key == pygame.K_PLUS:
+                        self.__is_user_change_delay = True
+                        self.__user_game_delay += 1
+                        self.__delay_counter = 0
+                        self.__current_game_delay = self.__user_game_delay
+
+                    if event.key == pygame.K_KP_MINUS or event.key == pygame.K_MINUS:
+                        self.__is_user_change_delay = True
+                        if self.__user_game_delay > 1:
+                            self.__user_game_delay -= 1
+                            self.__delay_counter = 0
+                            self.__current_game_delay = self.__user_game_delay
+
             self.__screen.fill(self.COLOUR_BACKGROUND)
 
             self.__delay_counter += 1
 
-            if self.__delay_counter == self.__game_delay:
+            if self.__delay_counter == self.__current_game_delay:
                 self.__game.run()
                 self.__make_list_of_dead_cells()
                 # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
+                self.__number_of_dead_cells = len(self.__keys_of_dead_cells)
                 self.__print_text()
                 self.__remove_dead_cells()
                 self.__add_new_cells()
                 self.__update_live_cells()
                 self.__delay_counter = 0
 
+            # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
+            self.__print_text()
             self.__print_all_live_cells()
 
             self.__clock.tick(self.REFRESH_RATE)
