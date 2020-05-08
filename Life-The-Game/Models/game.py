@@ -3,15 +3,10 @@ from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
 
-import time
-import os
-
 
 class Game:
     def __init__(self, map_width, map_height):
         self.__game_map = Map(width=map_width, height=map_height)
-        self.__map_refresh_rate = 0.5
-        self.__number_of_cycles = 40
         self.__life_cells = {}
 
         self.__is_stats_are_visible = True
@@ -32,50 +27,6 @@ class Game:
     @is_stats_are_visibile.setter
     def is_stats_are_visibile(self, value: bool):
         self.__is_stats_are_visible = value
-
-    @property
-    def map_refresh_rate(self):
-        """
-        Szybkość odświeżania mapy.
-        Wartość podawana w sekundach.
-        Z taką prędkością wyknuje się jeden cykl na mapie.
-
-        Returns:
-            [float] -- Szybkość w sekundach odświeżania mapy.
-        """
-        return self.__map_refresh_rate
-
-    @map_refresh_rate.setter
-    def map_refresh_rate(self, value: float):
-        """
-        Szybkość odświeżania mapy.
-        Wartość podawana w sekundach.
-        Z taką prędkością wyknuje się jeden cykl na mapie.
-
-        Arguments:
-            value {float} -- Szybkość w sekundach odświeżania mapy.
-        """
-        self.__map_refresh_rate = value
-
-    @property
-    def number_of_cycles(self):
-        """
-        Ilość cykli po których zakończy się aplikacja.
-
-        Returns:
-            [int] -- Liczba cykli po której zakończy się aplikacja.
-        """
-        return self.__number_of_cycles
-
-    @number_of_cycles.setter
-    def number_of_cycles(self, value: int):
-        """
-        Ilość cykli po których zakończy się aplikacja.
-
-        Arguments:
-            value {int} -- Liczba cykli po której zakończy się aplikacja.
-        """
-        self.__number_of_cycles = value
 
     def put_coordinates_to_map(self, coordinates, x, y):
         for item in coordinates:
@@ -102,24 +53,11 @@ class Game:
         """
         Włącza gre.
         """
-        counter = 0
-        # while counter < self.__number_of_cycles:
-        # os.system('cls')
-        # print(f'{counter}')
-        self.__game_map.print_map()
-
         self.__check_current_cells_to_see_if_they_survive()
         self.__find_empty_cells_to_live_and_put_new_ones()
 
-        # if self.__is_stats_are_visible:
-        #     self.__print_stats_survived_cells()
-        #     self.__print_stats_dead_cells()
-
         self.__remove_dead_cells()
         self.__clear_after_round()
-
-        # counter += 1
-        # time.sleep(self.__map_refresh_rate)
 
     def __clear_after_round(self):
         """

@@ -23,6 +23,8 @@ class App():
     GAME_WIDTH = 120
     GAME_HEIGHT = 80
 
+    REFRESH_RATE = 60
+
     WINDOW_WIDTH = 1200
     WINDOW_HEIGHT = 800
 
@@ -40,8 +42,6 @@ class App():
 
         self.__game = Game(map_width=self.GAME_WIDTH,
                            map_height=self.GAME_HEIGHT)
-        self.__game.map_refresh_rate = 0.05
-        self.__game.number_of_cycles = 120
         self.__game.is_stats_are_visibile = False
 
         self.cells_at_the_begginning()
@@ -114,7 +114,7 @@ class App():
 
             self.print_all_live_cells()
 
-            self.__clock.tick(60)
+            self.__clock.tick(self.REFRESH_RATE)
             pygame.display.flip()
 
         # Once we have exited the main program loop we can stop the game engine:

@@ -63,18 +63,6 @@ class CellView:
     def position(self):
         return self.__position
 
-    def change_coordinates(self, x, y):
-        if isinstance(y, int) and isinstance(x, int):
-            if y > 0 and x > 0:
-                if y < self.__bot_border - self.__height and x < self.__right_border - self.__width:
-                    self.__distance_from_the_top = y
-                    self.__distance_from_the_left = x
-                    self.__coordinates = (self.__distance_from_the_left // 1,
-                                          self.__distance_from_the_top // 1)
-                    self.__position = (self.__coordinates, self.__size)
-                    self.__body = pygame.draw.ellipse(
-                        self.__screen, self.LIVE_COLOUR, self.__position, 0)
-
     def update(self):
         self.__distance_from_the_top = self.__model.location.X * self.__width
         self.__distance_from_the_left = self.__model.location.Y * self.__height
