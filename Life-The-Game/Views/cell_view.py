@@ -8,7 +8,9 @@ class CellView:
     HEIGHT = 10
     WIDTH = 10
 
-    def __init__(self, screen):
+    MARGIN = 2
+
+    def __init__(self, screen, model):
         self.__distance_from_the_top = 10
         self.__distance_from_the_left = 10
         self.__coordinates = (self.__distance_from_the_left // 2,
@@ -27,6 +29,15 @@ class CellView:
         self.__screen_surface = pygame.display.get_surface().get_size()
         self.__right_border = self.__screen_surface[0]
         self.__bot_border = self.__screen_surface[1]
+        self.__model = model
+
+    @property
+    def model(self):
+        return self.__model
+
+    @property
+    def name(self):
+        return self.__model.name
 
     @property
     def body(self):
@@ -63,3 +74,15 @@ class CellView:
                     self.__position = (self.__coordinates, self.__size)
                     self.__body = pygame.draw.ellipse(
                         self.__screen, self.LIVE_COLOUR, self.__position, 0)
+
+    def update(self):
+        self.__distance_from_the_top = self.__model.location.X * self.__width
+        self.__distance_from_the_left = self.__model.location.Y * self.__height
+
+        self.__coordinates = (self.__distance_from_the_top // 1,
+                              self.__distance_from_the_left // 1)
+
+        self.__position = (self.__coordinates, self.__size)
+
+        self.__body = pygame.draw.ellipse(
+            self.__screen, self.LIVE_COLOUR, self.__position, 0)

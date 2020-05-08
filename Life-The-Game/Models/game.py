@@ -22,6 +22,10 @@ class Game:
         self.__finded = []
 
     @property
+    def life_cells(self):
+        return self.__life_cells
+
+    @property
     def is_stats_are_visibile(self):
         return self.__is_stats_are_visible
 
@@ -99,23 +103,23 @@ class Game:
         Włącza gre.
         """
         counter = 0
-        while counter < self.__number_of_cycles:
-            os.system('cls')
-            print(f'{counter}')
-            self.__game_map.print_map()
+        # while counter < self.__number_of_cycles:
+        # os.system('cls')
+        # print(f'{counter}')
+        self.__game_map.print_map()
 
-            self.__check_current_cells_to_see_if_they_survive()
-            self.__find_empty_cells_to_live_and_put_new_ones()
+        self.__check_current_cells_to_see_if_they_survive()
+        self.__find_empty_cells_to_live_and_put_new_ones()
 
-            if self.__is_stats_are_visible:
-                self.__print_stats_survived_cells()
-                self.__print_stats_dead_cells()
+        # if self.__is_stats_are_visible:
+        #     self.__print_stats_survived_cells()
+        #     self.__print_stats_dead_cells()
 
-            self.__remove_dead_cells()
-            self.__clear_after_round()
+        self.__remove_dead_cells()
+        self.__clear_after_round()
 
-            counter += 1
-            time.sleep(self.__map_refresh_rate)
+        # counter += 1
+        # time.sleep(self.__map_refresh_rate)
 
     def __clear_after_round(self):
         """

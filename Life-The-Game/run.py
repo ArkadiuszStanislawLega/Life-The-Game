@@ -19,8 +19,8 @@ DARKRED = (139, 0, 0)
 
 COLOUR_BACKGROUND = GRAY
 
-WIDTH = 700
-HEIGHT = 500
+WIDTH = 1200
+HEIGHT = 800
 
 SIZE = (WIDTH, HEIGHT)
 
@@ -30,21 +30,28 @@ WINDOW_TITLE = "Life the game"
 def main():
     pygame.init()
 
+    game = Game(map_width=120, map_height=80)
+    game.map_refresh_rate = 0.05
+    game.number_of_cycles = 120
+    game.is_stats_are_visibile = False
+
+    horizontal_line(game, 10, 10)
+    demonid(game, 40, 20)
+    spaceship(game, 50, 40)
+
+    game.run()
+
     screen = pygame.display.set_mode(SIZE)
     pygame.display.set_caption(WINDOW_TITLE)
 
     carry_on = True
 
     clock = pygame.time.Clock()
+
     counter = 0
 
-    cells = [CellView(screen), CellView(screen), CellView(screen)]
+    cells = {}
 
-    cells[0].change_coordinates(10, 20)
-    cells[1].change_coordinates(10, 30)
-    cells[2].change_coordinates(10, 40)
-
-    cell = CellView(screen)
     while carry_on:
 
         # --- Main event loop
@@ -56,31 +63,34 @@ def main():
 
         screen.fill(COLOUR_BACKGROUND)
 
-        new_left_position = cell.distance_from_the_left + 1
-        new_top_position = cell.distance_from_the_top + 1
+        counter += 1
 
-        font = pygame.font.Font('freesansbold.ttf', 10)
-        text = font.render(f'{new_left_position}', True, GREEN, BLACK)
-        textRect = text.get_rect()
-        textRect.center = (200 // 2, 200 // 2)
+        if counter == 10:
+            game.run()
 
-        screen.blit(text, textRect)
+            for key, value in game.life_cells.items():
+                if not cells.get(key):
+                    cells.update({key: CellView(screen, value)})
 
-        cell.change_coordinates(new_left_position, new_top_position)
+            dead_cells_key = []
 
-        if counter == 50:
-            cells.remove(cells[2])
-        if counter == 100:
-            cells.remove(cells[1])
-        if counter == 150:
-            cells.remove(cells[0])
+            for key, value in cells.items():
+                if value.model == None or not value.model.is_alive:
+                    dead_cells_key.append(key)
 
-        for rect in cells:
+            for key in dead_cells_key:
+                if cells.get(key):
+                    cells.pop(key)
+
+            for rect in cells.values():
+                rect.update()
+
+            counter = 0
+
+            # pygame.draw.ellipse(screen, BLACK, cell.body)
+        for rect in cells.values():
             pygame.draw.ellipse(screen, BLACK, rect.body)
 
-        pygame.draw.ellipse(screen, BLACK, cell.body)
-
-        counter += 1
         clock.tick(60)
         pygame.display.flip()
 

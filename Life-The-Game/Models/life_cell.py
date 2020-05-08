@@ -8,11 +8,16 @@ class LifeCell:
     def __init__(self):
         self.__is_alive = False
         self.__location = Location()
+        self.__name = ""
 
     def __str__(self):
         if self.__is_alive:
             return self.CHARACTER_REPRESENTING_AN_LIVE_CELL
         return self.CHARACTER_REPRESENTING_AN_DEAD_CELL
+
+    @property
+    def name(self):
+        return f'{self.__location}'
 
     @property
     def location(self):
