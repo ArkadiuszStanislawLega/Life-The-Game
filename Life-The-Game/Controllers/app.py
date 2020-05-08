@@ -9,6 +9,7 @@ from Library.noah_ark import noah_ark
 from Views.cell_view import CellView
 import pygame
 import sys
+import datetime
 
 
 class App():
@@ -43,15 +44,18 @@ class App():
     WINDOW_TITLE = "Life the game"
 
     def __init__(self):
+        self.__start_time = datetime.datetime.now()
         self.__cells = {}
         self.__keys_of_dead_cells = []
         self.__number_of_dead_cells = 0
         self.__screen = pygame.display.set_mode(self.WINDOW_SIZE)
         self.__clock = pygame.time.Clock()
+
         self.__current_game_delay = 1
         self.__default_game_delay = 1
         self.__user_game_delay = 1
         self.__is_user_change_delay = False
+
         self.__delay_counter = 0
         self.__is_working = True
         # Instancja gry - mechanika działania
@@ -153,7 +157,7 @@ class App():
             f'Żywych komórek: {len(self.__cells)}', True,  self.COLOUR_TEXT)
 
         delay_info = font.render(
-            f'Opóźnienie gry: {self.__current_game_delay}', True,  self.COLOUR_TEXT, self.DARKRED)
+            f'Opóźnienie gry: {self.__current_game_delay}', True,  self.COLOUR_TEXT)
 
         information_about_pause_part_1 = font.render(
             f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.', True,  self.COLOUR_TEXT, self.DARKRED)
@@ -161,6 +165,9 @@ class App():
             f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ', True,  self.COLOUR_TEXT, self.DARKRED)
         information_about_delay_speed = font.render(
             f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-', True,  self.COLOUR_TEXT, self.DARKRED)
+
+        current_time_of_game = font.render(
+            f'{datetime.datetime.now()-self.__start_time}', True,  self.COLOUR_TEXT)
 
         self.__screen.blit(title_dead_cells, (15, 15))
         self.__screen.blit(title_live_cells, (15, 30))
@@ -173,6 +180,9 @@ class App():
                            (15, self.WINDOW_HEIGHT-30))
         self.__screen.blit(information_about_pause_part_2,
                            (15, self.WINDOW_HEIGHT-15))
+
+        self.__screen.blit(current_time_of_game,
+                           (self.WINDOW_WIDTH-100, self.WINDOW_HEIGHT-15))
 
     def start_game(self):
         """
