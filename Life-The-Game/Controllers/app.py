@@ -6,7 +6,9 @@ from Library.glider import glider
 from Library.horizontal_line import horizontal_line
 from Library.spaceship import spaceship
 from Library.noah_ark import noah_ark
+from Library.info import struct_info
 from Views.cell_view import CellView
+import random
 import pygame
 import sys
 import datetime
@@ -45,6 +47,7 @@ class App():
 
     def __init__(self):
         self.__start_time = datetime.datetime.now()
+        self.__number_of_rounds = 0
         self.__cells = {}
         self.__keys_of_dead_cells = []
         self.__number_of_dead_cells = 0
@@ -67,10 +70,50 @@ class App():
 
         self.start_game()
 
+    def gen_random_x(self, struc_info: dict):
+        return random.randrange(0, self.GAME_WIDTH-struc_info.get("width"))
+
+    def gen_random_y(self, struc_info: dict):
+        return random.randrange(0, self.GAME_HEIGHT-struc_info.get("height"))
+
+    def generate_random_demonid(self):
+        demonid_info = struct_info().get("demonid")
+        demonid(self.__game, self.gen_random_x(
+            demonid_info), self.gen_random_y(demonid_info))
+
+    def generate_random_spaceship(self):
+        spaceship_info = struct_info().get("spaceship")
+        spaceship(self.__game, self.gen_random_x(
+            spaceship_info), self.gen_random_y(spaceship_info))
+
+    def generate_random_glider(self):
+        glider_info = struct_info().get("glider")
+        glider(self.__game, self.gen_random_x(
+            glider_info), self.gen_random_y(glider_info))
+
+    def generate_random_noah_ark(self):
+        noah_ark_info = struct_info().get("noah_ark")
+        noah_ark(self.__game, self.gen_random_x(
+            noah_ark_info), self.gen_random_y(noah_ark_info))
+
     def __cells_at_the_begginning(self):
         """
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
+        self.generate_random_demonid()
+        self.generate_random_spaceship()
+        self.generate_random_demonid()
+        # self.generate_random_spaceship()
+        self.generate_random_demonid()
+        # self.generate_random_spaceship()
+
+        self.generate_random_glider()
+        self.generate_random_glider()
+        self.generate_random_glider()
+        self.generate_random_glider()
+
+        self.generate_random_noah_ark()
+
         # demonid(self.__game, 1, 5)
         # demonid(self.__game, 23, 5)
         # demonid(self.__game, 46, 5)
@@ -86,14 +129,14 @@ class App():
         # demonid(self.__game, 46, 35)
         # demonid(self.__game, 70, 35)
 
-        spaceship(self.__game, 60, 20)
+        #spaceship(self.__game, 60, 20)
 
-        glider(self.__game, 80, 10)
-        glider(self.__game, 90, 10)
-        glider(self.__game, 100, 10)
-        glider(self.__game, 110, 10)
+        # glider(self.__game, 10, 10)
+        # glider(self.__game, 20, 10)
+        # glider(self.__game, 30, 10)
+        # glider(self.__game, 40, 10)
 
-        noah_ark(self.__game, 20, 30)
+        #noah_ark(self.__game, 20, 30)
 
     def __add_new_cells(self):
         """
@@ -159,6 +202,9 @@ class App():
         delay_info = font.render(
             f'Opóźnienie gry: {self.__current_game_delay}', True,  self.COLOUR_TEXT)
 
+        number_of_rounds = font.render(
+            f'Numer rundy: {self.__number_of_rounds}', True,  self.COLOUR_TEXT)
+
         information_about_pause_part_1 = font.render(
             f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.', True,  self.COLOUR_TEXT, self.DARKRED)
         information_about_pause_part_2 = font.render(
@@ -173,6 +219,7 @@ class App():
         self.__screen.blit(title_live_cells, (15, 30))
 
         self.__screen.blit(delay_info, (15, 45))
+        self.__screen.blit(number_of_rounds, (15, 60))
 
         self.__screen.blit(information_about_delay_speed,
                            (15, self.WINDOW_HEIGHT-45))
@@ -240,6 +287,7 @@ class App():
                 self.__add_new_cells()
                 self.__update_live_cells()
                 self.__delay_counter = 0
+                self.__number_of_rounds += 1
 
             # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
             self.__print_all_live_cells()

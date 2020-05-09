@@ -35,9 +35,13 @@ class Game:
         Arguments:
             life_cell {LifeCell} -- Komórka życia z ustawionymi koordynatami.
         """
-        if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
-            if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
-                self.__life_cells[f'{life_cell.location}'] = life_cell
+        try:
+            if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
+                if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
+                    self.__life_cells[f'{life_cell.location}'] = life_cell
+        except (AttributeError):
+            print(
+                f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
 
     def run(self):
         """
