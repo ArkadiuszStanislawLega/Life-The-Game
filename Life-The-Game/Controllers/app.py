@@ -191,6 +191,7 @@ class App():
         """
         Drukuje wszystkie napisy w oknie.
         """
+        # region lewy górny róg
         font = pygame.font.Font(self.FONT_NAME, self.FONT_SIZE)
 
         title_dead_cells = font.render(
@@ -205,31 +206,32 @@ class App():
         number_of_rounds = font.render(
             f'Numer rundy: {self.__number_of_rounds}', True,  self.COLOUR_TEXT)
 
+        self.__screen.blit(title_dead_cells, (15, 15))
+        self.__screen.blit(title_live_cells, (15, 30))
+
+        self.__screen.blit(delay_info, (15, 45))
+        self.__screen.blit(number_of_rounds, (15, 60))
+        # endregion
+        # region lewy dolny róg
         information_about_pause_part_1 = font.render(
             f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.', True,  self.COLOUR_TEXT, self.DARKRED)
         information_about_pause_part_2 = font.render(
             f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ', True,  self.COLOUR_TEXT, self.DARKRED)
         information_about_delay_speed = font.render(
             f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-', True,  self.COLOUR_TEXT, self.DARKRED)
-
-        current_time_of_game = font.render(
-            f'{datetime.datetime.now()-self.__start_time}', True,  self.COLOUR_TEXT)
-
-        self.__screen.blit(title_dead_cells, (15, 15))
-        self.__screen.blit(title_live_cells, (15, 30))
-
-        self.__screen.blit(delay_info, (15, 45))
-        self.__screen.blit(number_of_rounds, (15, 60))
-
         self.__screen.blit(information_about_delay_speed,
                            (15, self.WINDOW_HEIGHT-45))
         self.__screen.blit(information_about_pause_part_1,
                            (15, self.WINDOW_HEIGHT-30))
         self.__screen.blit(information_about_pause_part_2,
                            (15, self.WINDOW_HEIGHT-15))
-
+        # endregion
+        # region prawy dolny róg
+        current_time_of_game = font.render(
+            f'{datetime.datetime.now()-self.__start_time}', True,  self.COLOUR_TEXT)
         self.__screen.blit(current_time_of_game,
                            (self.WINDOW_WIDTH-100, self.WINDOW_HEIGHT-15))
+        # endregion
 
     def start_game(self):
         """
