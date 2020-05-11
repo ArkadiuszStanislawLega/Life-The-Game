@@ -1,8 +1,10 @@
-from Views.cell_view import CellView
+from Views.map_cell_view import MapCellView
+from Views.view import View
+from Views.map_view import MapView
 import pygame
 
 
-class GameView:
+class GameView(View):
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     GREEN = (0, 255, 0)
@@ -12,6 +14,7 @@ class GameView:
     MATRIX = (52, 195, 5)
 
     def __init__(self, model):
+        super().__init__(name="GameView", model=model)
         self.__WINDOW_TITLE = "Life the game"
         self.__WINDOW_BACKGROUND_COLOUR = self.BLACK
 
@@ -29,13 +32,16 @@ class GameView:
         self.__FONT_COLOUR = self.WHITE
         self.__FONT = pygame.font.Font(self.__FONT_NAME, self.__FONT_SIZE)
 
-        self.__model = model
-        self.__window_width = self.__model.game_map.width * self.__CELLS_WIDTH
-        self.__window_height = self.__model.game_map.height * self.__CELLS_HEIGHT
+        self.__window_width = self._model.game_map.width * self.__CELLS_WIDTH
+        self.__window_height = self._model.game_map.height * self.__CELLS_HEIGHT
         self.__screen = pygame.display.set_mode(self.window_size)
 
         self.__text_print_top_left = []
         self.__text_print_bot_left = []
+
+        self.__map_view = MapView(
+            model=self._model.game_map, screen=self.__screen)
+        self._model.game_map.add_observer(self.__map_view)
 
         self.__cells = {}
         self.__keys_of_dead_cells = []
@@ -67,9 +73,9 @@ class GameView:
         """
         Dodaje wszystkie widoki komórek które są utworzone w instancji gry.
         """
-        for key, value in self.__model.life_cells.items():
+        for key, value in self._model.life_cells.items():
             if not self.__cells.get(key):
-                new_cell = CellView(self.__screen, value)
+                new_cell = MapCellView(screen=self.__screen, model=value)
                 new_cell.width = self.__CELLS_WIDTH
                 new_cell.height = self.__CELLS_HEIGHT
                 new_cell.colour = self.__CELLS_COLOUR
@@ -179,3 +185,13 @@ class GameView:
         self.__add_new_cells()
         self.__update_live_cells()
         self.print_text()
+
+    def add_component(self, comp):
+        if comp.name not in self._component_list:
+            self._component_list[comp.name] = comp
+
+    def update(self, *args, **kwargs):
+        pass
+
+    def show(self):
+        pass

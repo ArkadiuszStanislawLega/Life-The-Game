@@ -19,6 +19,7 @@ class App():
                            map_height=self.GAME_HEIGHT)
 
         self.__game_view = GameView(self.__game)
+
         self.__clock = pygame.time.Clock()
 
         self.__current_game_delay = 1
@@ -31,6 +32,7 @@ class App():
 
         self.__is_space_pushed = False
 
+        self.__game.cells_at_the_begginning()
         self.start_game()
 
     def __refresh_text_top_left(self):

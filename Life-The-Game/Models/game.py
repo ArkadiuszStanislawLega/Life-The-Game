@@ -2,6 +2,7 @@ from Models.map import Map
 from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
+from Models.basic_model import BasicModel
 
 from Library.demonid import demonid
 from Library.glider import glider
@@ -14,8 +15,9 @@ from Library.gosper_glider_gun import gosper_glider_gun
 import random
 
 
-class Game:
+class Game(BasicModel):
     def __init__(self, map_width, map_height):
+        super().__init__()
         self.__game_map = Map(width=map_width, height=map_height)
         self.__struct = {"glider": glider,
                          "spaceship": spaceship,
@@ -29,8 +31,6 @@ class Game:
         self.__cells_for_potential_betting = []
         self.__finded = []
         self.__current_round = 0
-
-        self.__cells_at_the_begginning()
 
     @property
     def dead_cells(self):
@@ -67,7 +67,7 @@ class Game:
             for i in range(number_of_struct):
                 self.generate_stuct_in_random_loc(name)
 
-    def __cells_at_the_begginning(self):
+    def cells_at_the_begginning(self):
         """
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
@@ -115,8 +115,10 @@ class Game:
         """
         try:
             if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
-                if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
+                if self.__game_map.modify(key=f'{life_cell.location}', value=life_cell):
                     self.__life_cells[f'{life_cell.location}'] = life_cell
+                # if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
+                #     self.__life_cells[f'{life_cell.location}'] = life_cell
         except (AttributeError):
             print(
                 f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
@@ -458,3 +460,9 @@ class Game:
 
             return 1
         return -1
+
+    def modify(self, *args, **kwargs):
+        pass
+
+    def notify(self):
+        pass

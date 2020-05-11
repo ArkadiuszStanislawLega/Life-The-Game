@@ -1,8 +1,9 @@
 from Models.location import Location
 from Models.life_cell import LifeCell
+from Models.basic_model import BasicModel
 
 
-class MapCell:
+class MapCell(BasicModel):
     """
     Model przedstawiający jedno pole mapy.
 
@@ -13,9 +14,15 @@ class MapCell:
     CHARACTER_REPRESENTING_AN_EMPTY_MAP_FIELD = ' '
 
     def __init__(self):
+        super().__init__()
         self.__life_cell = None
         self.__is_occupied = False
+        self.__is_was_occupied = False
         self.__location = Location()
+
+    @property
+    def is_was_occupied(self):
+        return self.__is_occupied
 
     @property
     def is_occupied(self):
@@ -46,6 +53,7 @@ class MapCell:
         if self.__life_cell is None and isinstance(life_cell, LifeCell):
             self.__life_cell = life_cell
             self.__is_occupied = True
+            self.modify(is_was_occupied=True)
             life_cell.location = self.__location
             return True
         return False
@@ -63,3 +71,14 @@ class MapCell:
             return f'{self.__life_cell}'
         else:
             return self.CHARACTER_REPRESENTING_AN_EMPTY_MAP_FIELD
+
+    def modify(self, *args, **kwargs):
+        if len(kwargs) > 0:
+            for key, value in kwargs.items():
+                if key == "is_was_occupied":
+                    self.__is_was_occupied = value
+                    self.notify(is_was_occupied=self.__is_was_occupied)
+
+    def notify(self, *args, **kwargs):
+        if len(kwargs) > 0:
+            self._obs_list.get(f'MapCellView:{self.__location}').update(kwargs)

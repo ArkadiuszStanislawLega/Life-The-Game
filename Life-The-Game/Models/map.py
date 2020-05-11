@@ -1,10 +1,12 @@
 from Models.location import Location
 from Models.map_cell import MapCell
+from Models.basic_model import BasicModel
 
 
-class Map:
+class Map(BasicModel):
     def __init__(self, width, height):
-        self.__cell_container = {str: MapCell}
+        super().__init__()
+        self.__cells_container = {}
         self.__width = width
         self.__height = height
 
@@ -18,7 +20,7 @@ class Map:
         Returns:
             [dictionary{str:MapCell}] -- Słownik z komórkami mapy, kluczami są koordynaty lokacji (x, y)
         """
-        return self.__cell_container
+        return self.__cells_container
 
     @property
     def width(self):
@@ -53,18 +55,24 @@ class Map:
                 map_cell = MapCell()
                 map_cell.location = location
 
-                self.__cell_container[f'{location}'] = map_cell
+                self.__cells_container[f'{location}'] = map_cell
 
-    def print_map(self):
-        """
-        Rysuje mapę w konsoli.
-        """
-        for y in range(self.__height):
-            for x in range(self.__width):
-                location = Location()
-                location.X = x
-                location.Y = y
-                coordinates = f'{location}'
-                print(f'{self.__cell_container[coordinates]}', end="")
-                if x == self.__width - 1:
-                    print()
+    def modify(self, *args, **kwargs):
+        if len(kwargs) > 0:
+            for key, value in kwargs.items():
+                if key == "is_was_occupied":
+                    self.__is_was_occupied = value
+                    self.notify(grade=self.__is_was_occupied)
+
+            key = kwargs.get("key")
+            value = kwargs.get("value")
+
+            if key and value:
+                self.__cells_container.get(key).is_put_life_in_cell(value)
+                new_key = f"MapCellView:{value.location}"
+                self.notify(name=new_key)
+                return True
+
+    def notify(self, *args, **kwargs):
+        if len(kwargs) > 0:
+            self._obs_list.get("MapView").update(**kwargs)

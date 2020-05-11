@@ -1,8 +1,11 @@
+from Views.view import View
+
 import pygame
 
 
-class CellView:
+class CellView(View):
     def __init__(self, screen, model):
+        super().__init__(model=model, name="CellView")
         self.__colour = (0, 0, 0)
         self.__distance_from_the_top = 10
         self.__distance_from_the_left = 10
@@ -22,11 +25,10 @@ class CellView:
         self.__screen_surface = pygame.display.get_surface().get_size()
         self.__right_border = self.__screen_surface[0]
         self.__bot_border = self.__screen_surface[1]
-        self.__model = model
 
     @property
     def model(self):
-        return self.__model
+        return self._model
 
     @property
     def colour(self):
@@ -38,7 +40,7 @@ class CellView:
 
     @property
     def name(self):
-        return self.__model.name
+        return self._model.name
 
     @property
     def body(self):
@@ -72,12 +74,15 @@ class CellView:
     def position(self):
         return self.__position
 
-    def update(self):
+    def add_component(self, comp):
+        pass
+
+    def update(self, *args, **kwargs):
         """
         Aktulizauje pozycje komórki.
         """
-        self.__distance_from_the_top = self.__model.location.X * self.__width
-        self.__distance_from_the_left = self.__model.location.Y * self.__height
+        self.__distance_from_the_top = self._model.location.X * self.__width
+        self.__distance_from_the_left = self._model.location.Y * self.__height
 
         self.__coordinates = (self.__distance_from_the_top // 1,
                               self.__distance_from_the_left // 1)
@@ -86,3 +91,6 @@ class CellView:
 
         self.__body = pygame.draw.ellipse(
             self.__screen, self.__colour, self.__position, 0)
+
+    def show(self):
+        pass
