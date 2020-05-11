@@ -3,8 +3,8 @@ from Models.game import Game
 
 def demonid(game: Game, x, y):
     """
-    wysokość: 17
-    szerokość: 11
+    wysokość: 18
+    szerokość: 12
 
             OO      OO
            O O      O O
