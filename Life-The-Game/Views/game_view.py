@@ -128,10 +128,16 @@ class GameView:
                 self.__create_white_text_red_background(text))
 
     def clear_text(self):
+        """
+        Czyści tekst który jest odświerzany co cykl.
+        Nie usuwa tekstu który jest statycznie wpisany i nie ulega zmianie.
+        """
         self.__text_print_top_left.clear()
-        self.__text_print_bot_left.clear()
 
     def __unchanging_text(self):
+        """
+        Dodaje do listy tekstów nie zmieniających się określone informacje.
+        """
         self.add_text_bot_left(f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.')
         self.add_text_bot_left(
             f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ')
@@ -139,6 +145,9 @@ class GameView:
             f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-')
 
     def __print_text_top_left(self):
+        """
+        Drukuje w oknie wszystkie dodane teksty w górnym lewym rogu.
+        """
         row_height = 15
         current_row_height = row_height
         for text in self.__text_print_top_left:
@@ -146,6 +155,9 @@ class GameView:
             current_row_height += row_height
 
     def __print_text_bot_left(self):
+        """
+        Drukuje w oknie wszystkie dodane teksty w dolnym lewym rogu.
+        """
         row_height = 15
         current_row_height = self.__window_height - row_height
         for text in self.__text_print_bot_left:
@@ -160,10 +172,11 @@ class GameView:
         self.__print_text_bot_left()
 
     def round(self):
+        """
+        Jeden przebieg rundy.
+        """
         self.__make_list_of_dead_cells()
-        # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
-        self.__number_of_dead_cells = len(self.__keys_of_dead_cells)
-        self.print_text()
         self.__remove_dead_cells()
         self.__add_new_cells()
         self.__update_live_cells()
+        self.print_text()
