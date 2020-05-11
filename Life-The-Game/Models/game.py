@@ -23,7 +23,7 @@ class Game:
                          "demonid": demonid,
                          "gosper_glider_gun": gosper_glider_gun}
         self.__life_cells = {}
-
+        self.__dead_cells_to_remove = 0
         self.__cells_that_survive = {}
         self.__cells_that_will_die = []
         self.__cells_for_potential_betting = []
@@ -34,7 +34,7 @@ class Game:
 
     @property
     def dead_cells(self):
-        return self.__cells_that_will_die
+        return self.__dead_cells_to_remove
 
     @property
     def current_round(self):
@@ -205,6 +205,8 @@ class Game:
         """
         Usuwa martwe komórki z mapy.
         """
+        self.__dead_cells_to_remove = len(self.__cells_that_will_die)
+
         for location in self.__cells_that_will_die:
             cell = self.__game_map.container.get(f'{location}')
             cell.is_alive = False

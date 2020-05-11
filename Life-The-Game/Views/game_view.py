@@ -11,11 +11,12 @@ class GameView:
     DARKRED = (139, 0, 0)
     MATRIX = (52, 195, 5)
 
-    WINDOW_TITLE = "Life the game"
-
     def __init__(self, model):
+        self.__WINDOW_TITLE = "Life the game"
+        self.__WINDOW_BACKGROUND_COLOUR = self.BLACK
+
         pygame.init()
-        pygame.display.set_caption(self.WINDOW_TITLE)
+        pygame.display.set_caption(self.__WINDOW_TITLE)
 
         self.__CELLS_WIDTH = 10
         self.__CELLS_HEIGHT = 10
@@ -26,8 +27,6 @@ class GameView:
         self.__FONT_SIZE = 12
         self.__FONT_COLOUR = self.WHITE
         self.__FONT = pygame.font.Font(self.__FONT_NAME, self.__FONT_SIZE)
-
-        self.__WINDOW_BACKGROUND_COLOUR = self.BLACK
 
         self.__model = model
         self.__window_width = self.__model.game_map.width * self.__CELLS_WIDTH
