@@ -28,12 +28,25 @@ class Game:
         self.__cells_that_will_die = []
         self.__cells_for_potential_betting = []
         self.__finded = []
+        self.__current_round = 0
 
         self.__cells_at_the_begginning()
 
     @property
+    def dead_cells(self):
+        return self.__cells_that_will_die
+
+    @property
+    def current_round(self):
+        return self.__current_round
+
+    @property
     def life_cells(self):
         return self.__life_cells
+
+    @property
+    def game_map(self):
+        return self.__game_map
 
     def gen_random_x(self, struc_info: dict):
         return random.randrange(0, self.__game_map.width-struc_info.get("width"))
@@ -117,6 +130,7 @@ class Game:
 
         self.__remove_dead_cells()
         self.__clear_after_round()
+        self.__current_round += 1
 
     def __clear_after_round(self):
         """

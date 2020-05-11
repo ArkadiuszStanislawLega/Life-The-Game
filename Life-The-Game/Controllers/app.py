@@ -1,51 +1,28 @@
 from Models.game import Game
 from Models.life_cell import LifeCell
 from Models.location import Location
-from Views.cell_view import CellView
+from Views.game_view import GameView
 import pygame
 import sys
 import datetime
 
 
 class App():
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    GREEN = (0, 255, 0)
-    RED = (255, 0, 0)
-    GRAY = (192, 192, 192)
-    DARKRED = (139, 0, 0)
-    MATRIX = (52, 195, 5)
 
-    REFRESH_RATE = 60
-
-    COLOUR_BACKGROUND = BLACK
-    COLOUR_CELLS = MATRIX
-    COLOUR_TEXT = WHITE
-    COLOUT_TEXT_BACKGROUD = COLOUR_BACKGROUND
-
-    FONT_SIZE = 12
-    FONT_NAME = 'freesansbold.ttf'
-    LEFT_MARGIN = 15
     # Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
     GAME_WIDTH = 137
     GAME_HEIGHT = 73
 
-    CELLS_WIDTH = 10
-    CELLS_HEIGHT = 10
-
-    WINDOW_WIDTH = GAME_WIDTH*CELLS_WIDTH
-    WINDOW_HEIGHT = GAME_HEIGHT*CELLS_HEIGHT
-
-    WINDOW_SIZE = (WINDOW_WIDTH, WINDOW_HEIGHT)
-    WINDOW_TITLE = "Life the game"
+    REFRESH_RATE = 60
 
     def __init__(self):
+        self.__game = Game(map_width=self.GAME_WIDTH,
+                           map_height=self.GAME_HEIGHT)
+
+        self.__game_view = GameView(self.__game)
+
         self.__start_time = datetime.datetime.now()
-        self.__number_of_rounds = 0
-        self.__cells = {}
-        self.__keys_of_dead_cells = []
-        self.__number_of_dead_cells = 0
-        self.__screen = pygame.display.set_mode(self.WINDOW_SIZE)
+
         self.__clock = pygame.time.Clock()
 
         self.__current_game_delay = 1
@@ -56,114 +33,30 @@ class App():
         self.__delay_counter = 0
         self.__is_working = True
         # Instancja gry - mechanika działania
-        self.__game = Game(map_width=self.GAME_WIDTH,
-                           map_height=self.GAME_HEIGHT)
+
         self.__is_space_pushed = False
 
         self.start_game()
 
-    def __add_new_cells(self):
-        """
-        Dodaje wszystkie widoki komórek które są utworzone w instancji gry.
-        """
-        for key, value in self.__game.life_cells.items():
-            if not self.__cells.get(key):
-                new_cell = CellView(self.__screen, value)
-                new_cell.width = self.CELLS_WIDTH
-                new_cell.height = self.CELLS_HEIGHT
-                new_cell.colour = self.COLOUR_CELLS
-                self.__cells.update({key: new_cell})
+    def __add_text_top_left(self):
 
-    def __make_list_of_dead_cells(self):
-        """
-        Tworzy listę kluczy komórek które umrą w rundzie.
-        """
-        if len(self.__cells) > 0:
-            for key, value in self.__cells.items():
-                if value.model == None or not value.model.is_alive:
-                    self.__keys_of_dead_cells.append(key)
+        self.__game_view.add_text_top_left(
+            f'Umierających komórek: {self.__game.dead_cells}')
 
-    def __remove_dead_cells(self):
-        """
-        Usuwa wszystkie widoki martwych komórek, po kluczach komórek.
-        """
-        if len(self.__keys_of_dead_cells) > 0:
-            for key in self.__keys_of_dead_cells:
-                if self.__cells.get(key):
-                    self.__cells.pop(key)
+        self.__game_view.add_text_top_left(
+            f'Żywych komórek: {len(self.__game.life_cells)}')
 
-        self.__keys_of_dead_cells.clear()
+        self.__game_view.add_text_top_left(
+            f'Numer rundy: {self.__game.current_round}')
 
-    def __update_live_cells(self):
-        """
-        Aktualizuje pozycję widoków komórek.
-        """
-        if len(self.__cells):
-            for rect in self.__cells.values():
-                rect.update()
-
-    def __print_all_live_cells(self):
-        """
-        Drukuje wszystkie widoki komórek.
-        """
-        if len(self.__cells):
-            for rect in self.__cells.values():
-                pygame.draw.ellipse(
-                    self.__screen, self.COLOUR_CELLS, rect.body)
-
-    def __print_text(self):
-        """
-        Drukuje wszystkie napisy w oknie.
-        """
-        # region lewy górny róg
-        font = pygame.font.Font(self.FONT_NAME, self.FONT_SIZE)
-
-        title_dead_cells = font.render(
-            f'Umierających komórek: {self.__number_of_dead_cells}', True, self.COLOUR_TEXT)
-
-        title_live_cells = font.render(
-            f'Żywych komórek: {len(self.__cells)}', True,  self.COLOUR_TEXT)
-
-        delay_info = font.render(
-            f'Opóźnienie gry: {self.__current_game_delay}', True,  self.COLOUR_TEXT)
-
-        number_of_rounds = font.render(
-            f'Numer rundy: {self.__number_of_rounds}', True,  self.COLOUR_TEXT)
-
-        self.__screen.blit(title_dead_cells, (self.LEFT_MARGIN, 15))
-        self.__screen.blit(title_live_cells, (self.LEFT_MARGIN, 30))
-
-        self.__screen.blit(delay_info, (self.LEFT_MARGIN, 45))
-        self.__screen.blit(number_of_rounds, (self.LEFT_MARGIN, 60))
-        # endregion
-        # region lewy dolny róg
-        information_about_pause_part_1 = font.render(
-            f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.', True,  self.COLOUR_TEXT, self.DARKRED)
-        information_about_pause_part_2 = font.render(
-            f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ', True,  self.COLOUR_TEXT, self.DARKRED)
-        information_about_delay_speed = font.render(
-            f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-', True,  self.COLOUR_TEXT, self.DARKRED)
-        self.__screen.blit(information_about_delay_speed,
-                           (self.LEFT_MARGIN, self.WINDOW_HEIGHT-45))
-        self.__screen.blit(information_about_pause_part_1,
-                           (self.LEFT_MARGIN, self.WINDOW_HEIGHT-30))
-        self.__screen.blit(information_about_pause_part_2,
-                           (self.LEFT_MARGIN, self.WINDOW_HEIGHT-15))
-        # endregion
-        # region prawy dolny róg
-        current_time_of_game = font.render(
-            f'{datetime.datetime.now()-self.__start_time}', True,  self.COLOUR_TEXT)
-        self.__screen.blit(current_time_of_game,
-                           (self.WINDOW_WIDTH-100, self.WINDOW_HEIGHT-15))
-        # endregion
+        self.__game_view.add_text_top_left(
+            f'Opóźnienie gry: {self.__current_game_delay}')
 
     def start_game(self):
         """
         Inicjalizuje grę. 
         Zawarta tutaj jest główna pętla aplikacji.
         """
-        pygame.init()
-        pygame.display.set_caption(self.WINDOW_TITLE)
 
         while self.__is_working:
 
@@ -184,7 +77,7 @@ class App():
                         else:
                             self.__current_game_delay = -1
                             self.__is_space_pushed = True
-                            self.__print_text()
+                            self.__game_view.print_text()
 
                     if event.key == pygame.K_KP_PLUS or event.key == pygame.K_PLUS:
                         self.__is_user_change_delay = True
@@ -199,25 +92,22 @@ class App():
                             self.__delay_counter = 0
                             self.__current_game_delay = self.__user_game_delay
 
-            self.__screen.fill(self.COLOUR_BACKGROUND)
+            self.__game_view.screen.fill(self.__game_view.window_background)
 
             self.__delay_counter += 1
 
+            self.__add_text_top_left()
+
             if self.__delay_counter == self.__current_game_delay:
                 self.__game.run()
-                self.__make_list_of_dead_cells()
-                # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
-                self.__number_of_dead_cells = len(self.__keys_of_dead_cells)
-                self.__print_text()
-                self.__remove_dead_cells()
-                self.__add_new_cells()
-                self.__update_live_cells()
+                self.__game_view.round()
+
                 self.__delay_counter = 0
-                self.__number_of_rounds += 1
 
             # Przed usunięciem wszystkich martwych komórek żeby mieć dane nie używając niepotrzebnie dodatowych zmiennch.
-            self.__print_all_live_cells()
-            self.__print_text()
+            self.__game_view.print_all_live_cells()
+            self.__game_view.print_text()
+            self.__game_view.clear_text()
 
             self.__clock.tick(self.REFRESH_RATE)
             pygame.display.flip()
