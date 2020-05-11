@@ -22,6 +22,7 @@ class GameView:
         self.__CELLS_HEIGHT = 10
         self.__CELLS_COLOUR = self.MATRIX
 
+        self.__ROW_HEIGHT = 15
         self.__LEFT_MARGIN = 15
         self.__FONT_NAME = 'freesansbold.ttf'
         self.__FONT_SIZE = 12
@@ -148,21 +149,19 @@ class GameView:
         """
         Drukuje w oknie wszystkie dodane teksty w górnym lewym rogu.
         """
-        row_height = 15
-        current_row_height = row_height
+        current_row_height = self.__ROW_HEIGHT
         for text in self.__text_print_top_left:
             self.__screen.blit(text, (self.__LEFT_MARGIN, current_row_height))
-            current_row_height += row_height
+            current_row_height += self.__ROW_HEIGHT
 
     def __print_text_bot_left(self):
         """
         Drukuje w oknie wszystkie dodane teksty w dolnym lewym rogu.
         """
-        row_height = 15
-        current_row_height = self.__window_height - row_height
+        current_row_height = self.__window_height - self.__ROW_HEIGHT
         for text in self.__text_print_bot_left:
             self.__screen.blit(text, (self.__LEFT_MARGIN, current_row_height))
-            current_row_height -= row_height
+            current_row_height -= self.__ROW_HEIGHT
 
     def print_text(self):
         """
