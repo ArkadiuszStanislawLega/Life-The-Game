@@ -1,7 +1,5 @@
-from Models.game import Game
 
-
-def demonid(game: Game, x, y):
+def demonid(game, x, y):
     """
     wysokość: 17
     szerokość: 11

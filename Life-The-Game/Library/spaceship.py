@@ -1,7 +1,4 @@
-from Models.game import Game
-
-
-def spaceship(game: Game, x, y):
+def spaceship(game, x, y):
     """
     wysokość: 18
     szerokość: 34

@@ -1,15 +1,7 @@
 from Models.game import Game
 from Models.life_cell import LifeCell
 from Models.location import Location
-from Library.demonid import demonid
-from Library.glider import glider
-from Library.horizontal_line import horizontal_line
-from Library.spaceship import spaceship
-from Library.noah_ark import noah_ark
-from Library.info import struct_info
-from Library.gosper_glider_gun import gosper_glider_gun
 from Views.cell_view import CellView
-import random
 import pygame
 import sys
 import datetime
@@ -48,11 +40,6 @@ class App():
     WINDOW_TITLE = "Life the game"
 
     def __init__(self):
-        self.__struct = {"glider": glider,
-                         "spaceship": spaceship,
-                         "noah_ark": noah_ark,
-                         "demonid": demonid,
-                         "gosper_glider_gun": gosper_glider_gun}
         self.__start_time = datetime.datetime.now()
         self.__number_of_rounds = 0
         self.__cells = {}
@@ -73,58 +60,7 @@ class App():
                            map_height=self.GAME_HEIGHT)
         self.__is_space_pushed = False
 
-        self.__cells_at_the_begginning()
-
         self.start_game()
-
-    def gen_random_x(self, struc_info: dict):
-        return random.randrange(0, self.GAME_WIDTH-struc_info.get("width"))
-
-    def gen_random_y(self, struc_info: dict):
-        return random.randrange(0, self.GAME_HEIGHT-struc_info.get("height"))
-
-    def generate_stuct_in_random_loc(self, name):
-        info = struct_info().get(name)
-        self.__struct.get(name)(self.__game, self.gen_random_x(
-            info), self.gen_random_y(info))
-
-    def try_generate_struct(self, name: str, max_number_of_struct: int, min_number_of_struct: int, max_chance_to_generate: int):
-        chance = random.randrange(
-            0, max_chance_to_generate)
-        if chance < 1000:
-            number_of_struct = random.randrange(
-                min_number_of_struct, max_number_of_struct)
-            for i in range(number_of_struct):
-                self.generate_stuct_in_random_loc(name)
-
-    def __cells_at_the_begginning(self):
-        """
-        Początkowy układ komórek przy uruchomieniu aplikacji.
-        """
-        self.try_generate_struct(name="demonid",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=4,
-                                 max_chance_to_generate=1500)
-
-        self.try_generate_struct(name="spaceship",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=2,
-                                 max_chance_to_generate=1500)
-
-        self.try_generate_struct(name="glider",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=8,
-                                 max_chance_to_generate=1500)
-
-        self.try_generate_struct(name="noah_ark",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=2,
-                                 max_chance_to_generate=1500)
-
-        self.try_generate_struct(name="gosper_glider_gun",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=3,
-                                 max_chance_to_generate=1000)
 
     def __add_new_cells(self):
         """

@@ -1,7 +1,5 @@
-from Models.game import Game
 
-
-def glider(game: Game, x, y):
+def glider(game, x, y):
     """
     wysokość: 3
     szerokość: 3

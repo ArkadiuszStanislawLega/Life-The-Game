@@ -1,7 +1,4 @@
-from Models.game import Game
-
-
-def gosper_glider_gun(game: Game, x, y):
+def gosper_glider_gun(game, x, y):
     """
     wysokość: 9
     szerokość: 37

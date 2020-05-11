@@ -1,7 +1,4 @@
-from Models.game import Game
-
-
-def horizontal_line(game: Game, x, y):
+def horizontal_line(game, x, y):
     """
     wysokość: 1
     szerokość: 3

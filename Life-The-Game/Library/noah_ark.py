@@ -1,7 +1,4 @@
-from Models.game import Game
-
-
-def noah_ark(game: Game, x, y):
+def noah_ark(game, x, y):
     """
     wysokość: 14
     szerokość: 14
