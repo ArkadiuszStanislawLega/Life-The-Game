@@ -7,6 +7,7 @@ from Library.horizontal_line import horizontal_line
 from Library.spaceship import spaceship
 from Library.noah_ark import noah_ark
 from Library.info import struct_info
+from Library.gosper_glider_gun import gosper_glider_gun
 from Views.cell_view import CellView
 import random
 import pygame
@@ -32,6 +33,7 @@ class App():
 
     FONT_SIZE = 12
     FONT_NAME = 'freesansbold.ttf'
+    LEFT_MARGIN = 15
 
     GAME_WIDTH = 120
     GAME_HEIGHT = 60
@@ -49,7 +51,8 @@ class App():
         self.__struct = {"glider": glider,
                          "spaceship": spaceship,
                          "noah_ark": noah_ark,
-                         "demonid": demonid}
+                         "demonid": demonid,
+                         "gosper_glider_gun": gosper_glider_gun}
         self.__start_time = datetime.datetime.now()
         self.__number_of_rounds = 0
         self.__cells = {}
@@ -98,25 +101,30 @@ class App():
         """
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
-        self.try_generate_struct(name="demonid",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=4,
-                                 max_chance_to_generate=2000)
+        # self.try_generate_struct(name="demonid",
+        #                          min_number_of_struct=1,
+        #                          max_number_of_struct=4,
+        #                          max_chance_to_generate=2000)
 
-        self.try_generate_struct(name="spaceship",
+        # self.try_generate_struct(name="spaceship",
+        #                          min_number_of_struct=1,
+        #                          max_number_of_struct=2,
+        #                          max_chance_to_generate=3000)
+
+        # self.try_generate_struct(name="glider",
+        #                          min_number_of_struct=1,
+        #                          max_number_of_struct=8,
+        #                          max_chance_to_generate=1500)
+
+        # self.try_generate_struct(name="noah_ark",
+        #                          min_number_of_struct=1,
+        #                          max_number_of_struct=2,
+        #                          max_chance_to_generate=3000)
+
+        self.try_generate_struct(name="gosper_glider_gun",
                                  min_number_of_struct=1,
                                  max_number_of_struct=2,
-                                 max_chance_to_generate=3000)
-
-        self.try_generate_struct(name="glider",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=8,
-                                 max_chance_to_generate=1500)
-
-        self.try_generate_struct(name="noah_ark",
-                                 min_number_of_struct=1,
-                                 max_number_of_struct=2,
-                                 max_chance_to_generate=3000)
+                                 max_chance_to_generate=1000)
 
     def __add_new_cells(self):
         """
@@ -186,11 +194,11 @@ class App():
         number_of_rounds = font.render(
             f'Numer rundy: {self.__number_of_rounds}', True,  self.COLOUR_TEXT)
 
-        self.__screen.blit(title_dead_cells, (15, 15))
-        self.__screen.blit(title_live_cells, (15, 30))
+        self.__screen.blit(title_dead_cells, (self.LEFT_MARGIN, 15))
+        self.__screen.blit(title_live_cells, (self.LEFT_MARGIN, 30))
 
-        self.__screen.blit(delay_info, (15, 45))
-        self.__screen.blit(number_of_rounds, (15, 60))
+        self.__screen.blit(delay_info, (self.LEFT_MARGIN, 45))
+        self.__screen.blit(number_of_rounds, (self.LEFT_MARGIN, 60))
         # endregion
         # region lewy dolny róg
         information_about_pause_part_1 = font.render(
@@ -200,11 +208,11 @@ class App():
         information_about_delay_speed = font.render(
             f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-', True,  self.COLOUR_TEXT, self.DARKRED)
         self.__screen.blit(information_about_delay_speed,
-                           (15, self.WINDOW_HEIGHT-45))
+                           (self.LEFT_MARGIN, self.WINDOW_HEIGHT-45))
         self.__screen.blit(information_about_pause_part_1,
-                           (15, self.WINDOW_HEIGHT-30))
+                           (self.LEFT_MARGIN, self.WINDOW_HEIGHT-30))
         self.__screen.blit(information_about_pause_part_2,
-                           (15, self.WINDOW_HEIGHT-15))
+                           (self.LEFT_MARGIN, self.WINDOW_HEIGHT-15))
         # endregion
         # region prawy dolny róg
         current_time_of_game = font.render(
