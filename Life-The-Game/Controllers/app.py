@@ -34,9 +34,9 @@ class App():
     FONT_SIZE = 12
     FONT_NAME = 'freesansbold.ttf'
     LEFT_MARGIN = 15
-
-    GAME_WIDTH = 120
-    GAME_HEIGHT = 60
+    # Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
+    GAME_WIDTH = 137
+    GAME_HEIGHT = 73
 
     CELLS_WIDTH = 10
     CELLS_HEIGHT = 10
@@ -101,29 +101,29 @@ class App():
         """
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
-        # self.try_generate_struct(name="demonid",
-        #                          min_number_of_struct=1,
-        #                          max_number_of_struct=4,
-        #                          max_chance_to_generate=2000)
+        self.try_generate_struct(name="demonid",
+                                 min_number_of_struct=1,
+                                 max_number_of_struct=4,
+                                 max_chance_to_generate=1500)
 
-        # self.try_generate_struct(name="spaceship",
-        #                          min_number_of_struct=1,
-        #                          max_number_of_struct=2,
-        #                          max_chance_to_generate=3000)
+        self.try_generate_struct(name="spaceship",
+                                 min_number_of_struct=1,
+                                 max_number_of_struct=2,
+                                 max_chance_to_generate=1500)
 
-        # self.try_generate_struct(name="glider",
-        #                          min_number_of_struct=1,
-        #                          max_number_of_struct=8,
-        #                          max_chance_to_generate=1500)
+        self.try_generate_struct(name="glider",
+                                 min_number_of_struct=1,
+                                 max_number_of_struct=8,
+                                 max_chance_to_generate=1500)
 
-        # self.try_generate_struct(name="noah_ark",
-        #                          min_number_of_struct=1,
-        #                          max_number_of_struct=2,
-        #                          max_chance_to_generate=3000)
+        self.try_generate_struct(name="noah_ark",
+                                 min_number_of_struct=1,
+                                 max_number_of_struct=2,
+                                 max_chance_to_generate=1500)
 
         self.try_generate_struct(name="gosper_glider_gun",
                                  min_number_of_struct=1,
-                                 max_number_of_struct=2,
+                                 max_number_of_struct=3,
                                  max_chance_to_generate=1000)
 
     def __add_new_cells(self):
