@@ -167,24 +167,6 @@ class Game:
             counter_cells_in_neighbor_mid = 0
             counter_cells_in_neighbor_bot = 0
 
-    def __print_stats_survived_cells(self):
-        """
-        Drukuje do konsoli wszystkie komórki które przeżyją.
-        """
-        print("Przeżyją:")
-        cnt = 1
-        for item in self.__cells_that_survive:
-            print(f'{cnt}. {item} {self.__cells_that_survive[item]}')
-            cnt += 1
-
-    def __print_stats_dead_cells(self):
-        """
-        Drukuje do konsoli wszystkie komórki które umrą.
-        """
-        print("Umrą:")
-        for i, item in enumerate(self.__cells_that_will_die):
-            print(f'{i+1}. {item}')
-
     def __check_bot(self, location, occupied: bool):
         """
         Sprawdza czy w pod koordynatami podanymi w argumencie po lewej, środku i po prawo znajdują się jakieś żywe komórki.
