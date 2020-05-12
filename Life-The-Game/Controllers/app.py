@@ -91,7 +91,7 @@ class App():
                             self.__delay_counter = 0
                             self.__current_game_delay = self.__user_game_delay
 
-            self.__game_view.screen.fill(self.__game_view.window_background)
+            # self.__game_view.screen.fill(self.__game_view.window_background)
 
             self.__delay_counter += 1
 
@@ -99,9 +99,10 @@ class App():
 
             if self.__delay_counter == self.__current_game_delay:
                 self.__game.run()
-                # self.__game_view.round()
+                self.__game_view.round()
                 self.__delay_counter = 0
 
+            self.__game_view.show()
             # self.__game_view.print_all_live_cells()
             self.__game_view.print_text()
             self.__game_view.clear_text()

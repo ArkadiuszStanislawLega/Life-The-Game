@@ -4,6 +4,7 @@ from Models.location import Location
 from Models.map_cell import MapCell
 from Models.basic_model import BasicModel
 
+from Library.horizontal_line import horizontal_line
 from Library.demonid import demonid
 from Library.glider import glider
 from Library.horizontal_line import horizontal_line
@@ -71,6 +72,8 @@ class Game(BasicModel):
         """
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
+
+        # horizontal_line(self, 10, 10)
         self.try_generate_struct(name="demonid",
                                  min_number_of_struct=1,
                                  max_number_of_struct=4,
@@ -113,14 +116,14 @@ class Game(BasicModel):
         Arguments:
             life_cell {LifeCell} -- Komórka życia z ustawionymi koordynatami.
         """
-        # try:
-        if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
+        try:
+            if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
                 if self.__game_map.modify(key=f'{life_cell.location}', value=life_cell):
                     self.__life_cells[f'{life_cell.location}'] = life_cell
                     self.modify(key="NewLifeCell", value=life_cell)
-        # except (AttributeError):
-        #     print(
-        #         f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
+        except (AttributeError):
+            print(
+                f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
 
     def run(self):
         """
@@ -209,9 +212,7 @@ class Game(BasicModel):
         self.__dead_cells_to_remove = len(self.__cells_that_will_die)
 
         for location in self.__cells_that_will_die:
-            cell = self.__game_map.map_cells_container.get(f'{location}')
-            cell.is_alive = False
-            cell.clear_cell()
+            self.__game_map.map_cells_container.get(f'{location}').clear_cell()
             del(self.__life_cells[f'{location}'])
 
     def __check_current_cells_to_see_if_they_survive(self):
@@ -453,7 +454,7 @@ class Game(BasicModel):
 
     def __check_is_empty(self, map_cell: MapCell):
         if isinstance(map_cell, MapCell):
-             # Sprawdza czy miejsce jest puste
+            # Sprawdza czy miejsce jest puste
             if map_cell.is_occupied:
                 return 0
 

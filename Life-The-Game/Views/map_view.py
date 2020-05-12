@@ -31,14 +31,12 @@ class MapView(View):
 
             if key == "NewLifeCell":
                 if not self._component_list.get(f'LifeCellView:{value.name}'):
-                    view = LifeCellView(screen=self.__screen, model=value)
-                    view.name += f':{value.location}'
-                    self._component_list[view.name] = view
+                    self._component_list[value.name] = value
 
             else:
                 for key in kwargs.values():
                     self._component_list.get(key).update()
 
     def show(self):
-        for key, value in self._component_list.items():
-            value.show()
+        for map_cell in self._component_list.values():
+            map_cell.show()

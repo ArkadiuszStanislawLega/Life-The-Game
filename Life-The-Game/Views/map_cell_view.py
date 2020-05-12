@@ -3,13 +3,14 @@ import pygame
 
 
 class MapCellView(View):
-    DARK_RED = (50, 0, 0)
+    DARK_RED = (139, 0, 0)
+    MATRIX = (52, 195, 5)
     BLACK = (0, 0, 0)
 
     def __init__(self, model, screen):
         super().__init__(name="MapCellView", model=model)
         self.__is_was_occupied_colour = self.DARK_RED
-        self.__is_was_not_occupied_colour = self.BLACK
+        self.__is_was_not_occupied_colour = (123, 123, 123)
         self.__current_colour = self.__is_was_not_occupied_colour
         self.__screen = screen
 
@@ -51,9 +52,8 @@ class MapCellView(View):
 
         if self._model.is_was_occupied:
             self.__current_colour = self.__is_was_occupied_colour
-
-        self.__body = pygame.draw.rect(
-            self.__screen, self.__current_colour, self.__position, 0)
+            self.__body = pygame.draw.rect(
+                self.__screen, self.__current_colour, self.__position, 0)
 
         self.show()
 

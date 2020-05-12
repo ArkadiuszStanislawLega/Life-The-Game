@@ -4,16 +4,21 @@ import pygame
 
 
 class LifeCellView(View):
+    DARKRED = (139, 0, 0)
+    MATRIX = (52, 195, 5)
+    YELLOW = (255, 255, 0)
+
     def __init__(self, screen, model):
         super().__init__(model=model, name="LifeCellView")
-        self.__colour = (0, 0, 0)
-        self.__distance_from_the_top = 10
-        self.__distance_from_the_left = 10
-        self.__coordinates = (self.__distance_from_the_left // 2,
-                              self.__distance_from_the_top // 2)
-
+        self.__colour = self.MATRIX
         self.__width = 10
         self.__height = 10
+
+        self.__distance_from_the_top = self._model.location.Y * self.__height
+        self.__distance_from_the_left = self._model.location.X * self.__width
+        self.__coordinates = (self.__distance_from_the_left // 1,
+                              self.__distance_from_the_top // 1)
+
         self.__size = (self.__width, self.__height)
         self.__screen = screen
 
@@ -85,16 +90,9 @@ class LifeCellView(View):
         """
         Aktulizauje pozycje komórki.
         """
-        self.__distance_from_the_top = self._model.location.X * self.__width
-        self.__distance_from_the_left = self._model.location.Y * self.__height
-
-        self.__coordinates = (self.__distance_from_the_top // 1,
-                              self.__distance_from_the_left // 1)
-
-        self.__position = (self.__coordinates, self.__size)
-
-        self.__body = pygame.draw.ellipse(
-            self.__screen, self.__colour, self.__position, 0)
+        if not self._model.is_alive:
+            self.__body = pygame.draw.ellipse(
+                self.__screen, self.DARKRED, self.__position, 0)
 
     def show(self):
-        pass
+        return self.__body

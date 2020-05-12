@@ -22,7 +22,7 @@ class MapCell(BasicModel):
 
     @property
     def is_was_occupied(self):
-        return self.__is_occupied
+        return self.__is_was_occupied
 
     @property
     def is_occupied(self):

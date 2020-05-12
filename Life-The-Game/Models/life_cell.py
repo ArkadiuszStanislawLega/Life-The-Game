@@ -8,7 +8,7 @@ class LifeCell(BasicModel):
 
     def __init__(self):
         super().__init__()
-        self.__is_alive = False
+        self.__is_alive = True
         self.__location = Location()
         self.__name = ""
 
@@ -39,8 +39,6 @@ class LifeCell(BasicModel):
         self.__location = value
 
     def modify(self, *args, **kwargs):
-        self.__is_alive = False
-
         self.notify()
 
     def notify(self):

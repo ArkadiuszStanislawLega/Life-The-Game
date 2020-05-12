@@ -1,6 +1,7 @@
 from Views.map_cell_view import MapCellView
 from Views.view import View
 from Views.map_view import MapView
+from Views.life_cell_view import LifeCellView
 import pygame
 
 
@@ -41,14 +42,14 @@ class GameView(View):
 
         self.__map_view = MapView(
             model=self._model.game_map, screen=self.__screen)
+        self.add_component(self.__map_view)
 
         self._model.game_map.add_observer(self.__map_view)
 
         self.__map_cell_views = {}
         self.__life_cell_views = {}
-        self.__keys_of_dead_cells = []
         self.__number_of_dead_cells = 0
-
+        self.__dead_life_cells_keys = []
         self.__add_new_cells()
         self.__unchanging_text()
 
@@ -84,47 +85,38 @@ class GameView(View):
                 new_cell.colour = self.__CELLS_COLOUR
                 self.__map_cell_views.update({key: new_cell})
 
-    # def get_all_life_cells(self):
-    #     for map_cell_view in self.__map_cell_views.values:
-    #         if map_cell_view.model.is_occupied:
-    #             self.__life_cell_view.append(map_cell_view.model.life_cell)
+    def __make_list_of_dead_cells(self):
+        """
+        Tworzy listę kluczy komórek które umrą w rundzie.
+        """
+        self.__number_of_dead_cells += 0
+        if len(self.__life_cell_views) > 0:
+            for key, value in self.__life_cell_views.items():
+                if not value.model.is_alive:
+                    self.__life_cell_views.get(key).update()
+                    self.__number_of_dead_cells += 1
+                    self.__dead_life_cells_keys.append(key)
 
-    # def __make_list_of_dead_cells(self):
-    #     """
-    #     Tworzy listę kluczy komórek które umrą w rundzie.
-    #     """
-    #     if len(self.__map_cell_views) > 0:
-    #         for key, value in self.__map_cell_views.items():
-    #             if value.model == None or not value.model.is_alive:
-    #                 self.__keys_of_dead_cells.append(key)
+            for key in self.__dead_life_cells_keys:
+                self.__life_cell_views.pop(key)
 
-    # def __remove_dead_cells(self):
-    #     """
-    #     Usuwa wszystkie widoki martwych komórek, po kluczach komórek.
-    #     """
-    #     if len(self.__keys_of_dead_cells) > 0:
-    #         for key in self.__keys_of_dead_cells:
-    #             if self.__map_cell_views.get(key):
-    #                 self.__map_cell_views.pop(key)
+            self.__dead_life_cells_keys.clear()
 
-    #     self.__keys_of_dead_cells.clear()
+    def __update_live_cells(self):
+        """
+        Aktualizuje pozycję widoków komórek.
+        """
+        if len(self.__life_cell_views):
+            for map_cell_view in self.__life_cell_views.values():
+                map_cell_view.update()
 
-    # def __update_live_cells(self):
-    #     """
-    #     Aktualizuje pozycję widoków komórek.
-    #     """
-    #     if len(self.__map_cell_views):
-    #         for map_cell_view in self.__map_cell_views.values():
-    #             map_cell_view.update()
-
-    # def print_all_live_cells(self):
-    #     """
-    #     Drukuje wszystkie widoki komórek.
-    #     """
-    #     if len(self.__map_cell_views):
-    #         for rect in self.__map_cell_views.values():
-    #             pygame.draw.ellipse(
-    #                 self.__screen, self.__CELLS_COLOUR, rect.body)
+    def print_all_live_cells(self):
+        """
+        Drukuje wszystkie widoki komórek.
+        """
+        if len(self.__life_cell_views):
+            for view in self.__life_cell_views.values():
+                view.body
 
     def __create_white_text(self, text: str):
         return self.__FONT.render(text, True, self.__FONT_COLOUR)
@@ -188,9 +180,9 @@ class GameView(View):
         """
         Jeden przebieg rundy.
         """
-        # self.__make_list_of_dead_cells()
-        # self.__remove_dead_cells()
-        # self.__update_live_cells()
+        self.__make_list_of_dead_cells()
+        self.__update_live_cells()
+        self.print_all_live_cells()
         self.print_text()
 
     def add_component(self, comp):
@@ -203,8 +195,15 @@ class GameView(View):
             value = kwargs.get("value")
 
             if key == "NewLifeCell":
-                self.__map_view.update(key=key, value=value)
+                if not self._component_list.get(f'LifeCellView:{value.name}'):
+                    view = LifeCellView(screen=self.__screen, model=value)
+                    view.name += f':{value.location}'
+                    value.add_observer(view)
+                    self.__life_cell_views[view.name] = view
+                    self.__map_view.update(key=key, value=view)
 
     def show(self):
-        for key, value in self._component_list.items():
-            value.show()
+        self.__map_view.show()
+
+        for life_cell in self.__life_cell_views.values():
+            life_cell.show()
