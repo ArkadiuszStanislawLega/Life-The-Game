@@ -4,6 +4,10 @@ import pygame
 
 
 class TextView(View):
+    """
+    Klasa jest odpowiedzialna za wyświetlanie napisów w czasie trwania rozgrywki.
+    """
+
     def __init__(self, model, screen):
         super().__init__(name="TextView", model=model)
         self.__screen = screen
@@ -20,17 +24,49 @@ class TextView(View):
         self.__unchanging_text()
 
     def __create_white_text(self, text: str):
+        """
+        Tworzy widok napisu którego czcionka jest biała i nie posiada tła.
+
+        Arguments:
+            text {str} -- Napis do wyświetlenia.
+
+        Returns:
+            [pygame.font.Font] -- Napis o standardowej czcionce w kolorze białym bez tła.
+        """
         return self.__FONT.render(text, True, self.__FONT_COLOUR)
 
     def __create_white_text_red_background(self, text: str):
+        """
+        Tworzy widok napisu którego czcionka jest biała a tło ciemno czerwone.
+
+        Arguments:
+            text {str} -- Napis do wyświetlenia.
+
+        Returns:
+            [pygame.font.Font] -- Napis o standardowej czcionce w kolorze białym na ciemno czerwonym tle.
+        """
         return self.__FONT.render(text, True, self.__FONT_COLOUR, colours.DARK_RED)
 
     def add_text_top_left(self, text: str):
+        """
+        Dodaje kolejny wiersz do "grida" wyświetlającego napisy
+        w górnym lewym rogu planszy.
+
+        Arguments:
+            text {str} -- Napis który ma zostać dodany.
+        """
         if isinstance(text, str):
             self.__text_print_top_left.append(
                 self.__create_white_text(text))
 
     def add_text_bot_left(self, text: str):
+        """
+        Dodaje kolejny wiersz do "grida" wyświetlającego napisy
+        w dolnym lewym rogu planszy.
+
+        Arguments:
+            text {str} -- Napis który ma zostać dodany.
+        """
         if isinstance(text, str):
             self.__text_print_bot_left.append(
                 self.__create_white_text_red_background(text))
@@ -48,7 +84,7 @@ class TextView(View):
         """
         self.add_text_bot_left(f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.')
         self.add_text_bot_left(
-            f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ')
+            f'Żeby ją wznowić należy powtórnie wciśnąć SPACJĘ')
         self.add_text_bot_left(
             f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-')
 
@@ -71,6 +107,10 @@ class TextView(View):
             current_row_height -= self.__ROW_HEIGHT
 
     def __print_backround(self):
+        """
+        Drukuje tło w górnej lewej części ekranu po wszystkimi napisamy.
+        Celem jest odświerzanie widoków napisów.
+        """
         width = 170
         height = len(self.__text_print_top_left) * self.__ROW_HEIGHT + 15
 

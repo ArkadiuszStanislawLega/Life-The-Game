@@ -8,6 +8,9 @@ from Library.colours import colours
 
 
 class GameView(View):
+    """
+    Klasa przetrzymuje wszystkie widoki potrzebne do przeprowadzenia rozgrywki.
+    """
 
     def __init__(self, model):
         super().__init__(name="GameView", model=model)

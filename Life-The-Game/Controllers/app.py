@@ -8,7 +8,9 @@ import sys
 
 
 class App():
-
+    """
+    Klasa łącząca model - widok - kontrolery.
+    """
     # Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
     GAME_WIDTH = 137
     GAME_HEIGHT = 73
@@ -35,7 +37,7 @@ class App():
 
         self.__delay_counter = 0
         self.__is_working = True
-
+        # Flaga wskazująca czy przycisk spacji był wciśnięty
         self.__is_space_pushed = False
 
         self.__game.cells_at_the_begginning()
@@ -95,8 +97,6 @@ class App():
                             self.__user_game_delay -= 1
                             self.__delay_counter = 0
                             self.__current_game_delay = self.__user_game_delay
-
-            # self.__game_view.screen.fill(self.__game_view.window_background)
 
             self.__delay_counter += 1
 

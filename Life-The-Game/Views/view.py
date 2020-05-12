@@ -2,6 +2,10 @@ from abc import ABC, abstractmethod
 
 
 class View(ABC):
+    """
+    Podstawowy model widoku który powinny dziedziczyć klasy widoków.
+    """
+
     def __init__(self, name, model):
         super().__init__()
         self._name = name
