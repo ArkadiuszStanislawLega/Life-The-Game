@@ -5,15 +5,15 @@ import pygame
 
 class MapCellView(View):
 
-    def __init__(self, model, screen):
+    def __init__(self, model, screen, width=10, height=10):
         super().__init__(name="MapCellView", model=model)
         self.__is_was_occupied_colour = colours.DARK_RED
         self.__is_was_not_occupied_colour = colours.BLACK
         self.__current_colour = self.__is_was_not_occupied_colour
         self.__screen = screen
 
-        self.__width = 10
-        self.__height = 10
+        self.__width = width
+        self.__height = height
 
         self.__distance_from_the_top = self._model.location.Y * self.__height
         self.__distance_from_the_left = self._model.location.X * self.__width
@@ -27,6 +27,22 @@ class MapCellView(View):
         self.__body = pygame.draw.rect(
             self.__screen, self.__current_colour, self.__position, 0)
         self._name += f':{self._model.location}'
+
+    @property
+    def width(self):
+        return self.__width
+
+    @width.setter
+    def width(self, value):
+        self.__width = value
+
+    @property
+    def height(self):
+        return self.__height
+
+    @height.setter
+    def height(self, value):
+        self.__height = value
 
     @property
     def body(self):

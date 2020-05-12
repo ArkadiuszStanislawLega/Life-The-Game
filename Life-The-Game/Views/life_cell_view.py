@@ -6,11 +6,12 @@ import pygame
 
 class LifeCellView(View):
 
-    def __init__(self, screen, model):
+    def __init__(self, screen, model, width=10, height=10):
         super().__init__(model=model, name="LifeCellView")
         self.__colour = colours.MATRIX
-        self.__width = 10
-        self.__height = 10
+
+        self.__width = width
+        self.__height = height
 
         self.__distance_from_the_top = self._model.location.Y * self.__height
         self.__distance_from_the_left = self._model.location.X * self.__width

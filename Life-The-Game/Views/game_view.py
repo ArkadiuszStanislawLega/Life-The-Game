@@ -36,6 +36,7 @@ class GameView(View):
 
         self.__map_view = MapView(
             model=self._model.game_map, screen=self.__screen)
+
         self.add_component(self.__map_view)
 
         self._model.game_map.add_observer(self.__map_view)
@@ -73,13 +74,12 @@ class GameView(View):
         """
         for key, value in self._model.life_cells.items():
             if not self.__map_cell_views.get(key):
-                new_cell = MapCellView(screen=self.__screen, model=value)
-                new_cell.width = self.__CELLS_WIDTH
-                new_cell.height = self.__CELLS_HEIGHT
+                new_cell = MapCellView(
+                    screen=self.__screen, model=value, width=self.__CELLS_WIDTH, height=self.__CELLS_HEIGHT)
                 new_cell.colour = self.__CELLS_COLOUR
                 self.__map_cell_views.update({key: new_cell})
 
-    def __make_list_of_dead_cells(self):
+    def __remove_dead_cells(self):
         """
         Tworzy listę kluczy komórek które umrą w rundzie.
         """
@@ -103,14 +103,6 @@ class GameView(View):
         if len(self.__life_cell_views):
             for map_cell_view in self.__life_cell_views.values():
                 map_cell_view.update()
-
-    def print_all_live_cells(self):
-        """
-        Drukuje wszystkie widoki komórek.
-        """
-        if len(self.__life_cell_views):
-            for view in self.__life_cell_views.values():
-                view.body
 
     def __create_white_text(self, text: str):
         return self.__FONT.render(text, True, self.__FONT_COLOUR)
@@ -174,9 +166,9 @@ class GameView(View):
         """
         Jeden przebieg rundy.
         """
-        self.__make_list_of_dead_cells()
+        self.__remove_dead_cells()
         self.__update_live_cells()
-        self.print_all_live_cells()
+        self.show()
         self.print_text()
 
     def add_component(self, comp):
@@ -190,14 +182,13 @@ class GameView(View):
 
             if key == "NewLifeCell":
                 if not self._component_list.get(f'LifeCellView:{value.name}'):
-                    view = LifeCellView(screen=self.__screen, model=value)
+                    view = LifeCellView(screen=self.__screen, model=value,
+                                        width=self.__CELLS_WIDTH, height=self.__CELLS_HEIGHT)
                     view.name += f':{value.location}'
                     value.add_observer(view)
                     self.__life_cell_views[view.name] = view
                     self.__map_view.update(key=key, value=view)
 
     def show(self):
-        self.__map_view.show()
-
-        for life_cell in self.__life_cell_views.values():
-            life_cell.show()
+        for view in self._component_list.values():
+            view.show()
