@@ -95,6 +95,7 @@ class LifeCellView(View):
         if not self._model.is_alive:
             self.__body = pygame.draw.ellipse(
                 self.__screen, colours.DARK_RED, self.__position, 0)
+        self.show()
 
     def show(self):
         return self.__body

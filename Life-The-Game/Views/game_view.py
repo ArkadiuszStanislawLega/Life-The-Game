@@ -72,39 +72,6 @@ class GameView(View):
                 new_cell.colour = self.__CELLS_COLOUR
                 self.__map_cell_views.update({key: new_cell})
 
-    def __remove_dead_cells(self):
-        """
-        Tworzy listę kluczy komórek które umrą w rundzie.
-        """
-        self.__number_of_dead_cells += 0
-        if len(self.__life_cell_views) > 0:
-            for key, value in self.__life_cell_views.items():
-                if not value.model.is_alive:
-                    self.__life_cell_views.get(key).update()
-                    self.__number_of_dead_cells += 1
-                    self.__dead_life_cells_keys.append(key)
-
-            for key in self.__dead_life_cells_keys:
-                self.__life_cell_views.pop(key)
-
-            self.__dead_life_cells_keys.clear()
-
-    def __update_live_cells(self):
-        """
-        Aktualizuje pozycję widoków komórek.
-        """
-        if len(self.__life_cell_views):
-            for map_cell_view in self.__life_cell_views.values():
-                map_cell_view.update()
-
-    def round(self):
-        """
-        Jeden przebieg rundy.
-        """
-        self.__remove_dead_cells()
-        self.__update_live_cells()
-        self.show()
-
     def add_component(self, comp):
         if comp.name not in self._component_list:
             self._component_list[comp.name] = comp
@@ -131,6 +98,7 @@ class GameView(View):
 
             if key == "RemoveLifeCell":
                 self.__map_view.update(key=key, value=value)
+                del self.__life_cell_views[f'LifeCellView:{value.life_cell.name}']
 
     def show(self):
         """

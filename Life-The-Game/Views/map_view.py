@@ -41,6 +41,7 @@ class MapView(View):
 
             elif key == "RemoveLifeCell":
                 life_cell_to_remove_name = f'LifeCellView:{value.life_cell.name}'
+                self._component_list.get(life_cell_to_remove_name).update()
                 self.remove_component(life_cell_to_remove_name)
 
             else:

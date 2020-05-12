@@ -73,7 +73,7 @@ class Game(BasicModel):
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
 
-        # horizontal_line(self, 2, 2)
+        #horizontal_line(self, 2, 2)
         self.try_generate_struct(name="demonid",
                                  min_number_of_struct=1,
                                  max_number_of_struct=4,
