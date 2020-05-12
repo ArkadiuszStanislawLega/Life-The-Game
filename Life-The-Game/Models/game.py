@@ -17,6 +17,8 @@ import random
 
 
 class Game(BasicModel):
+    """Model gry w której odbywa się cała rozgrywka."""
+
     def __init__(self, map_width, map_height):
         super().__init__()
         self.__game_map = Map(width=map_width, height=map_height)

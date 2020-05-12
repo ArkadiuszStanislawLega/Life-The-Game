@@ -4,9 +4,7 @@ import pygame
 
 
 class TextView(View):
-    """
-    Klasa jest odpowiedzialna za wyświetlanie napisów w czasie trwania rozgrywki.
-    """
+    """ Klasa jest odpowiedzialna za wyświetlanie napisów w czasie trwania rozgrywki."""
 
     def __init__(self, model, screen):
         super().__init__(name="TextView", model=model)

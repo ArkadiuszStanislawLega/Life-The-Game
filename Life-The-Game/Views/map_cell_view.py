@@ -4,9 +4,7 @@ import pygame
 
 
 class MapCellView(View):
-    """
-    Klasa reprezentująca pojedynczą komórkę mapy.
-    """
+    """Klasa reprezentująca pojedynczą komórkę mapy."""
 
     def __init__(self, model, screen, width=10, height=10):
         super().__init__(name="MapCellView", model=model)

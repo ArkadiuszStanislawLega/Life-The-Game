@@ -1,19 +1,18 @@
 from Models.game import Game
-from Models.life_cell import LifeCell
-from Models.location import Location
+
 from Views.texts_view import TextView
 from Views.game_view import GameView
 import pygame
-import sys
 
 
 class App():
     """
     Klasa łącząca model - widok - kontrolery.
+    Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
+    GAME_WIDTH = 137
+    GAME_HEIGHT = 73
     """
-    # Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
-    # 137
-    # 73
+
     GAME_WIDTH = 137
     GAME_HEIGHT = 73
 
