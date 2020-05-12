@@ -105,7 +105,7 @@ class Game(BasicModel):
             location.X = x + item[0]
             location.Y = y + item[1]
             lifecell = LifeCell()
-            lifecell.is_alive = True
+            lifecell.modify(is_alive=True)
             lifecell.location = location
             self.put_life_cell(lifecell)
 
@@ -193,7 +193,7 @@ class Game(BasicModel):
         for str_location in self.__finded:
             location = self.__game_map.map_cells_container[str_location].location
             lifecell = LifeCell()
-            lifecell.is_alive = True
+            lifecell.modify(is_alive=True)
             lifecell.location = location
             self.put_life_cell(lifecell)
 
@@ -241,10 +241,10 @@ class Game(BasicModel):
 
             if count_life_cells_in_neighbors == 2 or count_life_cells_in_neighbors == 3:
                 self.__cells_that_survive[current_location] = count_life_cells_in_neighbors
-                cell.is_alive = True
+                cell.modify(is_alive=True)
             else:
                 self.__cells_that_will_die.append(current_location)
-                cell.is_alive = False
+                cell.modify(is_alive=False)
 
             count_life_cells_in_neighbors = 0
             counter_cells_in_neighbor_top = 0
