@@ -113,15 +113,14 @@ class Game(BasicModel):
         Arguments:
             life_cell {LifeCell} -- Komórka życia z ustawionymi koordynatami.
         """
-        try:
-            if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
+        # try:
+        if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
                 if self.__game_map.modify(key=f'{life_cell.location}', value=life_cell):
                     self.__life_cells[f'{life_cell.location}'] = life_cell
-                # if self.__game_map.container.get(f'{life_cell.location}').is_put_life_in_cell(life_cell):
-                #     self.__life_cells[f'{life_cell.location}'] = life_cell
-        except (AttributeError):
-            print(
-                f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
+                    self.modify(key="NewLifeCell", value=life_cell)
+        # except (AttributeError):
+        #     print(
+        #         f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
 
     def run(self):
         """
@@ -148,7 +147,7 @@ class Game(BasicModel):
         Wyszukuje wszystkie puste miejsca w około aktulnie postawionych komórek na mapie.
         """
         for value in self.__life_cells:
-            live_cell = self.__game_map.container.get(f'{value}')
+            live_cell = self.__game_map.map_cells_container.get(f'{value}')
             current_location = live_cell.location
 
             self.__check_top(current_location, False)
@@ -166,7 +165,7 @@ class Game(BasicModel):
         counter_of_empty_cells_bot = 0
 
         for str_location in self.__cells_for_potential_betting:
-            live_cell = self.__game_map.container.get(str_location)
+            live_cell = self.__game_map.map_cells_container.get(str_location)
             location = live_cell.location
 
             counter_of_empty_cells_top = self.__check_top(location, True)
@@ -189,7 +188,7 @@ class Game(BasicModel):
         Dodaje wszystkie nowe żywe komórki w miejscach które zostały wykryte że posiadają 3 sąsiadów.
         """
         for str_location in self.__finded:
-            location = self.__game_map.container[str_location].location
+            location = self.__game_map.map_cells_container[str_location].location
             lifecell = LifeCell()
             lifecell.is_alive = True
             lifecell.location = location
@@ -210,7 +209,7 @@ class Game(BasicModel):
         self.__dead_cells_to_remove = len(self.__cells_that_will_die)
 
         for location in self.__cells_that_will_die:
-            cell = self.__game_map.container.get(f'{location}')
+            cell = self.__game_map.map_cells_container.get(f'{location}')
             cell.is_alive = False
             cell.clear_cell()
             del(self.__life_cells[f'{location}'])
@@ -225,7 +224,8 @@ class Game(BasicModel):
         counter_cells_in_neighbor_bot = 0
 
         for cell in self.__life_cells.values():
-            live_cell = self.__game_map.container.get(f'{cell.location}')
+            live_cell = self.__game_map.map_cells_container.get(
+                f'{cell.location}')
             current_location = live_cell.location
 
             counter_cells_in_neighbor_top = self.__check_top(
@@ -354,7 +354,8 @@ class Game(BasicModel):
             check_location = Location()
             check_location.Y = location.Y
             check_location.X = location.X-1
-            map_cell = self.__game_map.container.get(f'{check_location}')
+            map_cell = self.__game_map.map_cells_container.get(
+                f'{check_location}')
             eq = -2
             if occupied:
                 eq = self.__check_map_cell(map_cell)
@@ -385,7 +386,8 @@ class Game(BasicModel):
             check_location = Location()
             check_location.Y = location.Y
             check_location.X = location.X
-            map_cell = self.__game_map.container.get(f'{check_location}')
+            map_cell = self.__game_map.map_cells_container.get(
+                f'{check_location}')
             eq = -2
             if occupied:
                 eq = self.__check_map_cell(map_cell)
@@ -418,7 +420,8 @@ class Game(BasicModel):
                 check_location = Location()
                 check_location.Y = location.Y
                 check_location.X = location.X+1
-                map_cell = self.__game_map.container.get(f'{check_location}')
+                map_cell = self.__game_map.map_cells_container.get(
+                    f'{check_location}')
                 eq = -2
                 if occupied:
                     eq = self.__check_map_cell(map_cell)
@@ -462,7 +465,12 @@ class Game(BasicModel):
         return -1
 
     def modify(self, *args, **kwargs):
-        pass
+        if len(kwargs) > 0:
+            value = kwargs.get("value")
+            key = kwargs.get("key")
+
+            if key == "NewLifeCell":
+                self._obs_list.get("GameView").update(key=key, value=value)
 
     def notify(self):
         pass

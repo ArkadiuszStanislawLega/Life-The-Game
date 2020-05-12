@@ -42,13 +42,18 @@ class MapCellView(View):
             self._component_list[comp.name] = comp
 
     def update(self, *args, **kwargs):
-        # if self._model.is_was_occupied:
-        #     self.__current_colour = self.__is_was_occupied_colour
-        # elif not self._model.is_was_occupied:
-        #     self.__current_colour = self.__is_was_not_occupied_colour
+        if len(kwargs) > 0:
+            key = kwargs.get("key")
+            value = kwargs.get("value")
 
-        # self.__body = pygame.draw.rect(
-        #     self.__screen, self.__current_colour, self.__position, 0)
+            if key == "LifeCell":
+                self.model.life_cell = value
+
+        if self._model.is_was_occupied:
+            self.__current_colour = self.__is_was_occupied_colour
+
+        self.__body = pygame.draw.rect(
+            self.__screen, self.__current_colour, self.__position, 0)
 
         self.show()
 

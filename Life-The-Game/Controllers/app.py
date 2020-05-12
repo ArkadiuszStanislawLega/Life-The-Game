@@ -19,6 +19,7 @@ class App():
                            map_height=self.GAME_HEIGHT)
 
         self.__game_view = GameView(self.__game)
+        self.__game.add_observer(self.__game_view)
 
         self.__clock = pygame.time.Clock()
 
@@ -98,10 +99,10 @@ class App():
 
             if self.__delay_counter == self.__current_game_delay:
                 self.__game.run()
-                self.__game_view.round()
+                # self.__game_view.round()
                 self.__delay_counter = 0
 
-            self.__game_view.print_all_live_cells()
+            # self.__game_view.print_all_live_cells()
             self.__game_view.print_text()
             self.__game_view.clear_text()
 

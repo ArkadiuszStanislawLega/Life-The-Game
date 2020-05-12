@@ -6,21 +6,21 @@ from Models.basic_model import BasicModel
 class Map(BasicModel):
     def __init__(self, width, height):
         super().__init__()
-        self.__cells_container = {}
+        self.__map_cells_container = {}
         self.__width = width
         self.__height = height
 
         self.__create_empty_cells()
 
     @property
-    def container(self):
+    def map_cells_container(self):
         """
         Kontener z komórkami mapy.
 
         Returns:
             [dictionary{str:MapCell}] -- Słownik z komórkami mapy, kluczami są koordynaty lokacji (x, y)
         """
-        return self.__cells_container
+        return self.__map_cells_container
 
     @property
     def width(self):
@@ -55,7 +55,7 @@ class Map(BasicModel):
                 map_cell = MapCell()
                 map_cell.location = location
 
-                self.__cells_container[f'{location}'] = map_cell
+                self.__map_cells_container[f'{location}'] = map_cell
 
     def modify(self, *args, **kwargs):
         if len(kwargs) > 0:
@@ -68,7 +68,7 @@ class Map(BasicModel):
             value = kwargs.get("value")
 
             if key and value:
-                self.__cells_container.get(key).is_put_life_in_cell(value)
+                self.__map_cells_container.get(key).is_put_life_in_cell(value)
                 new_key = f"MapCellView:{value.location}"
                 self.notify(name=new_key)
                 return True

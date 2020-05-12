@@ -3,9 +3,9 @@ from Views.view import View
 import pygame
 
 
-class CellView(View):
+class LifeCellView(View):
     def __init__(self, screen, model):
-        super().__init__(model=model, name="CellView")
+        super().__init__(model=model, name="LifeCellView")
         self.__colour = (0, 0, 0)
         self.__distance_from_the_top = 10
         self.__distance_from_the_left = 10
@@ -41,6 +41,10 @@ class CellView(View):
     @property
     def name(self):
         return self._model.name
+
+    @name.setter
+    def name(self, value):
+        self.__name = value
 
     @property
     def body(self):

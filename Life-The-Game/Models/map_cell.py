@@ -54,7 +54,6 @@ class MapCell(BasicModel):
             self.__life_cell = life_cell
             self.__is_occupied = True
             self.modify(is_was_occupied=True)
-            life_cell.location = self.__location
             return True
         return False
 
@@ -75,7 +74,7 @@ class MapCell(BasicModel):
     def modify(self, *args, **kwargs):
         if len(kwargs) > 0:
             for key, value in kwargs.items():
-                if key == "is_was_occupied":
+                if key == "is_was_occupied" and self.__is_was_occupied == False:
                     self.__is_was_occupied = value
                     self.notify(is_was_occupied=self.__is_was_occupied)
 

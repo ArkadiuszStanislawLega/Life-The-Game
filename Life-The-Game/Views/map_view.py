@@ -1,5 +1,6 @@
 from Views.view import View
 from Views.map_cell_view import MapCellView
+from Views.life_cell_view import LifeCellView
 
 
 class MapView(View):
@@ -13,7 +14,7 @@ class MapView(View):
         """
         Dodaje wszystkie widoki komórek które są utworzone w instancji gry.
         """
-        for key, value in self._model.container.items():
+        for key, value in self._model.map_cells_container.items():
             if not self._component_list.get(key):
                 view = MapCellView(screen=self.__screen, model=value)
                 value.add_observer(view)
@@ -24,8 +25,20 @@ class MapView(View):
             self._component_list[comp.name] = comp
 
     def update(self, *args, **kwargs):
-        for key in kwargs.values():
-            self._component_list.get(key).update()
+        if len(kwargs) > 0:
+            key = kwargs.get("key")
+            value = kwargs.get("value")
+
+            if key == "NewLifeCell":
+                if not self._component_list.get(f'LifeCellView:{value.name}'):
+                    view = LifeCellView(screen=self.__screen, model=value)
+                    view.name += f':{value.location}'
+                    self._component_list[view.name] = view
+
+            else:
+                for key in kwargs.values():
+                    self._component_list.get(key).update()
 
     def show(self):
-        pass
+        for key, value in self._component_list.items():
+            value.show()
