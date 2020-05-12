@@ -4,6 +4,10 @@ from Views.life_cell_view import LifeCellView
 
 
 class MapView(View):
+    """
+    Klasa reprezentująca widok wszystkich komórek z których jest złożona mapa.
+    """
+
     def __init__(self, model, screen):
         super().__init__(name="MapView", model=model)
         self.__screen = screen
@@ -30,8 +34,14 @@ class MapView(View):
             value = kwargs.get("value")
 
             if key == "NewLifeCell":
-                if not self._component_list.get(f'LifeCellView:{value.name}'):
-                    self._component_list[value.name] = value
+                new_life_cell_name = ""
+                new_life_cell_name += f'{value.name}'
+                if not self._component_list.get(new_life_cell_name):
+                    self._component_list.update({new_life_cell_name: value})
+
+            elif key == "RemoveLifeCell":
+                life_cell_to_remove_name = f'LifeCellView:{value.life_cell.name}'
+                self.remove_component(life_cell_to_remove_name)
 
             else:
                 for key in kwargs.values():

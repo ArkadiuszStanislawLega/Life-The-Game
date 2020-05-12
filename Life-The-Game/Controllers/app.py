@@ -12,6 +12,8 @@ class App():
     Klasa łącząca model - widok - kontrolery.
     """
     # Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
+    # 137
+    # 73
     GAME_WIDTH = 137
     GAME_HEIGHT = 73
 
@@ -83,7 +85,7 @@ class App():
                         else:
                             self.__current_game_delay = -1
                             self.__is_space_pushed = True
-                            self.__game_view.print_text()
+                            self.__text_view.print_text()
 
                     if event.key == pygame.K_KP_PLUS or event.key == pygame.K_PLUS:
                         self.__is_user_change_delay = True

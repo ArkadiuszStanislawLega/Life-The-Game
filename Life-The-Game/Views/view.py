@@ -21,7 +21,7 @@ class View(ABC):
 
     def remove_component(self, name):
         if name in self._component_list:
-            del self._component_list[name]
+            del(self._component_list[name])
 
     @abstractmethod
     def add_component(self, comp):

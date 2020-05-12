@@ -5,6 +5,9 @@ import pygame
 
 
 class LifeCellView(View):
+    """
+    Klasa przedstawiająca widok żywej komórki.
+    """
 
     def __init__(self, screen, model, width=10, height=10):
         super().__init__(model=model, name="LifeCellView")
@@ -44,7 +47,7 @@ class LifeCellView(View):
 
     @property
     def name(self):
-        return self._model.name
+        return self.__name
 
     @name.setter
     def name(self, value):

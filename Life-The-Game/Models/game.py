@@ -73,7 +73,7 @@ class Game(BasicModel):
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
 
-        # horizontal_line(self, 10, 10)
+        # horizontal_line(self, 2, 2)
         self.try_generate_struct(name="demonid",
                                  min_number_of_struct=1,
                                  max_number_of_struct=4,
@@ -212,7 +212,10 @@ class Game(BasicModel):
         self.__dead_cells_to_remove = len(self.__cells_that_will_die)
 
         for location in self.__cells_that_will_die:
-            self.__game_map.map_cells_container.get(f'{location}').clear_cell()
+            map_cell_view = self.__game_map.map_cells_container.get(
+                f'{location}')
+            self.modify(key="RemoveLifeCell", value=map_cell_view)
+            map_cell_view.clear_cell()
             del(self.__life_cells[f'{location}'])
 
     def __check_current_cells_to_see_if_they_survive(self):
@@ -471,6 +474,9 @@ class Game(BasicModel):
             key = kwargs.get("key")
 
             if key == "NewLifeCell":
+                self._obs_list.get("GameView").update(key=key, value=value)
+
+            elif key == "RemoveLifeCell":
                 self._obs_list.get("GameView").update(key=key, value=value)
 
     def notify(self):
