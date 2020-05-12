@@ -1,6 +1,7 @@
 from Models.game import Game
 from Models.life_cell import LifeCell
 from Models.location import Location
+from Views.texts_view import TextView
 from Views.game_view import GameView
 import pygame
 import sys
@@ -21,6 +22,10 @@ class App():
         self.__game_view = GameView(self.__game)
         self.__game.add_observer(self.__game_view)
 
+        self.__text_view = TextView(
+            model=self.__game_view, screen=self.__game_view.screen)
+        self.__game.add_observer(self.__text_view)
+
         self.__clock = pygame.time.Clock()
 
         self.__current_game_delay = 1
@@ -40,16 +45,16 @@ class App():
         """
         Odświeża dane które wyświetlają się w górnym lewym rogu.
         """
-        self.__game_view.add_text_top_left(
+        self.__text_view.add_text_top_left(
             f'Umierających komórek: {self.__game.dead_cells}')
 
-        self.__game_view.add_text_top_left(
+        self.__text_view.add_text_top_left(
             f'Żywych komórek: {len(self.__game.life_cells)}')
 
-        self.__game_view.add_text_top_left(
+        self.__text_view.add_text_top_left(
             f'Numer rundy: {self.__game.current_round}')
 
-        self.__game_view.add_text_top_left(
+        self.__text_view.add_text_top_left(
             f'Opóźnienie gry: {self.__current_game_delay}')
 
     def start_game(self):
@@ -103,8 +108,8 @@ class App():
                 self.__delay_counter = 0
 
             self.__game_view.show()
-            self.__game_view.print_text()
-            self.__game_view.clear_text()
+            self.__text_view.print_text()
+            self.__text_view.clear_text()
 
             self.__clock.tick(self.REFRESH_RATE)
             pygame.display.flip()
