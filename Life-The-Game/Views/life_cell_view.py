@@ -1,16 +1,14 @@
 from Views.view import View
+from Library.colours import colours
 
 import pygame
 
 
 class LifeCellView(View):
-    DARKRED = (139, 0, 0)
-    MATRIX = (52, 195, 5)
-    YELLOW = (255, 255, 0)
 
     def __init__(self, screen, model):
         super().__init__(model=model, name="LifeCellView")
-        self.__colour = self.MATRIX
+        self.__colour = colours.MATRIX
         self.__width = 10
         self.__height = 10
 
@@ -92,7 +90,7 @@ class LifeCellView(View):
         """
         if not self._model.is_alive:
             self.__body = pygame.draw.ellipse(
-                self.__screen, self.DARKRED, self.__position, 0)
+                self.__screen, colours.DARK_RED, self.__position, 0)
 
     def show(self):
         return self.__body

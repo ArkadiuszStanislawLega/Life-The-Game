@@ -1,36 +1,30 @@
+import pygame
 from Views.map_cell_view import MapCellView
 from Views.view import View
 from Views.map_view import MapView
 from Views.life_cell_view import LifeCellView
-import pygame
+from Library.colours import colours
 
 
 class GameView(View):
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    GREEN = (0, 255, 0)
-    RED = (255, 0, 0)
-    GRAY = (192, 192, 192)
-    DARKRED = (139, 0, 0)
-    MATRIX = (52, 195, 5)
 
     def __init__(self, model):
         super().__init__(name="GameView", model=model)
         self.__WINDOW_TITLE = "Life the game"
-        self.__WINDOW_BACKGROUND_COLOUR = self.BLACK
+        self.__WINDOW_BACKGROUND_COLOUR = colours.BLACK
 
         pygame.init()
         pygame.display.set_caption(self.__WINDOW_TITLE)
 
         self.__CELLS_WIDTH = 10
         self.__CELLS_HEIGHT = 10
-        self.__CELLS_COLOUR = self.MATRIX
+        self.__CELLS_COLOUR = colours.MATRIX
 
         self.__ROW_HEIGHT = 15
         self.__LEFT_MARGIN = 15
         self.__FONT_NAME = 'freesansbold.ttf'
         self.__FONT_SIZE = 12
-        self.__FONT_COLOUR = self.WHITE
+        self.__FONT_COLOUR = colours.WHITE
         self.__FONT = pygame.font.Font(self.__FONT_NAME, self.__FONT_SIZE)
 
         self.__window_width = self._model.game_map.width * self.__CELLS_WIDTH
@@ -122,7 +116,7 @@ class GameView(View):
         return self.__FONT.render(text, True, self.__FONT_COLOUR)
 
     def __create_white_text_red_background(self, text: str):
-        return self.__FONT.render(text, True, self.__FONT_COLOUR, self.DARKRED)
+        return self.__FONT.render(text, True, self.__FONT_COLOUR, colours.DARK_RED)
 
     def add_text_top_left(self, text: str):
         if isinstance(text, str):

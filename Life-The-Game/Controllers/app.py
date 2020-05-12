@@ -103,7 +103,6 @@ class App():
                 self.__delay_counter = 0
 
             self.__game_view.show()
-            # self.__game_view.print_all_live_cells()
             self.__game_view.print_text()
             self.__game_view.clear_text()
 
