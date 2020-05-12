@@ -70,10 +70,25 @@ class TextView(View):
             self.__screen.blit(text, (self.__LEFT_MARGIN, current_row_height))
             current_row_height -= self.__ROW_HEIGHT
 
+    def __print_backround(self):
+        width = 170
+        height = len(self.__text_print_top_left) * self.__ROW_HEIGHT + 15
+
+        distance_from_the_top = 10
+        distance_from_the_left = 10
+        coordinates = (distance_from_the_left // 1, distance_from_the_top // 1)
+
+        size = (width, height)
+
+        position = (coordinates, size)
+
+        pygame.draw.rect(self.__screen, colours.BLACK, position, 0)
+
     def print_text(self):
         """
         Drukuje wszystkie napisy w oknie.
         """
+        self.__print_backround()
         self.__print_text_top_left()
         self.__print_text_bot_left()
 
