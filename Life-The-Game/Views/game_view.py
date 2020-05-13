@@ -63,6 +63,8 @@ class GameView(View):
                     view.name = new_life_cell_name
                     value.add_observer(view)
                     self.__map.update(key=key, value=view)
+                    self._component_list.get("TextViews").update(
+                        LabelView_life_cells=len(self._model.life_cells))
 
             if key == "RemoveLifeCell":
                 self.__map.update(key=key, value=value)

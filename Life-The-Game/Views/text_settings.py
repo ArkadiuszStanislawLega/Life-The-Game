@@ -62,6 +62,7 @@ class TextSettings:
     @coordinate_x.setter
     def coordinate_x(self, value):
         self.__coordinate_x = value
+        self.__coordinates = (self.__coordinate_x, self.__coordinate_y)
 
     @property
     def coordinate_y(self):
@@ -70,6 +71,7 @@ class TextSettings:
     @coordinate_y.setter
     def coordinate_y(self, value):
         self.__coordinate_y = value
+        self.__coordinates = (self.__coordinate_x, self.__coordinate_y)
 
     @property
     def coordinates(self):

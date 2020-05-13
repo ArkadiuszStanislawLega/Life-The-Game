@@ -159,14 +159,13 @@ class Game(BasicModel):
         Arguments:
             life_cell {LifeCell} -- Komórka życia z ustawionymi koordynatami.
         """
-        try:
-            if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
+        # try:
+        if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
                 if self.__game_map.modify(key=f'{life_cell.location}', value=life_cell):
-                    self.__life_cells[f'{life_cell.location}'] = life_cell
                     self.modify(key="NewLifeCell", value=life_cell)
-        except AttributeError:
-            print(
-                f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
+        # except AttributeError:
+        #     print(
+        #         f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
 
     def run(self):
         """
@@ -263,7 +262,6 @@ class Game(BasicModel):
                 f'{location}')
             self.modify(key="RemoveLifeCell", value=map_cell_view)
             map_cell_view.clear_cell()
-            del self.__life_cells[f'{location}']
 
     def __check_current_cells_to_see_if_they_survive(self):
         """
@@ -540,9 +538,11 @@ class Game(BasicModel):
             key = kwargs.get("key")
 
             if key == "NewLifeCell":
+                self.__life_cells[f'{value.location}'] = value
                 self._obs_list.get("GameView").update(key=key, value=value)
 
             elif key == "RemoveLifeCell":
+                del self.__life_cells[f"{value.location}"]
                 self._obs_list.get("GameView").update(key=key, value=value)
 
     def notify(self):

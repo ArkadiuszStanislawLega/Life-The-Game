@@ -42,8 +42,9 @@ class TextViews(View):
         if len(kwargs) > 0:
             for key, value in kwargs.items():
                 if self._component_list.get(key):
-                    value.udpate()
-                    value.show()
+                    self._component_list.get(key).udpate(
+                        LabelView_life_cells=value)
+                    self._component_list.get(key).show()
 
     def show(self):
         for view in self._component_list.values():
