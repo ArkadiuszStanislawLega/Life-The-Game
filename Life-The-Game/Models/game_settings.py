@@ -2,8 +2,10 @@ from Models.basic_model import BasicModel
 
 
 class GameSettings(BasicModel):
+
     def __init__(self):
         super().__init__()
+        self.__refresh_rate = 60
         self.__delay_counter = 0
         self.__default_game_delay = 1
         self.__user_game_delay = 1
@@ -11,11 +13,14 @@ class GameSettings(BasicModel):
         self.__current_game_delay = 1
         # Flaga wskazująca czy przycisk spacji był wciśnięty
         self.__is_space_pushed = False
-        self.__is_working = True
 
-    @info_game_delay_view.setter
-    def info_game_delay_view(self, view):
-        self.__info_game_delay_view = view
+    @property
+    def refresh_rate(self):
+        return self.__refresh_rate
+
+    @refresh_rate.setter
+    def refresh_rate(self, value):
+        self.__refresh_rate = value
 
     @property
     def default_game_delay(self):
@@ -65,10 +70,8 @@ class GameSettings(BasicModel):
     def delay_counter(self, value):
         self.__delay_counter = value
 
-    @property
-    def is_working(self):
-        return self.__is_working
+    def modify(self, *args, **kwargs):
+        pass
 
-    @is_working.setter
-    def is_working(self, value):
-        self.__is_working = value
+    def notify(self):
+        pass

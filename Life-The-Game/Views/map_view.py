@@ -12,7 +12,6 @@ class MapView(View):
         super().__init__(name="MapView", model=model)
         self.__screen = screen
         self.__create_map()
-        pass
 
     def __create_map(self):
         """

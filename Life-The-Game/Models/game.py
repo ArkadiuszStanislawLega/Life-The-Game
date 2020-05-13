@@ -5,6 +5,7 @@ from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
 from Models.basic_model import BasicModel
+from Models.game_settings import GameSettings
 
 #from Library.horizontal_line import horizontal_line
 from Library.demonid import demonid
@@ -20,6 +21,7 @@ class Game(BasicModel):
 
     def __init__(self, map_width, map_height):
         super().__init__()
+        self.__settings = GameSettings()
         self.__game_map = Map(width=map_width, height=map_height)
         self.__struct = {"glider": glider,
                          "spaceship": spaceship,
@@ -33,6 +35,23 @@ class Game(BasicModel):
         self.__cells_for_potential_betting = []
         self.__finded = []
         self.__current_round = 0
+        self.__is_working = True
+
+    @property
+    def settings(self):
+        return self.__settings
+
+    @settings.setter
+    def settings(self, value):
+        self.__settings = value
+
+    @property
+    def is_working(self):
+        return self.__is_working
+
+    @is_working.setter
+    def is_working(self, value):
+        self.__is_working = value
 
     @property
     def dead_cells(self):
@@ -153,12 +172,13 @@ class Game(BasicModel):
         """
         Włącza gre.
         """
-        self.__check_current_cells_to_see_if_they_survive()
-        self.__find_empty_cells_to_live_and_put_new_ones()
+        if self.__is_working:
+            self.__check_current_cells_to_see_if_they_survive()
+            self.__find_empty_cells_to_live_and_put_new_ones()
 
-        self.__remove_dead_cells()
-        self.__clear_after_round()
-        self.__current_round += 1
+            self.__remove_dead_cells()
+            self.__clear_after_round()
+            self.__current_round += 1
 
     def __clear_after_round(self):
         """

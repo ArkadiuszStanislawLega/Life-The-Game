@@ -6,10 +6,11 @@ class MinusDownEventController(Controller):
         super().__init__(view=view, model=model)
 
     def get_input(self):
-        self._model.is_user_change_delay = True
-        if self._model.user_game_delay > 1:
-            self._model.user_game_delay -= 1
-            self._model.delay_counter = 0
-            self._model.current_game_delay = self._model.user_game_delay
-            self._view.update()
+        self._model.settings.is_user_change_delay = True
+        if self._model.settings.user_game_delay > 1:
+            self._model.settings.user_game_delay -= 1
+            self._model.settings.delay_counter = 0
+            self._model.settings.current_game_delay = self._model.settings.user_game_delay
+            self._view.update(
+                game_delay=self._model.settings.current_game_delay)
             self._view.show()

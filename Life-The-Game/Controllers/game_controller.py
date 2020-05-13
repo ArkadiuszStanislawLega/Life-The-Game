@@ -1,24 +1,40 @@
+import pygame
+
 from Controllers.controller import Controller
-from Controllers.life_cell_info_controller import LifeCellInfoController
-from Controllers.dead_cell_info_controller import DeadCellInfoController
+from Controllers.events_controller import EventsController
+
+from Models.game_settings import GameSettings
 
 
 class GameController(Controller):
     def __init__(self, view, model):
         super().__init__(view=view, model=model)
+        self.__refresh_rate = 60
+        self.__clock = pygame.time.Clock()
 
-        self.__life_cell_info_controller = LifeCellInfoController(
-            model=len(self._model.life_cells), view=view)
+        self.__events = EventsController(view=self._view, model=self._model)
 
-        self.__dead_cell_info_controller = DeadCellInfoController(
-            model=self._model.dead_cells, view=view)
+    def start_game(self):
+        """
+        Inicjalizuje grę.
+        Zawarta tutaj jest główna pętla aplikacji.
+        """
+        self._model.cells_at_the_begginning()
 
-    def get_life_cell_input(self):
-        self.__life_cell_info_controller.get_input()
+        while self._model.is_working:
 
-    def get_dead_cell_input(self):
-        self.__dead_cell_info_controller.get_input()
+            self.__events.get_input()
+
+            self._model.settings.delay_counter += 1
+
+            if self._model.settings.delay_counter == self._model.settings.current_game_delay:
+                self._model.run()
+                self._model.settings.delay_counter = 0
+
+            self.__clock.tick(self.__refresh_rate)
+            pygame.display.flip()
+
+        pygame.quit()
 
     def get_input(self):
-        self.get_life_cell_input()
-        self.get_dead_cell_input()
+        pass

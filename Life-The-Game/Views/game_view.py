@@ -1,9 +1,10 @@
 import pygame
+from Views.view_settings import ViewSettings
 from Views.map_cell_view import MapCellView
 from Views.view import View
 from Views.map_view import MapView
 from Views.life_cell_view import LifeCellView
-from Views.texts_view import TextView
+from Views.text_views import TextViews
 from Library.colours import colours
 
 
@@ -12,63 +13,30 @@ class GameView(View):
 
     def __init__(self, model):
         super().__init__(name="GameView", model=model)
-        self.__WINDOW_TITLE = "Life the game"
-        self.__WINDOW_BACKGROUND_COLOUR = colours.BLACK
+        self.__settings = ViewSettings(self._model)
+        self.__screen = pygame.display.set_mode(self.__settings.window_size)
+
+        self.__map = MapView(model=self._model.game_map,
+                             screen=self.__screen)
+        self.add_component(self.__map)
 
         pygame.init()
-        pygame.display.set_caption(self.__WINDOW_TITLE)
+        pygame.display.set_caption(self.__settings.window_title)
 
-        self.__CELLS_WIDTH = 10
-        self.__CELLS_HEIGHT = 10
-        self.__CELLS_COLOUR = colours.MATRIX
+        self.__texts = TextViews(model=self._model, screen=self.__screen)
+        self.add_component(self.__texts)
 
-        self.__window_width = self._model.game_map.width * self.__CELLS_WIDTH
-        self.__window_height = self._model.game_map.height * self.__CELLS_HEIGHT
-        self.__screen = pygame.display.set_mode(self.window_size)
+        self._model.game_map.add_observer(self.__map)
 
-        self.__map_view = MapView(
-            model=self._model.game_map, screen=self.__screen)
+        self.show()
 
-        self.add_component(self.__map_view)
-
-        self._model.game_map.add_observer(self.__map_view)
-
-        self.__map_cell_views = {}
-        self.__life_cell_views = {}
-        self.__number_of_dead_cells = 0
-        self.__dead_life_cells_keys = []
-        self.__add_new_cells()
+    @property
+    def texts(self):
+        return self.__texts
 
     @property
     def screen(self):
         return self.__screen
-
-    @property
-    def window_background(self):
-        return self.__WINDOW_BACKGROUND_COLOUR
-
-    @property
-    def window_width(self):
-        return self.__window_width
-
-    @property
-    def window_height(self):
-        return self.__window_height
-
-    @property
-    def window_size(self):
-        return (self.__window_width, self.__window_height)
-
-    def __add_new_cells(self):
-        """
-        Dodaje wszystkie widoki komórek które są utworzone w instancji gry.
-        """
-        for key, value in self._model.life_cells.items():
-            if not self.__map_cell_views.get(key):
-                new_cell = MapCellView(
-                    screen=self.__screen, model=value, width=self.__CELLS_WIDTH, height=self.__CELLS_HEIGHT)
-                new_cell.colour = self.__CELLS_COLOUR
-                self.__map_cell_views.update({key: new_cell})
 
     def add_component(self, comp):
         if comp.name not in self._component_list:
@@ -79,6 +47,7 @@ class GameView(View):
         Dodaje nową żywą komórkę do rozgrywki.
         klucza - NewLifeCell
         wartości - instancji klasy LifeCell
+        klucz - UpdateText
         """
         if len(kwargs) > 0:
             key = kwargs.get("key")
@@ -87,16 +56,19 @@ class GameView(View):
             if key == "NewLifeCell":
                 new_life_cell_name = f'LifeCellView:{value.name}'
                 if not self._component_list.get(new_life_cell_name):
-                    view = LifeCellView(screen=self.__screen, model=value,
-                                        width=self.__CELLS_WIDTH, height=self.__CELLS_HEIGHT)
+                    view = LifeCellView(screen=self.__screen,
+                                        model=value,
+                                        width=self.__settings.cell_width,
+                                        height=self.__settings.cell_height)
                     view.name = new_life_cell_name
                     value.add_observer(view)
-                    self.__life_cell_views[new_life_cell_name] = view
-                    self.__map_view.update(key=key, value=view)
+                    self.__map.update(key=key, value=view)
 
             if key == "RemoveLifeCell":
-                self.__map_view.update(key=key, value=value)
-                del self.__life_cell_views[f'LifeCellView:{value.life_cell.name}']
+                self.__map.update(key=key, value=value)
+
+            if key == "UpdateText":
+                self.__texts.update()
 
     def show(self):
         """

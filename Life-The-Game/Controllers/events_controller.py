@@ -9,12 +9,14 @@ class EventsController(Controller):
     def __init__(self, view, model):
         super().__init__(view=view, model=model)
 
-        self.__minus_down_event = MinusDownEventController(
-            model=self._model, view=self._model.info_game_delay_view)
-        self.__plus_down_event = PlusDownEventController(
-            model=self._model, view=self._model.info_game_delay_view)
-        self.__space_down_event = SpaceDownEventController(
-            model=self._model, view=self._model.info_game_delay_view)
+        self.__minus_down_event = MinusDownEventController(model=self._model,
+                                                           view=self._view.texts.info_game_delay)
+
+        self.__plus_down_event = PlusDownEventController(model=self._model,
+                                                         view=self._view.texts.info_game_delay)
+
+        self.__space_down_event = SpaceDownEventController(model=self._model,
+                                                           view=self._view.texts.info_game_delay)
 
     def get_input(self):
         for event in pygame.event.get():
