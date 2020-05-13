@@ -1,19 +1,18 @@
+import random
+
 from Models.map import Map
 from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
 from Models.basic_model import BasicModel
 
-from Library.horizontal_line import horizontal_line
+#from Library.horizontal_line import horizontal_line
 from Library.demonid import demonid
 from Library.glider import glider
-from Library.horizontal_line import horizontal_line
 from Library.spaceship import spaceship
 from Library.noah_ark import noah_ark
 from Library.info import struct_info
 from Library.gosper_glider_gun import gosper_glider_gun
-
-import random
 
 
 class Game(BasicModel):
@@ -37,32 +36,47 @@ class Game(BasicModel):
 
     @property
     def dead_cells(self):
+        """Ilość martwych komórek w rundzie"""
         return self.__dead_cells_to_remove
 
     @property
     def current_round(self):
+        """Aktulny numer rundy"""
         return self.__current_round
 
     @property
     def life_cells(self):
+        """List z wszystkimi żywymi komórkami"""
         return self.__life_cells
 
     @property
     def game_map(self):
+        """Mapa rozgrywki"""
         return self.__game_map
 
     def gen_random_x(self, struc_info: dict):
+        """Generuje losowo x z dostępnych koordynatów na mapie."""
         return random.randrange(0, self.__game_map.width-struc_info.get("width"))
 
     def gen_random_y(self, struc_info: dict):
+        """Generuje losowo y z dostępnych koordynatów na mapie."""
         return random.randrange(0, self.__game_map.height-struc_info.get("height"))
 
     def generate_stuct_in_random_loc(self, name):
+        """Generuje komórki w strukture z Library z losową lokalizacją."""
         info = struct_info().get(name)
         self.__struct.get(name)(self, self.gen_random_x(
             info), self.gen_random_y(info))
 
-    def try_generate_struct(self, name: str, max_number_of_struct: int, min_number_of_struct: int, max_chance_to_generate: int):
+    def try_generate_struct(self,
+                            name: str,
+                            max_number_of_struct: int,
+                            min_number_of_struct: int,
+                            max_chance_to_generate: int):
+        """
+        Losuje możliwość wylosowania struktury z komórek znajdujących się w
+        Library, następnie losuje ich ilość, oraz lokalizację.
+        """
         chance = random.randrange(0, max_chance_to_generate)
         if chance < 1000:
             number_of_struct = random.randrange(
@@ -101,11 +115,19 @@ class Game(BasicModel):
                                  max_number_of_struct=3,
                                  max_chance_to_generate=1000)
 
-    def put_coordinates_to_map(self, coordinates, x, y):
+    def put_coordinates_to_map(self, coordinates: list, start_x: int, start_y: int):
+        """
+        Wstawia komórki życie z listy koordynatów
+
+        Arguments:
+            coordinates {list} -- Lista z koordynatami
+            start_x -- od której współrzędnej x zaczyna wstawianie komórek
+            start_y -- od której współrzędnej y zaczyna wstawianie komórek
+        """
         for item in coordinates:
             location = Location()
-            location.X = x + item[0]
-            location.Y = y + item[1]
+            location.X = start_x + item[0]
+            location.Y = start_y + item[1]
             lifecell = LifeCell()
             lifecell.modify(is_alive=True)
             lifecell.location = location
@@ -123,7 +145,7 @@ class Game(BasicModel):
                 if self.__game_map.modify(key=f'{life_cell.location}', value=life_cell):
                     self.__life_cells[f'{life_cell.location}'] = life_cell
                     self.modify(key="NewLifeCell", value=life_cell)
-        except (AttributeError):
+        except AttributeError:
             print(
                 f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
 
@@ -162,7 +184,8 @@ class Game(BasicModel):
     def __from_potential_cells_check_which_have_three_neighbors(self):
         """
         Sprawdza czy są 3 komórki w wybranych potencjalnie komórkach.
-        Potencjalne komórki które sprawdzam to wszystkie puste bezpośrednio toważyszące aktuelnie żywym i martwym.
+        Potencjalne komórki które sprawdzam, to wszystkie puste,
+        bezpośrednio toważyszące aktualnie żywym i martwym.
         """
         sum_of_neighbors_cells = 0
         counter_of_empty_cells_top = 0
@@ -190,7 +213,8 @@ class Game(BasicModel):
 
     def __put_new_live_cells(self):
         """
-        Dodaje wszystkie nowe żywe komórki w miejscach które zostały wykryte że posiadają 3 sąsiadów.
+        Dodaje wszystkie nowe żywe komórki w miejscach,
+        które zostały wykryte że posiadają 3 sąsiadów.
         """
         for str_location in self.__finded:
             location = self.__game_map.map_cells_container[str_location].location
@@ -201,7 +225,8 @@ class Game(BasicModel):
 
     def __find_empty_cells_to_live_and_put_new_ones(self):
         """
-        Sprawdza pola które miały 3 żywe komórki w około siebie i wstawia w odpowiednie miejsce nową żywą komórkę
+        Sprawdza pola które miały 3 żywe komórki w około
+        siebie i wstawia w odpowiednie miejsce nową żywą komórkę.
         """
         self.__search_for_potential_places_to_place_new_cells()
         self.__from_potential_cells_check_which_have_three_neighbors()
@@ -218,7 +243,7 @@ class Game(BasicModel):
                 f'{location}')
             self.modify(key="RemoveLifeCell", value=map_cell_view)
             map_cell_view.clear_cell()
-            del(self.__life_cells[f'{location}'])
+            del self.__life_cells[f'{location}']
 
     def __check_current_cells_to_see_if_they_survive(self):
         """
@@ -244,7 +269,7 @@ class Game(BasicModel):
             count_life_cells_in_neighbors += counter_cells_in_neighbor_top + \
                 counter_cells_in_neighbor_mid + counter_cells_in_neighbor_bot
 
-            if count_life_cells_in_neighbors == 2 or count_life_cells_in_neighbors == 3:
+            if count_life_cells_in_neighbors in(2, 3):
                 self.__cells_that_survive[current_location] = count_life_cells_in_neighbors
                 cell.modify(is_alive=True)
             else:
@@ -258,7 +283,8 @@ class Game(BasicModel):
 
     def __check_bot(self, location, occupied: bool):
         """
-        Sprawdza czy w pod koordynatami podanymi w argumencie po lewej, środku i po prawo znajdują się jakieś żywe komórki.
+        Sprawdza czy w pod koordynatami podanymi w argumencie po lewej,
+        środku i po prawo znajdują się jakieś żywe komórki.
 
         Arguments:
             location {Location} -- koordynaty pod którymi mają zostać sprawdzone pola
@@ -291,7 +317,8 @@ class Game(BasicModel):
 
     def __check_mid(self, location, occupied: bool):
         """
-        Sprawdza czy na wysokości podanych w argumencie koordynatów po lewej i po prawo znajdują się jakieś żywe komórki.
+        Sprawdza czy na wysokości podanych w argumencie koordynatów
+        po lewej i po prawo znajdują się jakieś żywe komórki.
 
         Arguments:
             location {Location} -- koordynaty w około których mają zostać sprawdzone pola
@@ -314,7 +341,8 @@ class Game(BasicModel):
 
     def __check_top(self, location: Location, occupied: bool):
         """
-        Sprawdza czy w nad koordynatami podanymi w argumencie po lewej, środku i po prawo znajdują się jakieś żywe komórki.
+        Sprawdza czy w nad koordynatami podanymi w argumencie po lewej,
+        środku i po prawo znajdują się jakieś żywe komórki.
 
         Arguments:
             location {Location} -- koordynaty nad którymi mają zostać sprawdzone pola
@@ -346,15 +374,19 @@ class Game(BasicModel):
 
     def __check_map_cell_left(self, location: Location, occupied: bool):
         """
-        Sprawdza komórkę po lewej stronie od podanych koordynatów lokacji czy jest zajęta i czy ma komórkę życia aktywną.
+        Sprawdza komórkę po lewej stronie od podanych koordynatów lokacji
+        czy jest zajęta i czy ma komórkę życia aktywną.
 
         Arguments:
-            location {Location} -- koordynaty od których ma zostać srawdzone pole na lewo
-            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
+            location {Location} -- koordynaty od których ma zostać srawdzone
+                                pole na lewo
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone
+                            zajęte pola czy puste
 
         Returns:
             [int] --  0 - jeżeli lokacja wychodzi po za obszar mapy
-                      1 - jeżeli po lewej strony od podanej lokacji pole jest zajęte przez żyjącą komórkę życia
+                      1 - jeżeli po lewej strony od podanej lokacji pole
+                      jest zajęte przez żyjącą komórkę życia
         """
         if isinstance(location, Location) and location.X > 0:
             check_location = Location()
@@ -362,31 +394,35 @@ class Game(BasicModel):
             check_location.X = location.X-1
             map_cell = self.__game_map.map_cells_container.get(
                 f'{check_location}')
-            eq = -2
+            output = -2
             if occupied:
-                eq = self.__check_map_cell(map_cell)
+                output = self.__check_map_cell(map_cell)
             else:
-                eq = self.__check_is_empty(map_cell)
-                if eq == 1:
+                output = self.__check_is_empty(map_cell)
+                if output == 1:
                     if f'{check_location}' not in self.__cells_for_potential_betting:
                         self.__cells_for_potential_betting.append(
                             f'{check_location}')
 
-            return eq
+            return output
 
         return 0
 
     def __check_map_cell_mid(self, location: Location, occupied: bool):
         """
-        Sprawdza komórkę po na środku  (nad lub pod) od podanych koordynatów lokacji czy jest zajęta i czy ma komórkę życia aktywną.
+        Sprawdza komórkę po na środku  (nad lub pod) od podanych koordynatów
+        lokacji czy jest zajęta i czy ma komórkę życia aktywną.
 
         Arguments:
-            location {Location} -- koordynaty od których ma zostać srawdzone pole na środku
-            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
+            location {Location} -- koordynaty od których ma zostać srawdzone
+                                pole na środku
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone
+                            zajęte pola czy puste
 
         Returns:
             [int] --  0 - jeżeli lokacja wychodzi po za obszar mapy
-                      1 - jeżeli naśrodku (nad lub pod) od podanej lokacji pole jest zajęte przez żyjącą komórkę życia
+                      1 - jeżeli naśrodku (nad lub pod) od podanej
+                      lokacji pole jest zajęte przez żyjącą komórkę życia
         """
         if isinstance(location, Location):
             check_location = Location()
@@ -394,32 +430,37 @@ class Game(BasicModel):
             check_location.X = location.X
             map_cell = self.__game_map.map_cells_container.get(
                 f'{check_location}')
-            eq = -2
+            output = -2
             if occupied:
-                eq = self.__check_map_cell(map_cell)
+                output = self.__check_map_cell(map_cell)
             else:
-                eq = self.__check_is_empty(map_cell)
-                if eq == 1:
+                output = self.__check_is_empty(map_cell)
+                if output == 1:
                     if f'{check_location}' not in self.__cells_for_potential_betting:
                         self.__cells_for_potential_betting.append(
                             f'{check_location}')
 
-            return eq
+            return output
 
         return 0
 
     def __check_map_cell_right(self, location: Location, occupied: bool):
         """
-        Sprawdza komórkę po prawej stronie od podanych koordynatów lokacji czy jest zajęta i czy ma komórkę życia aktywną.
+        Sprawdza komórkę po prawej stronie od podanych koordynatów lokacji
+        czy jest zajęta i czy ma komórkę życia aktywną.
 
         Arguments:
-            location {Location} -- koordynaty od których ma zostać srawdzone pole na prawo
-            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone zajęte pola czy puste
+            location {Location} -- koordynaty od których ma zostać srawdzone
+                                pole na prawo
+            occupied {bool} -- flaga wskazująca czy mają zostaś sprawdzone
+                                zajęte pola czy puste
 
         Returns:
-            [int] -- -1 - jeżeli podany w atrybucie element nie jest instancją klasy Lokacja
+            [int] -- -1 - jeżeli podany w atrybucie element nie jest instancją
+                        klasy Lokacja
                       0 - jeżeli lokacja wychodzi po za obszar mapy
-                      1 - jeżeli po prawej strony od podanej lokacji pole jest zajęte przez żyjącą komórkę życia
+                      1 - jeżeli po prawej strony od podanej lokacji pole jest
+                        zajęte przez żyjącą komórkę życia
         """
         if isinstance(location, Location):
             if location.X < self.__game_map.width:
@@ -428,33 +469,36 @@ class Game(BasicModel):
                 check_location.X = location.X+1
                 map_cell = self.__game_map.map_cells_container.get(
                     f'{check_location}')
-                eq = -2
+                output = -2
                 if occupied:
-                    eq = self.__check_map_cell(map_cell)
+                    output = self.__check_map_cell(map_cell)
                 else:
-                    eq = self.__check_is_empty(map_cell)
-                    if eq == 1:
+                    output = self.__check_is_empty(map_cell)
+                    if output == 1:
                         if f'{check_location}' not in self.__cells_for_potential_betting:
                             self.__cells_for_potential_betting.append(
                                 f'{check_location}')
 
-                return eq
+                return output
             else:
                 return 0
         return -1
 
     def __check_map_cell(self, map_cell: MapCell):
         """
-        Sprawdza czy podane w argumencie pole mapy zawiera w sobie żyjącą komórkę życia.
+        Sprawdza czy podane w argumencie pole mapy zawiera w sobie żyjącą
+        komórkę życia.
 
         Arguments:
             map_cell {MapCell} -- pole mapy które ma zostać sprawdzone.
 
         Returns:
-            [int] -- 1 - jeżeli w polu znajduje się żyjąca komórka życia, 0 - jeżeli pole may nie posiada żyjącej komórki życia.
+            [int] -- 1 - jeżeli w polu znajduje się żyjąca komórka życia,
+                     0 - jeżeli pole may nie posiada żyjącej komórki życia.
         """
-        if isinstance(map_cell, MapCell) and map_cell.is_occupied and isinstance(map_cell.life_cell, LifeCell) and map_cell.life_cell != None:
-            return 1
+        if isinstance(map_cell, MapCell) and isinstance(map_cell.life_cell, LifeCell):
+            if map_cell.is_occupied and map_cell.life_cell is not None:
+                return 1
         return 0
 
     def __check_is_empty(self, map_cell: MapCell):
@@ -464,7 +508,7 @@ class Game(BasicModel):
                 return 0
 
             # sprawdza czy miejsce jest zajęte, ale komórka umiera
-            if isinstance(map_cell.life_cell, LifeCell) and map_cell.life_cell != None:
+            if isinstance(map_cell.life_cell, LifeCell) and map_cell.life_cell is not None:
                 return 0
 
             return 1
