@@ -1,9 +1,12 @@
 from Models.game import Game
 
 from Controllers.game_controller import GameController
+from Controllers.events_controller import EventsController
 
 from Views.texts_view import TextView
 from Views.game_view import GameView
+
+from Views.info_game_delay_view import InfoGameDelayView
 import pygame
 
 
@@ -21,33 +24,109 @@ class App():
     REFRESH_RATE = 60
 
     def __init__(self):
+        self.__delay_counter = 0
+        self.__default_game_delay = 1
+        self.__user_game_delay = 1
+        self.__is_user_change_delay = False
+        self.__current_game_delay = 1
+        # Flaga wskazująca czy przycisk spacji był wciśnięty
+        self.__is_space_pushed = False
+        self.__is_working = True
+        self.__clock = pygame.time.Clock()
+
         self.__game = Game(map_width=self.GAME_WIDTH,
                            map_height=self.GAME_HEIGHT)
 
         self.__game_view = GameView(self.__game)
         self.__game.add_observer(self.__game_view)
 
+        self.__info_game_delay_view = InfoGameDelayView(screen=self.__game_view.screen,
+                                                        model=self.__current_game_delay)
+
+        self.__event_controller = EventsController(
+            view=self.__game_view, model=self)
+
         self.__text_view = TextView(
             model=self.__game, screen=self.__game_view.screen)
+
+        self.__text_view.add_component(self.__info_game_delay_view)
+
         self.__game.add_observer(self.__text_view)
 
         self.__game_controller = GameController(
             model=self.__game, view=self.__text_view)
 
-        self.__clock = pygame.time.Clock()
-
-        self.__current_game_delay = 1
-        self.__default_game_delay = 1
-        self.__user_game_delay = 1
-        self.__is_user_change_delay = False
-
-        self.__delay_counter = 0
-        self.__is_working = True
-        # Flaga wskazująca czy przycisk spacji był wciśnięty
-        self.__is_space_pushed = False
-
         self.__game.cells_at_the_begginning()
+        self.__text_view.show()
         self.start_game()
+
+    @property
+    def info_game_delay_view(self):
+        return self.__info_game_delay_view
+
+    @info_game_delay_view.setter
+    def info_game_delay_view(self, view):
+        self.__info_game_delay_view = view
+
+    @property
+    def default_game_delay(self):
+        return self.__default_game_delay
+
+    @default_game_delay.setter
+    def default_game_delay(self, value):
+        self.__default_game_delay = value
+
+    @property
+    def user_game_delay(self):
+        return self.__user_game_delay
+
+    @user_game_delay.setter
+    def user_game_delay(self, value):
+        self.__user_game_delay = value
+
+    @property
+    def is_user_change_delay(self):
+        return self.__is_user_change_delay
+
+    @is_user_change_delay.setter
+    def is_user_change_delay(self, value):
+        self.__is_user_change_delay = value
+
+    @property
+    def is_space_pushed(self):
+        return self.__is_space_pushed
+
+    @is_space_pushed.setter
+    def is_space_pushed(self, value):
+        self.__is_space_pushed = value
+
+    @property
+    def current_game_delay(self):
+        return self.__current_game_delay
+
+    @current_game_delay.setter
+    def current_game_delay(self, value):
+        self.__current_game_delay = value
+
+    @property
+    def delay_counter(self):
+        return self.__delay_counter
+
+    @delay_counter.setter
+    def delay_counter(self, value):
+        self.__delay_counter = value
+
+    @property
+    def is_working(self):
+        return self.__is_working
+
+    @is_working.setter
+    def is_working(self, value):
+        self.__is_working = value
+
+    @property
+    def text_view(self):
+        return self.__text_view
 
     @property
     def game(self):
@@ -72,42 +151,12 @@ class App():
 
     def start_game(self):
         """
-        Inicjalizuje grę. 
+        Inicjalizuje grę.
         Zawarta tutaj jest główna pętla aplikacji.
         """
         while self.__is_working:
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.__is_working = False
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        if self.__is_space_pushed:
-                            if self.__is_user_change_delay:
-                                self.__current_game_delay = self.__user_game_delay
-                            else:
-                                self.__current_game_delay = self.__default_game_delay
-
-                            self.__delay_counter = 0
-                            self.__is_space_pushed = False
-                        else:
-                            self.__current_game_delay = -1
-                            self.__is_space_pushed = True
-                            self.__text_view.print_text()
-
-                    if event.key == pygame.K_KP_PLUS or event.key == pygame.K_PLUS:
-                        self.__is_user_change_delay = True
-                        self.__user_game_delay += 1
-                        self.__delay_counter = 0
-                        self.__current_game_delay = self.__user_game_delay
-
-                    if event.key == pygame.K_KP_MINUS or event.key == pygame.K_MINUS:
-                        self.__is_user_change_delay = True
-                        if self.__user_game_delay > 1:
-                            self.__user_game_delay -= 1
-                            self.__delay_counter = 0
-                            self.__current_game_delay = self.__user_game_delay
+            self.__event_controller.get_input()
 
             self.__game_controller.get_input()
             self.__delay_counter += 1
@@ -118,7 +167,7 @@ class App():
                 self.__game.run()
                 self.__delay_counter = 0
 
-            self.__text_view.print_text()
+            self.__text_view.show()
             self.__text_view.clear_text()
 
             self.__clock.tick(self.REFRESH_RATE)

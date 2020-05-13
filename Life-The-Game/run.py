@@ -2,7 +2,8 @@ from Controllers.app import App
 
 
 def main():
-    """Metoda Main od niej się wszystko zaczyna."""
+    """Metoda Main od niej się wszy
+    stko zaczyna."""
     App()
 
 

@@ -1,5 +1,6 @@
 from Views.view import View
 from Views.info_life_cells_view import InfoLifeCellsView
+from Views.info_dead_cells_view import InfoDeadCellsView
 from Library.colours import colours
 import pygame
 
@@ -25,11 +26,19 @@ class TextView(View):
         self.__info_life_cells_view = InfoLifeCellsView(
             screen=self.__screen, model=self._model.life_cells)
 
+        self.__info_dead_cells_view = InfoDeadCellsView(screen=self.__screen,
+                                                        model=self._model.dead_cells)
+
         self.add_component(self.__info_life_cells_view)
+        self.add_component(self.__info_dead_cells_view)
 
     @property
     def info_life_cells_view(self):
         return self.__info_life_cells_view
+
+    @property
+    def info_dead_cells_view(self):
+        return self.__info_dead_cells_view
 
     def __create_white_text(self, text: str):
         """
@@ -149,4 +158,5 @@ class TextView(View):
         pass
 
     def show(self):
-        pass
+        for view in self._component_list.values():
+            view.show()
