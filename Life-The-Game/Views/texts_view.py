@@ -1,4 +1,5 @@
 from Views.view import View
+from Views.info_life_cells_view import InfoLifeCellsView
 from Library.colours import colours
 import pygame
 
@@ -20,6 +21,15 @@ class TextView(View):
         self.__text_print_bot_left = []
 
         self.__unchanging_text()
+
+        self.__info_life_cells_view = InfoLifeCellsView(
+            screen=self.__screen, model=self._model.life_cells)
+
+        self.add_component(self.__info_life_cells_view)
+
+    @property
+    def info_life_cells_view(self):
+        return self.__info_life_cells_view
 
     def __create_white_text(self, text: str):
         """
@@ -99,7 +109,8 @@ class TextView(View):
         """
         Drukuje w oknie wszystkie dodane teksty w dolnym lewym rogu.
         """
-        current_row_height = self._model.window_height - self.__ROW_HEIGHT
+        width, height = pygame.display.get_surface().get_size()
+        current_row_height = height - self.__ROW_HEIGHT
         for text in self.__text_print_bot_left:
             self.__screen.blit(text, (self.__LEFT_MARGIN, current_row_height))
             current_row_height -= self.__ROW_HEIGHT

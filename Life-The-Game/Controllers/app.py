@@ -1,5 +1,7 @@
 from Models.game import Game
 
+from Controllers.game_controller import GameController
+
 from Views.texts_view import TextView
 from Views.game_view import GameView
 import pygame
@@ -26,8 +28,11 @@ class App():
         self.__game.add_observer(self.__game_view)
 
         self.__text_view = TextView(
-            model=self.__game_view, screen=self.__game_view.screen)
+            model=self.__game, screen=self.__game_view.screen)
         self.__game.add_observer(self.__text_view)
+
+        self.__game_controller = GameController(
+            model=self.__game, view=self.__text_view)
 
         self.__clock = pygame.time.Clock()
 
@@ -43,6 +48,11 @@ class App():
 
         self.__game.cells_at_the_begginning()
         self.start_game()
+
+    @property
+    def game(self):
+        """Instancja modelu obsługującą mechanikę gry."""
+        return self.__game
 
     def __refresh_text_top_left(self):
         """
@@ -99,6 +109,7 @@ class App():
                             self.__delay_counter = 0
                             self.__current_game_delay = self.__user_game_delay
 
+            self.__game_controller.get_input()
             self.__delay_counter += 1
 
             self.__refresh_text_top_left()
