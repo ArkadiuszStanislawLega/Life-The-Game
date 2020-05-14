@@ -9,7 +9,7 @@ class MapCellView(View):
     def __init__(self, model, screen, width=10, height=10):
         super().__init__(name="MapCellView", model=model)
         self.__is_was_occupied_colour = colours.DARK_RED
-        self.__is_was_not_occupied_colour = colours.WHITE
+        self.__is_was_not_occupied_colour = colours.BLACK
         self.__current_colour = self.__is_was_not_occupied_colour
         self.__screen = screen
 
@@ -60,13 +60,12 @@ class MapCellView(View):
     def update(self, *args, **kwargs):
         if len(args) > 0:
             self._model = args[0]
-
             if self._model.is_was_occupied:
                 self.__current_colour = self.__is_was_occupied_colour
-                self.__body = pygame.draw.rect(
-                    self.__screen, self.__current_colour, self.__position, 0)
-
-            self.show()
+                self.__body = pygame.draw.rect(self.__screen,
+                                               self.__current_colour,
+                                               self.__position,
+                                               0)
 
     def show(self):
         return self.__body

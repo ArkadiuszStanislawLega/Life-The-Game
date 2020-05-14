@@ -40,14 +40,13 @@ class MapView(View):
             self.add_component(view)
             return view
 
-    def remove_dead_life_cell_view(self, life_cell_view: LifeCellView):
-        self.remove_component(life_cell_view)
-
-    def update_life_cell_view(self, life_cell_view):
-        self._component_list.get(f'{life_cell_view}').update(life_cell_view)
-
     def update(self, *args, **kwargs):
         pass
+
+    def print_life_cells(self):
+        for map_cell in self._component_list.values():
+            if isinstance(map_cell, LifeCellView):
+                map_cell.show()
 
     def show(self):
         for map_cell in self._component_list.values():

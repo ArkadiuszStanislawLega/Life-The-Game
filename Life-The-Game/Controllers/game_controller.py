@@ -22,7 +22,7 @@ class GameController(Controller):
         self._model.cells_at_the_begginning()
 
         while self._model.is_working:
-
+            self._view.map.print_life_cells()
             self.__events.get_input()
 
             self._model.settings.delay_counter += 1
@@ -30,10 +30,10 @@ class GameController(Controller):
             if self._model.settings.delay_counter == self._model.settings.current_game_delay:
                 self._model.run()
                 self._model.settings.delay_counter = 0
-
+            self._view.map.print_life_cells()
             self.__clock.tick(self.__refresh_rate)
-            self._view.map.show()
-            pygame.display.flip()
+            self._view.map.print_life_cells()
+            pygame.display.update()
 
         pygame.quit()
 

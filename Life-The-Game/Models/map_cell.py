@@ -54,7 +54,7 @@ class MapCell(BasicModel):
             self.__life_cell = life_cell
             self.__is_was_occupied = True
             self.__is_occupied = True
-            self.notify()
+
             return True
         return False
 

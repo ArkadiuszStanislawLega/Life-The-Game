@@ -49,38 +49,9 @@ class GameView(View):
             self._component_list[comp.name] = comp
 
     def update(self, *args, **kwargs):
-        """
-        Dodaje nową żywą komórkę do rozgrywki.
-        klucza - NewLifeCell
-        wartości - instancji klasy LifeCell
-        klucz - UpdateText
-        """
-        if len(kwargs) > 0:
-            key = kwargs.get("key")
-            value = kwargs.get("value")
-
-            if key == "NewLifeCell":
-                new_life_cell_name = f'LifeCellView:{value.name}'
-                if not self._component_list.get(new_life_cell_name):
-                    view = LifeCellView(screen=self.__screen,
-                                        model=value,
-                                        width=self.__settings.cell_width,
-                                        height=self.__settings.cell_height)
-                    view.name = new_life_cell_name
-                    value.add_observer(view)
-                    self.__map.update(key=key, value=view)
-                    self._component_list.get("TextViews").update(
-                        LabelView_life_cells=len(self._model.life_cells))
-
-            if key == "RemoveLifeCell":
-                self.__map.update(key=key, value=value)
-
-            if key == "UpdateText":
-                self.__texts.update()
+        pass
 
     def show(self):
-        """
-        Wyświetla wszystkie komponenty wchodzące wskład gry.
-        """
+        """Wyświetla wszystkie komponenty wchodzące wskład gry."""
         for view in self._component_list.values():
             view.show()

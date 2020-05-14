@@ -7,7 +7,7 @@ from Models.map_cell import MapCell
 from Models.basic_model import BasicModel
 from Models.game_settings import GameSettings
 
-#from Library.horizontal_line import horizontal_line
+from Library.horizontal_line import horizontal_line
 from Library.demonid import demonid
 from Library.glider import glider
 from Library.spaceship import spaceship
@@ -105,7 +105,7 @@ class Game(BasicModel):
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
 
-        #horizontal_line(self, 2, 2)
+        horizontal_line(self, 2, 2)
         self.try_generate_struct(name="demonid",
                                  min_number_of_struct=1,
                                  max_number_of_struct=4,
@@ -186,8 +186,10 @@ class Game(BasicModel):
             life_cell_model = self.__map.life_cells.get(
                 f'{life_cell.location}')
             life_cell_view = map_view.add_life_cell_view(life_cell)
+
             if life_cell_view is not None:
                 life_cell_model.add_observer(life_cell_view)
+                life_cell_model.notify()
 
     def run(self):
         """Włącza gre. """
@@ -266,10 +268,7 @@ class Game(BasicModel):
         self.__dead_cells_to_remove = len(self.__cells_that_will_die)
 
         for location in self.__cells_that_will_die:
-            map_cell = self.__map.map_cells_container.get(
-                f'{location}')
-            life_cell_model = self.__map.life_cells.get(f'{location}')
-            life_cell_model.notify()
+            map_cell = self.__map.map_cells_container.get(f'{location}')
             map_cell.clear_cell()
             del self.__map.life_cells[f'{location}']
 
