@@ -10,5 +10,5 @@ class PlusDownEventController(Controller):
         self._model.settings.user_game_delay += 1
         self._model.settings.delay_counter = 0
         self._model.settings.current_game_delay = self._model.settings.user_game_delay
-        self._view.update(game_delay=self._model.settings.current_game_delay)
+        self._view.update(self._model.settings.current_game_delay)
         self._view.show()

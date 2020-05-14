@@ -58,20 +58,16 @@ class Map(BasicModel):
                 self.__map_cells_container[f'{location}'] = map_cell
 
     def modify(self, *args, **kwargs):
-        if len(kwargs) > 0:
-            for key, value in kwargs.items():
-                if key == "is_was_occupied":
-                    self.__is_was_occupied = value
-                    self.notify(grade=self.__is_was_occupied)
-
-            key = kwargs.get("key")
-            value = kwargs.get("value")
-
-            if key and value:
-                self.__map_cells_container.get(key).is_put_life_in_cell(value)
-                new_key = f"MapCellView:{value.location}"
-                self.notify(name=new_key)
-                return True
+        if len(args) > 0:
+            if isinstance(args[0], MapCell):
+                key = f"MapCellView:{args[0].location}"
+                if not self.__map_cells_container.get(key):
+                    self.__map_cells_container[key] = args[0]
+                    self.__map_cells_container.get(
+                        key).is_put_life_in_cell(args[0])
+                    return True
+                else:
+                    self.__map_cells_container.update({key: args[0]})
 
     def notify(self, *args, **kwargs):
         if len(kwargs) > 0:

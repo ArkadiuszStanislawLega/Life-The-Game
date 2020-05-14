@@ -161,8 +161,8 @@ class Game(BasicModel):
         """
         # try:
         if isinstance(life_cell, LifeCell) and isinstance(life_cell.location, Location):
-                if self.__game_map.modify(key=f'{life_cell.location}', value=life_cell):
-                    self.modify(key="NewLifeCell", value=life_cell)
+            if self.__game_map.modify(life_cell):
+                self.modify(key="NewLifeCell", value=life_cell)
         # except AttributeError:
         #     print(
         #         f'Komórka wychodzi po za współrzędne mapy. {life_cell.location}')
@@ -546,4 +546,5 @@ class Game(BasicModel):
                 self._obs_list.get("GameView").update(key=key, value=value)
 
     def notify(self):
-        pass
+        for view in self._obs_list.items():
+            view.update()
