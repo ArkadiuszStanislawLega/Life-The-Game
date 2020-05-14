@@ -10,10 +10,9 @@ class ViewSettings:
         self.__window_background = colours.BLACK
         self.__cell_width = 10
         self.__cell_height = 10
-        self.__cell_colour = colours.MATRIX
 
-        self.__window_width = self.__model.game_map.width * self.__cell_width
-        self.__window_height = self.__model.game_map.height * self.__cell_height
+        self.__window_width = self.__model.map.width * self.__cell_width
+        self.__window_height = self.__model.map.height * self.__cell_height
 
     @property
     def cell_width(self):

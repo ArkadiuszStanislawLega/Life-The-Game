@@ -16,8 +16,10 @@ class GameView(View):
         self.__settings = ViewSettings(self._model)
         self.__screen = pygame.display.set_mode(self.__settings.window_size)
 
-        self.__map = MapView(model=self._model.game_map,
-                             screen=self.__screen)
+        self.__map = MapView(model=self._model.map,
+                             screen=self.__screen,
+                             cell_width=self.__settings.cell_width,
+                             cell_height=self.__settings.cell_height)
         self.add_component(self.__map)
 
         pygame.init()
@@ -26,9 +28,13 @@ class GameView(View):
         self.__texts = TextViews(model=self._model, screen=self.__screen)
         self.add_component(self.__texts)
 
-        self._model.game_map.add_observer(self.__map)
+        self._model.map.add_observer(self.__map)
 
         self.show()
+
+    @property
+    def map(self):
+        return self.__map
 
     @property
     def texts(self):

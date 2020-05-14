@@ -7,10 +7,16 @@ class Map(BasicModel):
     def __init__(self, width, height):
         super().__init__()
         self.__map_cells_container = {}
+        self.__life_cells = {}
         self.__width = width
         self.__height = height
 
         self.__create_empty_cells()
+
+    @property
+    def life_cells(self):
+        """List z wszystkimi żywymi komórkami"""
+        return self.__life_cells
 
     @property
     def map_cells_container(self):
@@ -56,6 +62,16 @@ class Map(BasicModel):
                 map_cell.location = location
 
                 self.__map_cells_container[f'{location}'] = map_cell
+
+    def add_life_cell(self, life_cell):
+        """ Dodaje nowo stworzoną życiową komórkę"""
+        if not self.__life_cells.get(f'{life_cell.location}'):
+            map_cell = self.__map_cells_container.get(f'{life_cell.location}')
+            if map_cell.is_put_life_in_cell(life_cell):
+                self.__life_cells[f'{life_cell.location}'] = life_cell
+                return True
+
+        return False
 
     def modify(self, *args, **kwargs):
         if len(args) > 0:

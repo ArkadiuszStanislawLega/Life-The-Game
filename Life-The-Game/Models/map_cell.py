@@ -52,18 +52,18 @@ class MapCell(BasicModel):
         """
         if self.__life_cell is None and isinstance(life_cell, LifeCell):
             self.__life_cell = life_cell
+            self.__is_was_occupied = True
             self.__is_occupied = True
-            self.modify(is_was_occupied=True)
+            self.notify()
             return True
         return False
 
     def clear_cell(self):
-        """
-        Czyści pole mapy z komórki życiowej jeżeli taka jest na polu.
-        """
-        if self.__life_cell is not None:
+        """ Czyści pole mapy z komórki życiowej jeżeli taka jest na polu."""
+        if self.__life_cell is not None or isinstance(self.__life_cell, LifeCell) and not self.__life_cell.is_alive:
             self.__life_cell = None
             self.__is_occupied = False
+            self.notify()
 
     def __str__(self):
         if self.__is_occupied:
@@ -72,12 +72,8 @@ class MapCell(BasicModel):
             return self.CHARACTER_REPRESENTING_AN_EMPTY_MAP_FIELD
 
     def modify(self, *args, **kwargs):
-        if len(kwargs) > 0:
-            for key, value in kwargs.items():
-                if key == "is_was_occupied" and self.__is_was_occupied == False:
-                    self.__is_was_occupied = value
-                    self.notify(is_was_occupied=self.__is_was_occupied)
+        pass
 
     def notify(self, *args, **kwargs):
-        if len(kwargs) > 0:
-            self._obs_list.get(f'MapCellView:{self.__location}').update(kwargs)
+        for view in self._obs_list.values():
+            view.update(self)

@@ -19,7 +19,7 @@ class TextViews(View):
                                            "LabelView_game_delay")
 
         self.__life_cell_info = LabelView(self.__screen,
-                                          len(self._model.life_cells),
+                                          len(self._model.map.life_cells),
                                           "Żywe komórki: ",
                                           "LabelView_life_cells")
 

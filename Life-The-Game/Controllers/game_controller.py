@@ -32,6 +32,7 @@ class GameController(Controller):
                 self._model.settings.delay_counter = 0
 
             self.__clock.tick(self.__refresh_rate)
+            self._view.map.show()
             pygame.display.flip()
 
         pygame.quit()

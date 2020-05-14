@@ -29,18 +29,19 @@ class LifeCell(BasicModel):
     def is_alive(self):
         return self.__is_alive
 
+    @is_alive.setter
+    def is_alive(self, value):
+        self.is_alive = value
+
     @location.setter
     def location(self, value):
         self.__location = value
 
     def modify(self, *args, **kwargs):
-        if len(kwargs) > 0:
-            for key, value in kwargs.items():
-                if key == "is_alive":
-                    self.__is_alive = value
-                    self.notify()
+        if len(args):
+            self.__is_alive = args[0]
+            self.notify()
 
     def notify(self):
-        if self._obs_list.get(f'MapCellView:{self.__location}'):
-            self._obs_list.get(f'MapCellView:{self.__location}').update(
-                key='LifeCell', value=self)
+        for view in self._obs_list.values():
+            view.update(self)

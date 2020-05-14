@@ -87,13 +87,17 @@ class LifeCellView(View):
         pass
 
     def update(self, *args, **kwargs):
-        """
-        Aktulizauje pozycje komórki.
-        """
-        if not self._model.is_alive:
-            self.__body = pygame.draw.ellipse(
-                self.__screen, colours.DARK_RED, self.__position, 0)
-        self.show()
+        """Aktulizauje pozycje komórki."""
+        if len(args) > 0:
+            self._model = args[0]
+            if self._model.is_alive:
+                self.__body = pygame.draw.ellipse(
+                    self.__screen, self.__colour, self.__position, 0)
+                self.show()
+            else:
+                self.__body = pygame.draw.ellipse(
+                    self.__screen, colours.WHITE, self.__position, 0)
+                self.show()
 
     def show(self):
         return self.__body
