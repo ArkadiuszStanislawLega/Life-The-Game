@@ -48,7 +48,7 @@ class MapView(View):
             if isinstance(map_cell, LifeCellView) and map_cell.model.is_alive:
                 map_cell.show()
 
-    def remove_dead_cells(self):
+    def remove_dead_cells_views(self):
         dead_views = []
         for map_cell in self._component_list.values():
             if isinstance(map_cell, LifeCellView):

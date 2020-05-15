@@ -2,6 +2,8 @@ from Views.view import View
 from Views.text_settings import TextSettings
 from Views.label_view import LabelView
 
+from Library.colours import colours
+
 import pygame
 
 
@@ -12,6 +14,29 @@ class TextViews(View):
         super().__init__(name="TextViews", model=model)
         self.__basic_settings = TextSettings()
         self.__screen = screen
+
+        self.__ROW_HEIGHT = 15
+        self.__LEFT_MARGIN = 15
+        self.__FONT_NAME = 'freesansbold.ttf'
+        self.__FONT_SIZE = 12
+        self.__FONT_COLOUR = colours.WHITE
+        self.__FONT = pygame.font.Font(self.__FONT_NAME, self.__FONT_SIZE)
+
+        self.__text_print_top_left = []
+        self.__text_print_bot_left = []
+
+        self.__unchanging_text()
+
+        self.__background_width = 200
+        self.__background_height = 100
+        self.__background_coordinates = (5 // 1, 100 // 1)
+        self.__background_size = (
+            self.__background_width, self.__background_height)
+        self.__background_position = (
+            self.__background_coordinates, self.__background_size)
+
+        self.__text_background = pygame.draw.rect(
+            self.__screen, colours.GRAY, self.__background_position, 0)
 
         self.__game_delay_info = LabelView(self.__screen,
                                            self._model.settings.current_game_delay,
@@ -56,3 +81,78 @@ class TextViews(View):
     def show(self):
         for view in self._component_list.values():
             view.show()
+
+        self.__text_background
+
+    def __create_white_text(self, text: str):
+        return self.__FONT.render(text, True, self.__FONT_COLOUR)
+
+    def __create_white_text_red_background(self, text: str):
+        return self.__FONT.render(text, True, self.__FONT_COLOUR, colours.DARK_RED)
+
+    def add_text_top_left(self, text: str):
+        if isinstance(text, str):
+            self.__text_print_top_left.append(
+                self.__create_white_text(text))
+
+    def add_text_bot_left(self, text: str):
+        if isinstance(text, str):
+            self.__text_print_bot_left.append(
+                self.__create_white_text_red_background(text))
+
+    def clear_text(self):
+        """
+        Czyści tekst który jest odświerzany co cykl.
+        Nie usuwa tekstu który jest statycznie wpisany i nie ulega zmianie.
+        """
+        self.__text_print_top_left.clear()
+
+    def __unchanging_text(self):
+        """
+        Dodaje do listy tekstów nie zmieniających się określone informacje.
+        """
+        self.add_text_bot_left(f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.')
+        self.add_text_bot_left(
+            f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ')
+        self.add_text_bot_left(
+            f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-')
+
+    def __print_text_top_left(self):
+        """
+        Drukuje w oknie wszystkie dodane teksty w górnym lewym rogu.
+        """
+        current_row_height = self.__ROW_HEIGHT
+        for text in self.__text_print_top_left:
+            self.__screen.blit(text, (self.__LEFT_MARGIN, current_row_height))
+            current_row_height += self.__ROW_HEIGHT
+
+    def __print_text_bot_left(self):
+        """
+        Drukuje w oknie wszystkie dodane teksty w dolnym lewym rogu.
+        """
+        current_row_height = 1000 - self.__ROW_HEIGHT
+        for text in self.__text_print_bot_left:
+            self.__screen.blit(text, (self.__LEFT_MARGIN, current_row_height))
+            current_row_height -= self.__ROW_HEIGHT
+
+    def __print_backround(self):
+        width = 170
+        height = len(self.__text_print_top_left) * self.__ROW_HEIGHT + 15
+
+        distance_from_the_top = 10
+        distance_from_the_left = 10
+        coordinates = (distance_from_the_left // 1, distance_from_the_top // 1)
+
+        size = (width, height)
+
+        position = (coordinates, size)
+
+        pygame.draw.rect(self.__screen, colours.BLACK, position, 0)
+
+    def print_text(self):
+        """
+        Drukuje wszystkie napisy w oknie.
+        """
+        self.__print_backround()
+        self.__print_text_top_left()
+        self.__print_text_bot_left()
