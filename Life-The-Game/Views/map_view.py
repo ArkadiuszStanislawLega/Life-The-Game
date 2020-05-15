@@ -45,9 +45,22 @@ class MapView(View):
 
     def print_life_cells(self):
         for map_cell in self._component_list.values():
-            if isinstance(map_cell, LifeCellView):
+            if isinstance(map_cell, LifeCellView) and map_cell.model.is_alive:
                 map_cell.show()
+
+    def remove_dead_cells(self):
+        dead_views = []
+        for map_cell in self._component_list.values():
+            if isinstance(map_cell, LifeCellView):
+                if not map_cell.model.is_alive:
+                    dead_views.append(map_cell.name)
+
+        for dead in dead_views:
+            self.remove_component(dead)
+
+        dead_views.clear()
 
     def show(self):
         for map_cell in self._component_list.values():
-            map_cell.show()
+            if isinstance(map_cell, LifeCellView):
+                map_cell.show()

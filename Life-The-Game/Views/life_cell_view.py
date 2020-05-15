@@ -99,7 +99,6 @@ class LifeCellView(View):
                                                   colours.MATRIX,
                                                   self.__position,
                                                   0)
-        # pass
 
     def show(self):
         return self.__body

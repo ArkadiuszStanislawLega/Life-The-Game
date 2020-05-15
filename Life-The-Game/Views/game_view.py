@@ -48,6 +48,9 @@ class GameView(View):
         if comp.name not in self._component_list:
             self._component_list[comp.name] = comp
 
+    def run(self):
+        self.__map.print_life_cells()
+
     def update(self, *args, **kwargs):
         pass
 

@@ -24,6 +24,7 @@ class MapCellView(View):
 
         self.__size = (self.__width, self.__height)
         self.__position = (self.__coordinates, self.__size)
+        # self.__body = None
 
         self.__body = pygame.draw.rect(
             self.__screen, self.__current_colour, self.__position, 0)

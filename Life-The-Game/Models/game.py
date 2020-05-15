@@ -105,7 +105,7 @@ class Game(BasicModel):
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
 
-        horizontal_line(self, 2, 2)
+        # horizontal_line(self, 2, 2)
         self.try_generate_struct(name="demonid",
                                  min_number_of_struct=1,
                                  max_number_of_struct=4,
@@ -189,7 +189,6 @@ class Game(BasicModel):
 
             if life_cell_view is not None:
                 life_cell_model.add_observer(life_cell_view)
-                life_cell_model.notify()
 
     def run(self):
         """Włącza gre. """
@@ -296,7 +295,7 @@ class Game(BasicModel):
             count_life_cells_in_neighbors += counter_cells_in_neighbor_top + \
                 counter_cells_in_neighbor_mid + counter_cells_in_neighbor_bot
 
-            if count_life_cells_in_neighbors in(2, 3):
+            if count_life_cells_in_neighbors == 2 or count_life_cells_in_neighbors == 3:
                 self.__cells_that_survive[current_location] = count_life_cells_in_neighbors
                 cell.modify(True)
             else:
