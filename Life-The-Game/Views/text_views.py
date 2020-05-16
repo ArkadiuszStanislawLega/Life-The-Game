@@ -30,7 +30,6 @@ class TextViews(View):
                                           "LabelView_text_3")
         }
 
-        self.__grid_top = GridView(screen=screen, name="Grid_top")
         self.__grid_bot = GridView(screen=screen,
                                    name="Grid_bot",
                                    first_element_on_top=False,
@@ -64,21 +63,9 @@ class TextViews(View):
                                      self._model.settings.current_game_delay,
                                      "Aktulna prędkość rozgrywki: ",
                                      "LabelView_game_delay"))
-        # self.add_component(LabelView(self.__screen,
-        #                              " ",
-        #                              f'Żeby zatrzymać grę należy wcisnąć SPACJĘ.',
-        #                              "LabelView_text_1"))
-        # self.add_component(LabelView(self.__screen,
-        #                              " ",
-        #                              f'Żeby ją wznowić należy powtórnie wciśnąć SPCJĘ',
-        #                              "LabelView_text_2"))
-        # self.add_component(LabelView(self.__screen,
-        #                              " ",
-        #                              f'Do przyspieszenia lub opóźnienia gry należy wciskać +/-',
-        #                              "LabelView_text_3"))
 
     def grid(self):
-        coordinate_y = 0
+        coordinate_y = 10
         current_coordinate_y = coordinate_y
         for view in self._component_list.values():
             if isinstance(view, LabelView):
