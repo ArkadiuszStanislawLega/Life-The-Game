@@ -15,6 +15,9 @@ class MapView(View):
         self.__screen = screen
         self.__create_map()
 
+    def round(self):
+        self.remove_dead_cells_views()
+
     def __create_map(self):
         """
         Dodaje wszystkie widoki komórek które są utworzone w instancji gry.

@@ -64,6 +64,24 @@ class TextViews(View):
         self.add_component(self.__life_cell_info)
         self.add_component(self.__current_number_of_round_info)
 
+    def refresh_text_top_left(self):
+        """Odświeża dane które wyświetlają się w górnym lewym rogu."""
+        texts = [
+            f'Umierających komórek: {self._model.dead_cells}',
+            f'Żywych komórek:{len(self._model.map.life_cells)}',
+            f'Numer rundy: {self._model.current_round}',
+            f'Opóźnienie gry: {self._model.settings.current_game_delay}'
+        ]
+
+        for text in texts:
+            self.add_text_top_left(text)
+
+    def round(self):
+        self.show()
+        self.refresh_text_top_left()
+        self.print_text()
+        self.clear_text()
+
     @property
     def info_game_delay(self):
         return self._component_list.get("LabelView_game_delay")

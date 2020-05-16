@@ -32,6 +32,10 @@ class GameView(View):
 
         self.show()
 
+    def round(self):
+        self.__texts.round()
+        self.__map.round()
+
     @property
     def map(self):
         return self.__map
