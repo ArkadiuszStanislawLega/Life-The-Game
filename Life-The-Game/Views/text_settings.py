@@ -4,15 +4,20 @@ from Library.colours import colours
 
 class TextSettings:
     def __init__(self):
+        self.__row_height = 15
         self.__font_name = 'freesansbold.ttf'
         self.__font_colour = colours.WHITE
         self.__font_size = 12
         self.__left_margin = 15
         self.__background_colour = colours.BLACK
         self.__coordinate_x = self.__left_margin + 0
-        self.__coordinate_y = 100
+        self.__coordinate_y = 0
         self.__coordinates = (self.__coordinate_x, self.__coordinate_y)
         self.__font = pygame.font.Font(self.__font_name, self.__font_size)
+
+    @property
+    def row_height(self):
+        return self.__row_height
 
     @property
     def font_name(self):

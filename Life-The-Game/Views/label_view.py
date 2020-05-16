@@ -31,6 +31,10 @@ class LabelView(View):
         if len(args) > 0:
             self._model = args[0]
             self.__full_text = f'{self.__text}{self._model}'
+            self.__body = self.__settings.font.render(self.__full_text,
+                                                      True,
+                                                      self.__settings.font_colour,
+                                                      self.__settings.background_colour)
 
     def show(self):
         self.__body = self.__settings.font.render(self.__full_text,
@@ -38,4 +42,5 @@ class LabelView(View):
                                                   self.__settings.font_colour,
                                                   self.__settings.background_colour)
 
-        self.__screen.blit(self.__body, (self.__settings.left_margin, 100))
+        self.__screen.blit(self.__body, (self.__settings.left_margin,
+                                         self.__settings.coordinate_y))
