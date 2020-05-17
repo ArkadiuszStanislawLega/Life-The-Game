@@ -1,3 +1,4 @@
+"""Klasa Game"""
 import random
 
 from Models.map import Map
@@ -7,7 +8,6 @@ from Models.map_cell import MapCell
 from Models.basic_model import BasicModel
 from Models.game_settings import GameSettings
 
-from Library.horizontal_line import horizontal_line
 from Library.demonid import demonid
 from Library.glider import glider
 from Library.spaceship import spaceship
@@ -20,6 +20,16 @@ class Game(BasicModel):
     """Model gry w której odbywa się cała rozgrywka."""
 
     def __init__(self, map_width, map_height):
+        """Tworzy rozgrywkę.
+        Losuje pozycje poczatkowe wprowadzonych struktur.
+        Losuje ilość struktur które mają pojawić się na poczatku rozgrywki.
+        Rozpoczyna rozgrywkę.
+        Przeprowadza całą rozgrywkę od początku do wyłączenia aplikacji.
+
+        Arguments:
+            map_width {int} -- szerokość mapy - z ilu komórek ma być złożona mapa.
+            map_height {int} --  wysokość mapy - z ilu komórek ma być złożona mapa.
+        """
         super().__init__()
         self.__settings = GameSettings()
         self.__map = Map(width=map_width, height=map_height)
@@ -39,18 +49,40 @@ class Game(BasicModel):
     # region Properties
     @property
     def settings(self):
+        """Podstawowe właściwości rozgrywki.
+
+        Returns:
+            [GameSettings] -- Zwraca instancje klasy przechowujące właściwości rozgrywki.
+        """
         return self.__settings
 
     @settings.setter
-    def settings(self, value):
+    def settings(self, value: GameSettings):
+        """Podstawowe właściwości rozgrywki.
+
+
+        Arguments:
+            value {GameSettings} -- Ustawia nowe właściowści rozgrywki.
+        """
         self.__settings = value
 
     @property
     def is_working(self):
+        """Flaga wskazująca czy rozgrywka trwa.
+
+        Returns:
+            [bool] -- Flaga wskazująca czy rozgrywka trwa.
+        """
         return self.__is_working
 
     @is_working.setter
-    def is_working(self, value):
+    def is_working(self, value: bool):
+        """Flaga wskazująca czy rozgrywka trwa.
+
+        Arguments:
+            value {bool} -- wartość jaką ma przyjąć aktualny stan rozgrywki jeśli 
+                            false - to program sie zakończy.
+        """
         self.__is_working = value
 
     @property
@@ -105,7 +137,6 @@ class Game(BasicModel):
         Początkowy układ komórek przy uruchomieniu aplikacji.
         """
 
-        # horizontal_line(self, 2, 2)
         self.try_generate_struct(name="demonid",
                                  min_number_of_struct=1,
                                  max_number_of_struct=4,
@@ -295,7 +326,7 @@ class Game(BasicModel):
             count_life_cells_in_neighbors += counter_cells_in_neighbor_top + \
                 counter_cells_in_neighbor_mid + counter_cells_in_neighbor_bot
 
-            if count_life_cells_in_neighbors == 2 or count_life_cells_in_neighbors == 3:
+            if count_life_cells_in_neighbors in (2, 3):
                 self.__cells_that_survive[current_location] = count_life_cells_in_neighbors
                 cell.modify(True)
             else:
@@ -362,8 +393,6 @@ class Game(BasicModel):
             return count_life_cells
         else:
             return -1
-
-        return 0
 
     def __check_top(self, location: Location, occupied: bool):
         """

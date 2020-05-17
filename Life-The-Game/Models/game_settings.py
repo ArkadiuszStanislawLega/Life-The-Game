@@ -1,9 +1,20 @@
+"""Klasa GameSettings"""
+
+
 from Models.basic_model import BasicModel
 
 
 class GameSettings(BasicModel):
+    """
+    Klasa zawiera podstawowe ustawienia rozgrywki.
+
+    Arguments:
+        BasicModel {BasicModel} -- Dziedziczy podstawową klase która umożliwia komunikację
+                                    pomiędzy kontrolerem a widokiem.
+    """
 
     def __init__(self):
+        """Ustawia podstawowe wartości rozgrywki."""
         super().__init__()
         self.__refresh_rate = 60
         self.__delay_counter = 0
@@ -16,6 +27,12 @@ class GameSettings(BasicModel):
 
     @property
     def refresh_rate(self):
+        """
+        Wartość wskazująca odświeżanie widoku.
+
+        Returns:
+            [int] -- odświeżanie widoku.
+        """
         return self.__refresh_rate
 
     @refresh_rate.setter
