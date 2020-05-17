@@ -1,3 +1,5 @@
+"""Abstrakcyjna klasa. """
+
 from abc import ABC, abstractmethod
 
 
@@ -51,11 +53,9 @@ class BasicModel(ABC):
     def modify(self, *args, **kwargs):
         """Dzięki tej metodzie będzie można zmieniać właściwości klasy
         które są obserwowane przez obserwatorów."""
-        pass
 
     @abstractmethod
     def notify(self):
         """Przesyła informacje do widoków w słowniku które obserwują klase
         żeby zaktualizowały widok.
         """
-        pass
