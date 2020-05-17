@@ -1,5 +1,7 @@
+"""Przechowuje koordynary reprezentujące określoną strukture złożoną z żywych komórek."""
 
-def demonid(game, x, y):
+
+def demonid(game, coordinate_x: int, coordinate_y: int):
     """
     wysokość: 17
     szerokość: 11
@@ -16,6 +18,11 @@ def demonid(game, x, y):
            O          O
            O O      O O
             OO      OO
+
+    Arguments:
+        game {Game} -- Instancja gry do której ma zostać wstawiona struktura komórek.
+        coordinate_x {int} -- Koordynat x od którego ma zostać tworzona struktura.
+        coordinate_y {int} -- Koordynat x od którego ma zostać tworzona struktura.
     """
     coordinates = []
     coordinates.append((4, 0))
@@ -94,4 +101,4 @@ def demonid(game, x, y):
     coordinates.append((12, 11))
     coordinates.append((13, 11))
 
-    game.put_coordinates_to_map(coordinates, x, y)
+    game.put_coordinates_to_map(coordinates, coordinate_x, coordinate_y)

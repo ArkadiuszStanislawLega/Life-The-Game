@@ -1,8 +1,17 @@
-def gosper_glider_gun(game, x, y):
+"""Przechowuje koordynary reprezentujące określoną strukture złożoną z żywych komórek."""
+
+
+def gosper_glider_gun(game, coordinate_x, coordinate_y):
     """
     wysokość: 9
     szerokość: 37
+
+    Arguments:
+        game {Game} -- Instancja gry do której ma zostać wstawiona struktura komórek.
+        coordinate_x {int} -- Koordynat x od którego ma zostać tworzona struktura.
+        coordinate_y {int} -- Koordynat x od którego ma zostać tworzona struktura.
     """
+
     coordinates = []
     coordinates.append((0, 4))
     coordinates.append((0, 5))
@@ -56,4 +65,4 @@ def gosper_glider_gun(game, x, y):
     coordinates.append((35, 2))
     coordinates.append((35, 3))
 
-    game.put_coordinates_to_map(coordinates, x, y)
+    game.put_coordinates_to_map(coordinates, coordinate_x, coordinate_y)

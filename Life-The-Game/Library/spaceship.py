@@ -1,4 +1,7 @@
-def spaceship(game, x, y):
+"""Przechowuje koordynary reprezentujące określoną strukture złożoną z żywych komórek."""
+
+
+def spaceship(game, coordinate_x: int, coordinate_y: int):
     """
     wysokość: 18
     szerokość: 34
@@ -21,6 +24,10 @@ def spaceship(game, x, y):
         ......O.O......O.....OO........O...
         ................O...............O.O
         .................................O.
+    Arguments:
+        game {Game} -- Instancja gry do której ma zostać wstawiona struktura komórek.
+        coordinate_x {int} -- Koordynat x od którego ma zostać tworzona struktura.
+        coordinate_y {int} -- Koordynat x od którego ma zostać tworzona struktura.
     """
 
     coordinates = []
@@ -160,4 +167,4 @@ def spaceship(game, x, y):
 
     coordinates.append((33, 18))
 
-    game.put_coordinates_to_map(coordinates, x, y)
+    game.put_coordinates_to_map(coordinates, coordinate_x, coordinate_y)

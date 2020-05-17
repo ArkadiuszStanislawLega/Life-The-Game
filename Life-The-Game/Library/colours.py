@@ -1,4 +1,10 @@
+"""Klasa - kontener na kolory użyte przy produkcji gry."""
+
+
 class colours:
+    """
+    Kontener przetrzymujący wartość RGB kolorów.
+    """
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
     GREEN = (0, 255, 0)
