@@ -1,4 +1,5 @@
 import pygame
+
 from Controllers.controller import Controller
 from Controllers.minus_down_event_controller import MinusDownEventController
 from Controllers.plus_down_event_controller import PlusDownEventController
@@ -6,7 +7,21 @@ from Controllers.space_down_event_controller import SpaceDownEventController
 
 
 class EventsController(Controller):
+    """
+    Przechwytuje zdażenia związane z naciśnięcie przycisków na klwiaturze.
+
+    Arguments:
+        Controller {Controller} -- Interfejs umożliwiający połączenie modelu z widokiem.
+    """
+
     def __init__(self, view, model):
+        """
+        Inicjuje kontrolery odpowiedzialne za przyciśnięcie klawiszy klawiatury.
+
+        Arguments:
+            view {View} -- Widok do którego mają być przekazane informacje.
+            model {[type]} -- Model z którego są pobierane informacje.
+        """
         super().__init__(view=view, model=model)
 
         self.__minus_down_event = MinusDownEventController(model=self._model,

@@ -3,13 +3,29 @@ import pygame
 from Controllers.controller import Controller
 from Controllers.events_controller import EventsController
 
-from Models.game_settings import GameSettings
-
 
 class GameController(Controller):
-    def __init__(self, view, model):
+    """
+    Inicuje wszystkie kontrolery potrzebne do przeprowadzenia rozgrywki.
+
+    Arguments:
+        Controller {Controller} -- Interfejs umożliwający połączenie widoku z modelem.
+    """
+
+    def __init__(self, view, model, refresh_rate=60):
+        """
+        Inicjuje częstotliwość odświeżania oraz Clock, oraz tworzy instancję klasy
+        odpowiedzialnej za przechwytwanie zdarzeń wciśnięć klawiszy w klawiaturze.
+
+        Arguments:
+            view {View} -- Widok do którego mają zostać przekazane wprowadzone zmiany.
+            model {[type]} -- Model z którego są pobierane dane do wyświetlenia użytkownikowi.
+
+        Keyword Arguments:
+            refresh_rate {int} -- Częstotliwość odświeżania ilość klatek/s (default: {60})
+        """
         super().__init__(view=view, model=model)
-        self.__refresh_rate = 60
+        self.__refresh_rate = refresh_rate
         self.__clock = pygame.time.Clock()
 
         self.__events = EventsController(view=self._view, model=self._model)
