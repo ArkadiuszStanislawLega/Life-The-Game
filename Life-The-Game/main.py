@@ -1,10 +1,18 @@
 """Autor: Arkadiusz Łęga, email:horemheb@vp.pl
-*******************************************************************************
+*********************************************************************************
+
+INFORMACJE OD AUTORA:
 
 Można by doprawcować wyświetlanie i aktualizacje widoków, ale niestety czas mi
 nie pozwoli na dopracowanie tego elementu.
 
-*******************************************************************************
+Szczególnie przy wyświetlaniu tekstów, odświeżanie szwankuje. Niestety nie znam
+tego silnika graficznego tak dobrze żeby łatwo i elegancko poprawić ten szczegół.
+
+Wydajność algorytmu który napisałem w celu wyszukania miejsc na nowe komórki też 
+pozostawia wiele do życzenia. Trzeba by popracować nad wydajnością.
+
+*********************************************************************************
 """
 from Models.game import Game
 from Views.game_view import GameView
@@ -13,7 +21,7 @@ from Controllers.game_controller import GameController
 
 class App():
     """
-    stko zaczyna.
+    Im większy ekran tym większa mapa i więcej komórek.
     Przy takich ustawieniach mapa działa na cały ekran przy rozdzielczości 1366x768 ekran 15"
     GAME_WIDTH = 137
     GAME_HEIGHT = 73
