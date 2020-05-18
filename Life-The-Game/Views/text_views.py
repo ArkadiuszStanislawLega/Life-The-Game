@@ -1,19 +1,31 @@
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl
+*******************************************************************************
+
+Można by doprawcować wyświetlanie i aktualizacje widoków, ale niestety czas mi
+nie pozwoli na dopracowanie tego elementu.
+
+*******************************************************************************
+"""
+import pygame
 from Views.view import View
 from Views.text_settings import TextSettings
 from Views.label_view import LabelView
 from Views.grid_view import GridView
 
-from Library.colours import colours
-
-import pygame
-
 
 class TextViews(View):
     """ Klasa jest odpowiedzialna za wyświetlanie napisów w czasie trwania rozgrywki."""
+    MARGIN_TOP = 10
 
     def __init__(self, model, screen):
+        """Ustawia podstawowe wartość widoku wszystkich tekstów w casie rozgrywki.
+
+        Arguments:
+            model {Game} -- instancja klasy Game która prowadzi całą rozgrywkę.
+            screen {pygame} -- główny widok aplikacji.
+        """
         super().__init__(name="TextViews", model=model)
-        w, h = pygame.display.get_surface().get_size()
+        screen_width, screen_height = pygame.display.get_surface().get_size()
         self.__screen = screen
         self.__bot_grid_components = {
             "LabelView_text_1": LabelView(self.__screen,
@@ -33,7 +45,7 @@ class TextViews(View):
         self.__grid_bot = GridView(screen=screen,
                                    name="Grid_bot",
                                    first_element_on_top=False,
-                                   lenght_from_top=h,
+                                   lenght_from_top=screen_height,
                                    labels=self.__bot_grid_components)
 
         self.__basic_settings = TextSettings()
@@ -44,9 +56,15 @@ class TextViews(View):
 
     @property
     def info_game_delay(self):
+        """Zwraca widok który wyświetla aktualne opóźnienie gry.
+
+        Returns:
+            [LabelView] -- widok aktualnego opóźnienienia gry.
+        """
         return self._component_list.get("LabelView_game_delay")
 
     def add_labels(self):
+        """Dodaje wszystkie widoki po lewej górenj części ekranu."""
         self.add_component(LabelView(self.__screen,
                                      self._model.dead_cells,
                                      "Umierających komórek: ",
@@ -65,7 +83,10 @@ class TextViews(View):
                                      "LabelView_game_delay"))
 
     def grid(self):
-        coordinate_y = 10
+        """Tworzy kontener z widokami napisów. Zachowując dystans od
+        góry podany jakos stała MARGIN_TOP zainicjalizowany przy deklaracji
+        tej klasy."""
+        coordinate_y = self.MARGIN_TOP
         current_coordinate_y = coordinate_y
         for view in self._component_list.values():
             if isinstance(view, LabelView):
@@ -73,6 +94,7 @@ class TextViews(View):
                 current_coordinate_y += self.__row_height
 
     def update_labels(self):
+        """Aktualizuje dane pobrane z instancji Game zarządzającej rozgrywką."""
         dead_cells = self._component_list.get("LabelView_dead_cells")
         life_cells = self._component_list.get("LabelView_life_cells")
         round_number = self._component_list.get("LabelView_round_number")
@@ -84,11 +106,13 @@ class TextViews(View):
         round_number.update(self._model.current_round)
 
     def refresh_grid(self):
+        """Odświeża widoki napisów."""
         self.update_labels()
         for view in self._component_list.values():
             view.show()
 
     def round(self):
+        """Zadania wchodzące wskład akcji wykonywanych raz na rundę rozgrywki."""
         self.refresh_grid()
         self.show()
 

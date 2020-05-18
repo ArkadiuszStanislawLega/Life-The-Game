@@ -57,7 +57,7 @@ class LifeCellView(View):
         return self.__colour
 
     @colour.setter
-    def colour(self, value):
+    def colour(self, value: (int, int, int)):
         """Pozwala na ustawienie nowego koloru komórki.
 
         Arguments:
@@ -78,7 +78,7 @@ class LifeCellView(View):
         return self.__name
 
     @name.setter
-    def name(self, value):
+    def name(self, value: str):
         """Pozwala na ustawienie nowej nazwy komórki.
 
         Arguments:
@@ -105,7 +105,7 @@ class LifeCellView(View):
         return self.__width
 
     @width.setter
-    def width(self, value):
+    def width(self, value: int):
         """Pozawala na zmianę szeokości widoku komórki.
         Wartość podawana w ilości wyświetlanych piksel.
 
@@ -124,7 +124,7 @@ class LifeCellView(View):
         return self.__height
 
     @height.setter
-    def height(self, value):
+    def height(self, value: int):
         """Pozwala na zmianę wysokości widoku komórki.
         Wartość podawana w ilości wyświetlanych piksel.
 

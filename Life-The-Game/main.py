@@ -1,5 +1,11 @@
-"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl
+*******************************************************************************
 
+Można by doprawcować wyświetlanie i aktualizacje widoków, ale niestety czas mi
+nie pozwoli na dopracowanie tego elementu.
+
+*******************************************************************************
+"""
 from Models.game import Game
 from Views.game_view import GameView
 from Controllers.game_controller import GameController
