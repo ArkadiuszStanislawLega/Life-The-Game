@@ -1,4 +1,4 @@
-"""Klasa Location """
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 
 
 class Location:

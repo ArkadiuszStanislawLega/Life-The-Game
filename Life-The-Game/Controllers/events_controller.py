@@ -1,3 +1,5 @@
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
+
 import pygame
 
 from Controllers.controller import Controller

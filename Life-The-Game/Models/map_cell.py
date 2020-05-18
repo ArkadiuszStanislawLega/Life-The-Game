@@ -1,5 +1,4 @@
-"""Klasa MapCell"""
-
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 from Models.location import Location
 from Models.life_cell import LifeCell
 from Models.basic_model import BasicModel

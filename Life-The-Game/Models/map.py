@@ -1,5 +1,4 @@
-"""Klasa Map"""
-
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 from Models.location import Location
 from Models.map_cell import MapCell
 from Models.basic_model import BasicModel

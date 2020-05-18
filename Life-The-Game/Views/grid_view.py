@@ -1,3 +1,4 @@
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 from Views.view import View
 from Views.text_settings import TextSettings
 from Views.label_view import LabelView
@@ -13,7 +14,7 @@ class GridView(View):
 
         Arguments:
             View {View} -- Klasa którą powinien dziedziczyć każdy element widoku gry.
-            screen {pygame} -- Instancja okna gry.
+            screen {pygame} -- główne okno aplikacji.
 
         Keyword Arguments:
             name {str} -- Nazwa grida, po której będzie można go wyszukać w widokach rodzicach. (default: {"GridView"})

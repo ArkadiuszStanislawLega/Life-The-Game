@@ -1,4 +1,5 @@
-"""Przechowuje koordynary reprezentujące określoną strukture złożoną z żywych komórek."""
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl
+Przechowuje koordynary reprezentujące określoną strukture złożoną z żywych komórek."""
 
 
 def gosper_glider_gun(game, coordinate_x, coordinate_y):

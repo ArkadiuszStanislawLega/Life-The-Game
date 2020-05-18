@@ -1,4 +1,5 @@
-"""Klasa - kontener na kolory użyte przy produkcji gry."""
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl
+Klasa - kontener na kolory użyte przy produkcji gry."""
 
 
 class colours:

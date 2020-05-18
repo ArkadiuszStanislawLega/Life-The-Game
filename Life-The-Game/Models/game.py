@@ -1,4 +1,11 @@
-"""Klasa Game"""
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
+from Library.gosper_glider_gun import gosper_glider_gun
+from Library.info import struct_info
+from Library.noah_ark import noah_ark
+from Library.spaceship import spaceship
+from Library.glider import glider
+from Library.demonid import demonid
+from Models.game_settings import GameSettings
 import random
 
 from Models.map import Map
@@ -6,14 +13,6 @@ from Models.life_cell import LifeCell
 from Models.location import Location
 from Models.map_cell import MapCell
 from Models.basic_model import BasicModel
-from Models.game_settings import GameSettings
-
-from Library.demonid import demonid
-from Library.glider import glider
-from Library.spaceship import spaceship
-from Library.noah_ark import noah_ark
-from Library.info import struct_info
-from Library.gosper_glider_gun import gosper_glider_gun
 
 
 class Game(BasicModel):

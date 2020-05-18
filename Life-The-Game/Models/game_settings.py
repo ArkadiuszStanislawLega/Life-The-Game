@@ -1,4 +1,4 @@
-"""Klasa GameSettings"""
+"""Autor Arkadiusz Łęga email:horemheb@vp.pl"""
 
 
 from Models.basic_model import BasicModel

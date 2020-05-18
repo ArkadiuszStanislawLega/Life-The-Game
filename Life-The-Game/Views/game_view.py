@@ -1,11 +1,9 @@
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 import pygame
 from Views.view_settings import ViewSettings
-from Views.map_cell_view import MapCellView
 from Views.view import View
 from Views.map_view import MapView
-from Views.life_cell_view import LifeCellView
 from Views.text_views import TextViews
-from Library.colours import colours
 
 
 class GameView(View):
@@ -33,19 +31,37 @@ class GameView(View):
         self.show()
 
     def round(self):
+        """Akcje podczas jednego przebiegu rozgrywki.
+        Odświeżenie tekstu i usunięcie martwych komórek z mapy.
+        """
         self.__texts.round()
         self.__map.round()
 
     @property
     def map(self):
+        """Widok mapy wyświetlanej użytkownikowi.
+
+        Returns:
+            [MapView] -- widok rozgrywki.
+        """
         return self.__map
 
     @property
     def texts(self):
+        """Widok wszystkich tekstów które są wyświetlane w czasie rozgrywki.
+
+        Returns:
+            [TextsView] -- Widok wszystkich tekstów widocznych w czasie rozgrywki.
+        """
         return self.__texts
 
     @property
     def screen(self):
+        """Instancja okna pygame.
+
+        Returns:
+            [pygame] -- Instancja okna pygame.
+        """
         return self.__screen
 
     def add_component(self, comp):

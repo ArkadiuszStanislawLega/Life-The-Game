@@ -1,4 +1,4 @@
-"""Klasa LifeCell"""
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 
 from Models.location import Location
 from Models.basic_model import BasicModel

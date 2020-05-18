@@ -1,3 +1,5 @@
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
+
 from Models.game import Game
 from Views.game_view import GameView
 from Controllers.game_controller import GameController

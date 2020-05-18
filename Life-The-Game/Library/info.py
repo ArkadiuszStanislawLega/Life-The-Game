@@ -1,4 +1,5 @@
-"""Słownik zawierający wszystkie wymiary struktur zawartych w tej bibliotece."""
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl
+Słownik zawierający wszystkie wymiary struktur zawartych w tej bibliotece."""
 
 
 def struct_info():

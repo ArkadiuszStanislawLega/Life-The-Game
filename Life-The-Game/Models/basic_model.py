@@ -1,4 +1,4 @@
-"""Abstrakcyjna klasa. """
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 
 from abc import ABC, abstractmethod
 

@@ -1,3 +1,4 @@
+"""Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 from Controllers.controller import Controller
 
 
